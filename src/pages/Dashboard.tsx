@@ -91,9 +91,21 @@ const Dashboard = () => {
 
     return (
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <div className="mb-8">
-                <h2 className="heading-lg" style={{ color: 'var(--text-secondary)' }}>Today is</h2>
-                <h1 className="heading-xl">{todayDate}</h1>
+            <div className="flex-between mb-8">
+                <div>
+                    <h2 className="heading-lg" style={{ color: 'var(--text-secondary)' }}>Today is</h2>
+                    <h1 className="heading-xl">{todayDate}</h1>
+                </div>
+                <Link to="/vision" className="btn" style={{
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    border: '1px solid var(--primary-color)',
+                    color: 'var(--primary-color)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                }}>
+                    ✨ View Long-term Vision
+                </Link>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>

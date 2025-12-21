@@ -9,6 +9,7 @@ import DailyLog from './pages/DailyLog';
 import History from './pages/History';
 import RoadmapDetail from './pages/RoadmapDetail';
 import ControlList from './pages/ControlList';
+import Vision from './pages/Vision';
 
 import type { ReactNode } from 'react';
 
@@ -71,6 +72,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <ControlList />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/vision"
+                            element={
+                                <PrivateRoute>
+                                    <Vision />
                                 </PrivateRoute>
                             }
                         />

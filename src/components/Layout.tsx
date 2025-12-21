@@ -20,7 +20,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
     return (
         <div className="container">
             <header className="flex-between" style={{ padding: '2rem 0', marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '1.25rem', fontWeight: '700' }}>FocusFlow</h1>
+                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: 'inherit' }}>
+                    <img src="/focus_flow_favicon.png" alt="FocusFlow Logo" style={{ width: '32px', height: '32px', borderRadius: '6px' }} />
+                    <h1 style={{ fontSize: '1.25rem', fontWeight: '700', margin: 0 }}>FocusFlow</h1>
+                </Link>
                 <nav style={{ display: 'flex', gap: '1.5rem' }}>
                     {navItems.map((item) => (
                         <Link
