@@ -19,25 +19,22 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
     return (
         <div className="container">
-            <header className="flex-between" style={{ padding: '2rem 0', marginBottom: '2rem' }}>
-                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: 'inherit' }}>
-                    <img src="/focus_flow_favicon.png" alt="FocusFlow Logo" style={{ width: '32px', height: '32px', borderRadius: '6px' }} />
-                    <h1 style={{ fontSize: '1.25rem', fontWeight: '700', margin: 0 }}>FocusFlow</h1>
+            <header className="app-header">
+                <Link to="/" className="header-logo">
+                    <img src="/focus_flow_favicon.png" alt="FocusFlow Logo" className="logo-img" />
+                    <h1 className="logo-text">FocusFlow</h1>
                 </Link>
-                <nav style={{ display: 'flex', gap: '1.5rem' }}>
+                <nav className="header-nav">
                     {navItems.map((item) => (
                         <Link
                             key={item.path}
                             to={item.path}
-                            style={{
-                                color: location.pathname === item.path ? 'var(--text-primary)' : 'var(--text-secondary)',
-                                fontWeight: location.pathname === item.path ? '600' : '400',
-                            }}
+                            className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
                         >
                             {item.label}
                         </Link>
                     ))}
-                    <button onClick={logout} style={{ background: 'none', color: 'var(--error-color)' }}>
+                    <button onClick={logout} className="logout-btn">
                         Logout
                     </button>
                 </nav>
