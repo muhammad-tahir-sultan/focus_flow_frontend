@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { backendUrl } from '../main';
 
 interface DashboardStats {
     streak: number;
@@ -24,8 +25,8 @@ const Dashboard = () => {
         const fetchData = async () => {
             try {
                 const [logsRes, goalsRes] = await Promise.all([
-                    axios.get<Log[]>('http://localhost:3000/daily-logs'),
-                    axios.get<Goal[]>('http://localhost:3000/goals')
+                    axios.get<Log[]>(`${backendUrl}/daily-logs`),
+                    axios.get<Goal[]>(`${backendUrl}/goals`)
                 ]);
 
                 const logs = logsRes.data;

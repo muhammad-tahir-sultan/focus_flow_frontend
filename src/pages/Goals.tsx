@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import axios from 'axios';
+import { backendUrl } from '../main';
 
 interface Goal {
     _id: string;
@@ -23,7 +24,7 @@ const Goals = () => {
 
     const fetchGoals = async () => {
         try {
-            const res = await axios.get<Goal[]>('http://localhost:3000/goals');
+            const res = await axios.get<Goal[]>(`${backendUrl}/goals`);
             setGoals(res.data);
         } catch (err) {
             console.error(err);
@@ -39,7 +40,7 @@ const Goals = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/goals', formData);
+            await axios.post(`${backendUrl}/goals`, formData);
             setFormData({ title: '', category: 'Career', horizon: '30 Days' });
             fetchGoals();
         } catch (err: any) {
@@ -49,7 +50,7 @@ const Goals = () => {
 
     const updateStatus = async (id: string, status: string) => {
         try {
-            await axios.patch(`http://localhost:3000/goals/${id}/status`, { status });
+            await axios.patch(`${backendUrl}/goals/${id}/status`, { status });
             fetchGoals();
         } catch (err) {
             console.error(err);

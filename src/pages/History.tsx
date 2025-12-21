@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { backendUrl } from '../main';
 
 interface Log {
     _id: string;
@@ -16,7 +17,7 @@ const History = () => {
     useEffect(() => {
         const fetchLogs = async () => {
             try {
-                const res = await axios.get<Log[]>('http://localhost:3000/daily-logs');
+                const res = await axios.get<Log[]>(`${backendUrl}/daily-logs`);
                 setLogs(res.data);
             } catch (err) {
                 console.error(err);

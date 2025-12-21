@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { backendUrl } from '../main';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ const Login = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:3000/auth/login', { email, password });
+            const res = await axios.post(`${backendUrl}/auth/login`, { email, password });
             login(res.data.token);
             navigate('/');
         } catch (err: any) {

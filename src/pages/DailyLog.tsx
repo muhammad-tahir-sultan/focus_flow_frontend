@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { backendUrl } from '../main';
 
 const DailyLog = () => {
     const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ const DailyLog = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/daily-logs', {
+            await axios.post(`${backendUrl}/daily-logs`, {
                 ...formData,
                 timeSpent: Number(formData.timeSpent),
             });
