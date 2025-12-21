@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import Goals from './pages/Goals';
 import DailyLog from './pages/DailyLog';
 import History from './pages/History';
+import RoadmapDetail from './pages/RoadmapDetail';
+import ControlList from './pages/ControlList';
 
 import type { ReactNode } from 'react';
 
@@ -53,6 +55,22 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <History />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/roadmap/:id"
+                            element={
+                                <PrivateRoute>
+                                    <RoadmapDetail />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/control-list"
+                            element={
+                                <PrivateRoute>
+                                    <ControlList />
                                 </PrivateRoute>
                             }
                         />

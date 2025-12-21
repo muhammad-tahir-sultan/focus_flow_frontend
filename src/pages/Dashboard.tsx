@@ -111,10 +111,10 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="flex-between">
+            <div className="flex-between" >
                 <h2 className="heading-lg">Quick Actions</h2>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
                 <Link to="/log" className="btn btn-primary" style={{ textAlign: 'center', display: 'block' }}>
                     Log Daily Execution
                 </Link>
@@ -122,6 +122,120 @@ const Dashboard = () => {
                     Manage Goals
                 </Link>
             </div>
+
+            <div className="card mb-8" style={{ borderLeft: '4px solid var(--accent-color)' }}>
+                <h3 className="heading-lg mb-4">Daily Non-Negotiables</h3>
+                <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.75rem' }}>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--accent-color)' }}>•</span>
+                        <strong>Career & Income:</strong> 10 Client Outreach + 1 LinkedIn Post
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--accent-color)' }}>•</span>
+                        <strong>Physique:</strong> Workout (45 mins) + Reduce Tea (2x)
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--accent-color)' }}>•</span>
+                        <strong>Degree:</strong> Study Degree Subjects (1 hour)
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--accent-color)' }}>•</span>
+                        <strong>Communication:</strong> Practice English (Reading/Speaking 30 mins)
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--accent-color)' }}>•</span>
+                        <strong>Skills:</strong> Learn/Code New Tech (1 hour)
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--accent-color)' }}>•</span>
+                        <strong>Mindset:</strong>
+                        <Link to="/control-list" style={{ color: 'inherit', textDecoration: 'none', marginLeft: '0.25rem' }} className="hover-link">
+                            Control List Review
+                        </Link>
+                        + Daily Reflection
+                    </li>
+                </ul>
+            </div>
+
+            <div className="card mb-8" style={{ borderLeft: '4px solid var(--primary-color)' }}>
+                <h3 className="heading-lg mb-4">6 Months Goal Target</h3>
+                <ol style={{ paddingLeft: '1.5rem', display: 'grid', gap: '0.75rem' }}>
+                    <li>
+                        <Link to="/roadmap/income" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>1-Lakh per month income</strong> from other than job (50k is Salary)
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/roadmap/physique" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>Good Physique</strong>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/roadmap/degree" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>Degree Will be Completed</strong>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/roadmap/english" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>Good English Communication</strong>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/roadmap/client-hunting" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>Doing Daily Client Hunting</strong>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/roadmap/better-day" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>Being Better Day by Day</strong>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/roadmap/rate-myself" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>Rate Myself</strong> (Feedback)
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/roadmap/skills" style={{ color: 'inherit', textDecoration: 'none' }} className="hover-link">
+                            <strong>Add New Skills in me</strong>
+                        </Link>
+                        <div style={{ marginTop: '0.5rem' }}>
+                            <div style={{ marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>✅ MUST MASTER (High ROI):</div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                                {['NestJS (Advanced)', 'GraphQL', 'Prisma', 'DB Mastery', 'System Design'].map(skill => (
+                                    <span key={skill} style={{
+                                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                                        border: '1px solid var(--accent-color)',
+                                        color: 'var(--accent-color)',
+                                        padding: '0.25rem 0.5rem',
+                                        borderRadius: '4px',
+                                        fontSize: '0.85rem',
+                                        fontWeight: '600'
+                                    }}>
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                            <div style={{ marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>🟡 BASICS (Awareness):</div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                {['Redis', 'Queues', 'CI/CD', 'Cloud Deploy'].map(skill => (
+                                    <span key={skill} style={{
+                                        backgroundColor: 'var(--surface-color)',
+                                        border: '1px solid var(--border-color)',
+                                        padding: '0.25rem 0.5rem',
+                                        borderRadius: '4px',
+                                        fontSize: '0.85rem'
+                                    }}>
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+
         </div>
     );
 };
