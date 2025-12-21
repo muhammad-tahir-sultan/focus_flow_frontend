@@ -10,14 +10,39 @@ const DailyLog = () => {
         timeSpent: '',
         reflection: '',
     });
+    const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    const nonNegotiables = [
+        'Career: 10 Client Outreach + 1 LinkedIn Post',
+        'Physique: Workout (45 mins) + Reduce Tea (2x)',
+        'Degree: Study Degree Subjects (1 hour)',
+        'Communication: Practice English (30 mins)',
+        'Skills: Learn/Code New Tech (1 hour)',
+        'Mindset: Control List Review + Daily Reflection'
+    ];
+
+    const handleCheckChange = (item: string) => {
+        setCheckedItems(prev => ({
+            ...prev,
+            [item]: !prev[item]
+        }));
+    };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
+            const completedItems = Object.entries(checkedItems)
+                .filter(([_, isChecked]) => isChecked)
+                .map(([item]) => `- [x] ${item}`)
+                .join('\n');
+
+            const finalDescription = `${formData.description}\n\n**Completed Non-Negotiables:**\n${completedItems}`;
+
             await axios.post(`${backendUrl}/daily-logs`, {
                 ...formData,
+                description: finalDescription,
                 timeSpent: Number(formData.timeSpent),
             });
             navigate('/history');
@@ -36,8 +61,27 @@ const DailyLog = () => {
             <form onSubmit={handleSubmit} className="card">
                 {error && <div style={{ color: 'var(--error-color)', marginBottom: '1rem', padding: '0.5rem', border: '1px solid var(--error-color)', borderRadius: '4px' }}>{error}</div>}
 
+                <div className="mb-8" style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: '600', color: 'var(--accent-color)' }}>✅ Daily Non-Negotiables Checklist</label>
+                    <div style={{ display: 'grid', gap: '0.75rem' }}>
+                        {nonNegotiables.map((item) => (
+                            <label key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={!!checkedItems[item]}
+                                    onChange={() => handleCheckChange(item)}
+                                    style={{ width: '1.2rem', height: '1.2rem', accentColor: 'var(--accent-color)' }}
+                                />
+                                <span style={{ fontSize: '0.9rem', color: checkedItems[item] ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                                    {item}
+                                </span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="mb-4">
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>What did you execute today?</label>
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>What else did you execute today?</label>
                     <textarea
                         rows={4}
                         value={formData.description}
