@@ -131,7 +131,7 @@ const Dashboard = () => {
     const todayDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ width: '100%' }}>
             <div className="dashboard-header mb-8">
                 <div>
                     <h2 className="heading-lg" style={{ color: 'var(--text-secondary)' }}>Today is</h2>
@@ -209,7 +209,12 @@ const Dashboard = () => {
 
             {isAdmin() && (
                 <div className="card mb-8 goals-card">
-                    <h3 className="heading-lg mb-4">6 Months Goal Target</h3>
+                    <div className="flex-between mb-4">
+                        <h3 className="heading-lg" style={{ margin: 0 }}>6 Months Goal Target</h3>
+                        <Link to="/roadmaps" className="hover-link" style={{ fontSize: '0.9rem' }}>
+                            View All Roadmaps
+                        </Link>
+                    </div>
 
                     <div className="mb-6">
                         <h4 className="goal-section-title goal-core">🔥 Core (Daily Non-Negotiable)</h4>

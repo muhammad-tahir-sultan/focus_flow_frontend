@@ -60,7 +60,7 @@ const Goals = () => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ width: '100%' }}>
             <h2 className="heading-xl mb-8">Manage Goals</h2>
 
             <form onSubmit={handleSubmit} className="card mb-8">

@@ -58,9 +58,8 @@ select:focus {
 }
 
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1rem;
+  width: 100%;
+  padding: 0 3rem;
 }
 
 .btn {
@@ -81,6 +80,35 @@ select:focus {
 .btn-primary:hover {
   opacity: 0.9;
   transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-secondary);
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  font-size: 1.1rem;
+}
+
+.btn-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+  border-color: var(--accent-color);
 }
 
 .card {
@@ -143,6 +171,16 @@ select:focus {
   color: var(--accent-color) !important;
   text-decoration: none;
   background-color: rgba(255, 255, 255, 0.08);
+}
+
+.roadmap-card {
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  cursor: default;
+}
+
+.roadmap-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
 }
 
 .hover-link::after {

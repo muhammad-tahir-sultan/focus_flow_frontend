@@ -80,7 +80,7 @@ const Vision = () => {
     ];
 
     return (
-        <div style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
+        <div style={{ width: '100%', paddingBottom: '4rem' }}>
             <div className="mb-8" style={{ textAlign: 'center' }}>
                 <h1 className="heading-xl">Long-term Vision</h1>
                 <p className="text-sm" style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>

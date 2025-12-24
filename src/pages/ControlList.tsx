@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const ControlList = () => {
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ width: '100%' }}>
             <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', color: 'var(--text-secondary)', textDecoration: 'none' }}>
                 ← Back to Dashboard
             </Link>

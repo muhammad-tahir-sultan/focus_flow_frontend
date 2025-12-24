@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { backendUrl } from '../main';
 
 const DailyLog = () => {
+    const { id } = useParams();
     const [formData, setFormData] = useState({
         description: '',
         timeSpent: '',
@@ -12,6 +13,7 @@ const DailyLog = () => {
     });
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const nonNegotiables = [
@@ -22,6 +24,42 @@ const DailyLog = () => {
         'Skills: Learn/Code New Tech (1 hour)',
         'Mindset: Control List Review + Daily Reflection'
     ];
+
+    useEffect(() => {
+        if (id) {
+            const fetchLog = async () => {
+                try {
+                    setIsLoading(true);
+                    const res = await axios.get(`${backendUrl}/daily-logs/${id}`);
+                    const log = res.data;
+
+                    // Parse description for checked items
+                    const newCheckedItems: Record<string, boolean> = {};
+                    nonNegotiables.forEach(item => {
+                        if (log.description.includes(`[x] ${item}`)) {
+                            newCheckedItems[item] = true;
+                        }
+                    });
+
+                    // Clean up description (remove the non-negotiables section for editing)
+                    const descriptionParts = log.description.split('\n\n**Completed Non-Negotiables:**');
+
+                    setFormData({
+                        description: descriptionParts[0],
+                        timeSpent: log.timeSpent.toString(),
+                        reflection: log.reflection,
+                    });
+                    setCheckedItems(newCheckedItems);
+                } catch (err) {
+                    console.error('Failed to fetch log', err);
+                    setError('Failed to load log data');
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchLog();
+        }
+    }, [id]);
 
     const handleCheckChange = (item: string) => {
         setCheckedItems(prev => ({
@@ -40,20 +78,32 @@ const DailyLog = () => {
 
             const finalDescription = `${formData.description}\n\n**Completed Non-Negotiables:**\n${completedItems}`;
 
-            await axios.post(`${backendUrl}/daily-logs`, {
-                ...formData,
-                description: finalDescription,
-                timeSpent: Number(formData.timeSpent),
-            });
+            if (id) {
+                await axios.patch(`${backendUrl}/daily-logs/${id}`, {
+                    ...formData,
+                    description: finalDescription,
+                    timeSpent: Number(formData.timeSpent),
+                });
+            } else {
+                await axios.post(`${backendUrl}/daily-logs`, {
+                    ...formData,
+                    description: finalDescription,
+                    timeSpent: Number(formData.timeSpent),
+                });
+            }
             navigate('/history');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to submit log');
         }
     };
 
+    if (isLoading) return <div className="container">Loading log data...</div>;
+
     return (
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <h2 className="heading-xl" style={{ textAlign: 'center' }}>Log Daily Execution</h2>
+            <h2 className="heading-xl" style={{ textAlign: 'center' }}>
+                {id ? 'Edit Daily Execution' : 'Log Daily Execution'}
+            </h2>
             <p className="text-sm" style={{ textAlign: 'center', marginBottom: '2rem' }}>
                 "Consistency is the key to success."
             </p>
@@ -116,11 +166,8 @@ const DailyLog = () => {
                 </div>
 
                 <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-                    Submit Log
+                    {id ? 'Update Log' : 'Submit Log'}
                 </button>
-                <p className="text-sm" style={{ marginTop: '1rem', textAlign: 'center' }}>
-                    Note: You can only submit one log per day. It cannot be edited.
-                </p>
             </form>
         </div>
     );

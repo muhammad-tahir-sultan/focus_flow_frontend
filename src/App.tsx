@@ -8,8 +8,12 @@ import Goals from './pages/Goals';
 import DailyLog from './pages/DailyLog';
 import History from './pages/History';
 import RoadmapDetail from './pages/RoadmapDetail';
+import Roadmaps from './pages/Roadmaps';
+import RoadmapEditor from './pages/RoadmapEditor';
 import ControlList from './pages/ControlList';
 import Vision from './pages/Vision';
+import TechnicalRoadmapList from './pages/TechnicalRoadmapList';
+import TechnicalRoadmapDetail from './pages/TechnicalRoadmapDetail';
 
 import type { ReactNode } from 'react';
 
@@ -52,6 +56,14 @@ function App() {
                             }
                         />
                         <Route
+                            path="/log/:id"
+                            element={
+                                <PrivateRoute>
+                                    <DailyLog />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
                             path="/history"
                             element={
                                 <PrivateRoute>
@@ -68,10 +80,50 @@ function App() {
                             }
                         />
                         <Route
+                            path="/roadmaps"
+                            element={
+                                <PrivateRoute>
+                                    <Roadmaps />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/roadmaps/new"
+                            element={
+                                <PrivateRoute>
+                                    <RoadmapEditor />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/roadmaps/edit/:id"
+                            element={
+                                <PrivateRoute>
+                                    <RoadmapEditor />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
                             path="/control-list"
                             element={
                                 <PrivateRoute>
                                     <ControlList />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/future-roadmap"
+                            element={
+                                <PrivateRoute>
+                                    <TechnicalRoadmapList />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/future-roadmap/:slug"
+                            element={
+                                <PrivateRoute>
+                                    <TechnicalRoadmapDetail />
                                 </PrivateRoute>
                             }
                         />
