@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
+import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
 
 interface Roadmap {
@@ -58,7 +59,7 @@ const Roadmaps = () => {
         setFilteredRoadmaps(filtered);
     }, [roadmaps, selectedCategory, selectedDifficulty, searchQuery]);
 
-    if (loading) return <div className="container" style={{ padding: '2rem' }}>Loading Roadmaps...</div>;
+    if (loading) return <Loader />;
 
     // Extract unique values for filters
     const categories = ['All', ...Array.from(new Set(roadmaps.map(r => r.category)))];

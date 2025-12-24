@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
+import Loader from '../components/Loader';
 
 interface TechnicalRoadmap {
     _id: string;
@@ -106,7 +107,7 @@ const TechnicalRoadmapList = () => {
     const statuses = ['All', 'Planned', 'InProgress', 'Completed'];
     const difficulties = ['All', '1', '2', '3', '4', '5'];
 
-    if (loading && roadmaps.length === 0) return <div className="container" style={{ padding: '2rem' }}>Loading Technical Roadmaps...</div>;
+    if (loading && roadmaps.length === 0) return <Loader />;
 
     return (
         <div className="container" style={{ padding: '2rem 3rem' }}>

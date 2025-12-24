@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import axios from 'axios';
 import { backendUrl } from '../main';
+import Loader from '../components/Loader';
 
 interface Goal {
     _id: string;
@@ -57,52 +58,104 @@ const Goals = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loader />;
 
     return (
         <div style={{ width: '100%' }}>
-            <h2 className="heading-xl mb-8">Manage Goals</h2>
+            <h2 className="heading-xl mb-8" style={{ textAlign: 'center' }}>Manage Goals</h2>
 
-            <form onSubmit={handleSubmit} className="card mb-8">
-                {error && <div style={{ color: 'var(--error-color)', marginBottom: '1rem' }}>{error}</div>}
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Goal Title</label>
-                        <input
-                            type="text"
-                            value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            required
-                            placeholder="e.g., Learn NestJS"
-                        />
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Category</label>
-                            <select
-                                value={formData.category}
-                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                            >
-                                {['Career', 'Health', 'Finance', 'Skills', 'Personal'].map(c => (
-                                    <option key={c} value={c}>{c}</option>
-                                ))}
-                            </select>
+            <div style={{ maxWidth: '700px', margin: '0 auto 3rem' }}>
+                <form onSubmit={handleSubmit} className="card" style={{ padding: '2rem' }}>
+                    {error && (
+                        <div style={{
+                            color: 'var(--error-color)',
+                            marginBottom: '1.5rem',
+                            padding: '0.75rem 1rem',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            border: '1px solid var(--error-color)',
+                            borderRadius: '8px',
+                            fontSize: '0.9rem'
+                        }}>
+                            {error}
                         </div>
+                    )}
+
+                    <div style={{ display: 'grid', gap: '1.25rem' }}>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Time Horizon</label>
-                            <select
-                                value={formData.horizon}
-                                onChange={(e) => setFormData({ ...formData, horizon: e.target.value })}
-                            >
-                                {['Daily', '30 Days', '3 Months', '6 Months', '1 Year', '2 Years', '3 Years', '5 Years'].map(h => (
-                                    <option key={h} value={h}>{h}</option>
-                                ))}
-                            </select>
+                            <label style={{
+                                display: 'block',
+                                marginBottom: '0.75rem',
+                                fontWeight: '600',
+                                fontSize: '0.95rem'
+                            }}>
+                                Goal Title
+                            </label>
+                            <input
+                                type="text"
+                                value={formData.title}
+                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                required
+                                placeholder="e.g., Learn NestJS"
+                                style={{ fontSize: '1rem', padding: '0.875rem 1rem' }}
+                            />
                         </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                            <div>
+                                <label style={{
+                                    display: 'block',
+                                    marginBottom: '0.75rem',
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}>
+                                    Category
+                                </label>
+                                <select
+                                    value={formData.category}
+                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                    style={{ fontSize: '1rem', padding: '0.875rem 1rem' }}
+                                >
+                                    {['Career', 'Health', 'Finance', 'Skills', 'Personal'].map(c => (
+                                        <option key={c} value={c}>{c}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style={{
+                                    display: 'block',
+                                    marginBottom: '0.75rem',
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}>
+                                    Time Horizon
+                                </label>
+                                <select
+                                    value={formData.horizon}
+                                    onChange={(e) => setFormData({ ...formData, horizon: e.target.value })}
+                                    style={{ fontSize: '1rem', padding: '0.875rem 1rem' }}
+                                >
+                                    {['Daily', '30 Days', '3 Months', '6 Months', '1 Year', '2 Years', '3 Years', '5 Years'].map(h => (
+                                        <option key={h} value={h}>{h}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{
+                                padding: '1rem',
+                                fontSize: '1.05rem',
+                                fontWeight: '600'
+                            }}
+                        >
+                            Create Goal
+                        </button>
                     </div>
-                    <button type="submit" className="btn btn-primary">Create Goal</button>
-                </div>
-            </form>
+                </form>
+            </div>
 
             <div style={{ display: 'grid', gap: '1rem' }}>
                 {goals.map(goal => (

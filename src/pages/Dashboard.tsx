@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
+import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
 import ExecutionStreakChart from '../components/charts/ExecutionStreakChart';
 import TimeInvestedChart from '../components/charts/TimeInvestedChart';
@@ -126,7 +127,7 @@ const Dashboard = () => {
         fetchAnalytics();
     }, []);
 
-    if (loading) return <div className="container">Loading...</div>;
+    if (loading) return <Loader />;
 
     const todayDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
@@ -289,9 +290,7 @@ const Dashboard = () => {
                 {showGraphs && (
                     <>
                         {analyticsLoading ? (
-                            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
-                                Loading analytics...
-                            </div>
+                            <Loader />
                         ) : analyticsError ? (
                             <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--error-color)' }}>
                                 {analyticsError}

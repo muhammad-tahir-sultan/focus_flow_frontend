@@ -2,11 +2,13 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { backendUrl } from '../main';
+import Loader from '../components/Loader';
 
 interface Roadmap {
     _id: string;
     title: string;
     description: string;
+    content?: string;
     category: string;
     difficulty: string;
     weeklyMilestones: string[];
@@ -34,7 +36,7 @@ const RoadmapDetail = () => {
         if (id) fetchRoadmap();
     }, [id]);
 
-    if (loading) return <div className="container">Loading Roadmap details...</div>;
+    if (loading) return <Loader />;
 
     if (!roadmap || error) {
         return (
@@ -60,6 +62,15 @@ const RoadmapDetail = () => {
                     {roadmap.description}
                 </p>
             </div>
+
+            {roadmap.content && (
+                <div className="card mb-8" style={{ padding: '2rem' }}>
+                    <h2 className="heading-lg mb-4">Detailed Content</h2>
+                    <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.8', fontSize: '1rem' }}>
+                        {roadmap.content}
+                    </div>
+                </div>
+            )}
 
             {roadmap.weeklyMilestones && roadmap.weeklyMilestones.length > 0 && (
                 <div className="card mb-8" style={{ borderLeft: '4px solid var(--accent-color)' }}>

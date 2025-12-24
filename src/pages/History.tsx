@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
+import Loader from '../components/Loader';
 
 interface Log {
     _id: string;
@@ -30,18 +31,8 @@ const History = () => {
         fetchLogs();
     }, []);
 
-    const handleDelete = async (id: string) => {
-        if (!window.confirm('Are you sure you want to delete this log?')) return;
-        try {
-            await axios.delete(`${backendUrl}/daily-logs/${id}`);
-            setLogs(logs.filter(log => log._id !== id));
-        } catch (err) {
-            console.error('Failed to delete log', err);
-            alert('Failed to delete log');
-        }
-    };
 
-    if (loading) return <div className="container">Loading...</div>;
+    if (loading) return <Loader />;
 
     return (
         <div style={{ width: '100%' }}>
@@ -73,14 +64,6 @@ const History = () => {
                                     >
                                         ✏️
                                     </Link>
-                                    <button
-                                        onClick={() => handleDelete(log._id)}
-                                        className="btn-icon"
-                                        title="Delete Log"
-                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                                    >
-                                        🗑️
-                                    </button>
                                 </div>
                             </div>
                         </div>

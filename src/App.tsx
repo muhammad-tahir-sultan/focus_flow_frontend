@@ -14,12 +14,13 @@ import ControlList from './pages/ControlList';
 import Vision from './pages/Vision';
 import TechnicalRoadmapList from './pages/TechnicalRoadmapList';
 import TechnicalRoadmapDetail from './pages/TechnicalRoadmapDetail';
+import Loader from './components/Loader';
 
 import type { ReactNode } from 'react';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loader />;
     return user ? children : <Navigate to="/login" />;
 };
 

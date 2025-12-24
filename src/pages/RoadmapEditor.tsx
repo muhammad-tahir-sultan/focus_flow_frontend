@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { backendUrl } from '../main';
 import { useAuth } from '../context/AuthContext';
+import Loader from '../components/Loader';
 
 const RoadmapEditor = () => {
     const { id } = useParams();
@@ -14,6 +15,7 @@ const RoadmapEditor = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
+        content: '',
         category: '',
         difficulty: 'Intermediate',
         weeklyMilestones: [''],
@@ -84,14 +86,33 @@ const RoadmapEditor = () => {
         }
     };
 
-    if (loading && id) return <div className="container">Loading roadmap data...</div>;
+    if (loading && id) return <Loader />;
 
     return (
-        <div className="container" style={{ maxWidth: '800px' }}>
-            <h1 className="heading-xl">{id ? 'Edit Roadmap' : 'Upload New Roadmap'}</h1>
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                <h1 className="heading-xl" style={{ marginBottom: '0.5rem' }}>
+                    {id ? 'Edit Roadmap' : 'Upload New Roadmap'}
+                </h1>
+                <p className="text-sm" style={{ fontSize: '1rem' }}>
+                    {id ? 'Update your learning path' : 'Create a structured learning path'}
+                </p>
+            </div>
 
-            <form onSubmit={handleSubmit} className="card">
-                {error && <div style={{ color: 'var(--error-color)', marginBottom: '1rem' }}>{error}</div>}
+            <form onSubmit={handleSubmit} className="card" style={{ padding: '2.5rem' }}>
+                {error && (
+                    <div style={{
+                        color: 'var(--error-color)',
+                        marginBottom: '1.5rem',
+                        padding: '0.75rem 1rem',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        border: '1px solid var(--error-color)',
+                        borderRadius: '8px',
+                        fontSize: '0.9rem'
+                    }}>
+                        {error}
+                    </div>
+                )}
 
                 <div className="mb-4">
                     <label style={{ display: 'block', marginBottom: '0.5rem' }}>Title</label>
@@ -124,6 +145,20 @@ const RoadmapEditor = () => {
                         required
                         placeholder="Detailed overview of the roadmap..."
                     />
+                </div>
+
+                <div className="mb-4">
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Content (Blog-style)</label>
+                    <textarea
+                        rows={12}
+                        value={formData.content}
+                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                        placeholder="Write detailed blog-type content here. You can use markdown formatting..."
+                        style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}
+                    />
+                    <small style={{ display: 'block', marginTop: '0.5rem', color: 'var(--text-secondary)' }}>
+                        Supports Markdown formatting (headings, lists, code blocks, etc.)
+                    </small>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }} className="mb-8">
@@ -196,7 +231,17 @@ const RoadmapEditor = () => {
                     ))}
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={{
+                        width: '100%',
+                        padding: '1rem',
+                        fontSize: '1.05rem',
+                        fontWeight: '600'
+                    }}
+                    disabled={loading}
+                >
                     {loading ? 'Saving...' : id ? 'Update Roadmap' : 'Upload Roadmap'}
                 </button>
             </form>

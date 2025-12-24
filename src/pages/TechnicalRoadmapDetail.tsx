@@ -4,6 +4,7 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { backendUrl } from '../main';
+import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
 
 interface Resource {
@@ -65,7 +66,7 @@ const TechnicalRoadmapDetail = () => {
         }
     };
 
-    if (loading) return <div className="container" style={{ padding: '2rem' }}>Loading Technical Insight...</div>;
+    if (loading) return <Loader />;
     if (error || !roadmap) return <div className="container" style={{ padding: '2rem' }}>{error || 'Not found'}</div>;
 
     return (
