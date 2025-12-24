@@ -7,6 +7,7 @@ interface User {
     id: string;
     name: string;
     email: string;
+    role: string;
     exp: number;
 }
 
@@ -15,6 +16,7 @@ interface AuthContextType {
     login: (token: string) => void;
     logout: () => void;
     loading: boolean;
+    isAdmin: () => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -63,8 +65,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         delete axios.defaults.headers.common['Authorization'];
     };
 
+    const isAdmin = () => {
+        return user?.role === 'admin';
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, logout, loading, isAdmin }}>
             {!loading && children}
         </AuthContext.Provider>
     );

@@ -1,6 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useEffect } from 'react';
 
 const Vision = () => {
+    const { isAdmin } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isAdmin()) {
+            alert('Access denied. This page is only available to administrators.');
+            navigate('/');
+        }
+    }, [isAdmin, navigate]);
     const projections = [
         {
             time: '6 Months',

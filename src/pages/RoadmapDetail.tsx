@@ -1,7 +1,19 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useEffect } from 'react';
 import { roadmaps } from '../data/roadmaps';
 
 const RoadmapDetail = () => {
+    const { isAdmin } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isAdmin()) {
+            alert('Access denied. This page is only available to administrators.');
+            navigate('/');
+        }
+    }, [isAdmin, navigate]);
+
     const { id } = useParams<{ id: string }>();
     const roadmap = id ? roadmaps[id] : null;
 

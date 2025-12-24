@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
+import { useAuth } from '../context/AuthContext';
 import ExecutionStreakChart from '../components/charts/ExecutionStreakChart';
 import TimeInvestedChart from '../components/charts/TimeInvestedChart';
 import NonNegotiablesChart from '../components/charts/NonNegotiablesChart';
@@ -22,6 +23,7 @@ interface Goal {
 }
 
 const Dashboard = () => {
+    const { isAdmin } = useAuth();
     const [stats, setStats] = useState<DashboardStats>({ streak: 0, activeGoals: 0, logsThisWeek: 0 });
     const [loading, setLoading] = useState(true);
     const [showGraphs, setShowGraphs] = useState(true);
@@ -135,9 +137,11 @@ const Dashboard = () => {
                     <h2 className="heading-lg" style={{ color: 'var(--text-secondary)' }}>Today is</h2>
                     <h1 className="heading-xl">{todayDate}</h1>
                 </div>
-                <Link to="/vision" className="btn btn-vision">
-                    ✨ View Long-term Vision
-                </Link>
+                {isAdmin() && (
+                    <Link to="/vision" className="btn btn-vision">
+                        ✨ View Long-term Vision
+                    </Link>
+                )}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
@@ -167,99 +171,103 @@ const Dashboard = () => {
                 </Link>
             </div>
 
-            <div className="card mb-8 non-negotiables-card">
-                <h3 className="heading-lg mb-4">Daily Non-Negotiables</h3>
-                <ul className="non-negotiables-list">
-                    <li className="non-negotiable-item">
-                        <span className="bullet">•</span>
-                        <strong>Career & Income:</strong> 10 Client Outreach + 1 LinkedIn Post
-                    </li>
-                    <li className="non-negotiable-item">
-                        <span className="bullet">•</span>
-                        <strong>Physique:</strong> Workout (45 mins) + Reduce Tea (2x)
-                    </li>
-                    <li className="non-negotiable-item">
-                        <span className="bullet">•</span>
-                        <strong>Degree:</strong> Study Degree Subjects (1 hour)
-                    </li>
-                    <li className="non-negotiable-item">
-                        <span className="bullet">•</span>
-                        <strong>Communication:</strong> Practice English (Reading/Speaking 30 mins)
-                    </li>
-                    <li className="non-negotiable-item">
-                        <span className="bullet">•</span>
-                        <strong>Skills:</strong> Learn/Code New Tech (1 hour)
-                    </li>
-                    <li className="non-negotiable-item">
-                        <span className="bullet">•</span>
-                        <strong>Mindset:</strong>
-                        <Link to="/control-list" className="hover-link" style={{ marginLeft: '0.25rem' }}>
-                            Control List Review
-                        </Link>
-                        + Daily Reflection
-                    </li>
-                </ul>
-            </div>
-
-            <div className="card mb-8 goals-card">
-                <h3 className="heading-lg mb-4">6 Months Goal Target</h3>
-
-                <div className="mb-6">
-                    <h4 className="goal-section-title goal-core">🔥 Core (Daily Non-Negotiable)</h4>
-                    <ol className="goals-list">
-                        <li>
-                            <Link to="/roadmap/revenue-engine" className="hover-link">
-                                <strong>Revenue Engine</strong> (Income + Clients)
-                            </Link>
+            {isAdmin() && (
+                <div className="card mb-8 non-negotiables-card">
+                    <h3 className="heading-lg mb-4">Daily Non-Negotiables</h3>
+                    <ul className="non-negotiables-list">
+                        <li className="non-negotiable-item">
+                            <span className="bullet">•</span>
+                            <strong>Career & Income:</strong> 10 Client Outreach + 1 LinkedIn Post
                         </li>
-                        <li>
-                            <Link to="/roadmap/skills" className="hover-link">
-                                <strong>Tech Skills</strong> (NestJS Phase 1)
+                        <li className="non-negotiable-item">
+                            <span className="bullet">•</span>
+                            <strong>Physique:</strong> Workout (45 mins) + Reduce Tea (2x)
+                        </li>
+                        <li className="non-negotiable-item">
+                            <span className="bullet">•</span>
+                            <strong>Degree:</strong> Study Degree Subjects (1 hour)
+                        </li>
+                        <li className="non-negotiable-item">
+                            <span className="bullet">•</span>
+                            <strong>Communication:</strong> Practice English (Reading/Speaking 30 mins)
+                        </li>
+                        <li className="non-negotiable-item">
+                            <span className="bullet">•</span>
+                            <strong>Skills:</strong> Learn/Code New Tech (1 hour)
+                        </li>
+                        <li className="non-negotiable-item">
+                            <span className="bullet">•</span>
+                            <strong>Mindset:</strong>
+                            <Link to="/control-list" className="hover-link" style={{ marginLeft: '0.25rem' }}>
+                                Control List Review
                             </Link>
-                            <div className="skills-container">
-                                <div className="skills-badges">
-                                    {['NestJS (Advanced)', 'GraphQL', 'Prisma', 'DB Mastery', 'System Design'].map(skill => (
-                                        <span key={skill} className="skill-badge">
-                                            {skill}
-                                        </span>
-                                    ))}
+                            + Daily Reflection
+                        </li>
+                    </ul>
+                </div>
+            )}
+
+            {isAdmin() && (
+                <div className="card mb-8 goals-card">
+                    <h3 className="heading-lg mb-4">6 Months Goal Target</h3>
+
+                    <div className="mb-6">
+                        <h4 className="goal-section-title goal-core">🔥 Core (Daily Non-Negotiable)</h4>
+                        <ol className="goals-list">
+                            <li>
+                                <Link to="/roadmap/revenue-engine" className="hover-link">
+                                    <strong>Revenue Engine</strong> (Income + Clients)
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/roadmap/skills" className="hover-link">
+                                    <strong>Tech Skills</strong> (NestJS Phase 1)
+                                </Link>
+                                <div className="skills-container">
+                                    <div className="skills-badges">
+                                        {['NestJS (Advanced)', 'GraphQL', 'Prisma', 'DB Mastery', 'System Design'].map(skill => (
+                                            <span key={skill} className="skill-badge">
+                                                {skill}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li>
-                            <Link to="/roadmap/physique" className="hover-link">
-                                <strong>Physique & Energy</strong>
-                            </Link>
-                        </li>
-                    </ol>
-                </div>
+                            </li>
+                            <li>
+                                <Link to="/roadmap/physique" className="hover-link">
+                                    <strong>Physique & Energy</strong>
+                                </Link>
+                            </li>
+                        </ol>
+                    </div>
 
-                <div>
-                    <h4 className="goal-section-title goal-rotational">🔄 Rotational (Alternate Days)</h4>
-                    <ol className="goals-list">
-                        <li>
-                            <Link to="/roadmap/english" className="hover-link">
-                                <strong>English Communication</strong> (3x/Week)
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/roadmap/degree" className="hover-link">
-                                <strong>Degree Completion</strong> (Class Days)
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/roadmap/better-day" className="hover-link">
-                                <strong>Better Day</strong> (Mindset)
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/roadmap/rate-myself" className="hover-link">
-                                <strong>Self-Rating</strong> (Binary Check)
-                            </Link>
-                        </li>
-                    </ol>
+                    <div>
+                        <h4 className="goal-section-title goal-rotational">🔄 Rotational (Alternate Days)</h4>
+                        <ol className="goals-list">
+                            <li>
+                                <Link to="/roadmap/english" className="hover-link">
+                                    <strong>English Communication</strong> (3x/Week)
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/roadmap/degree" className="hover-link">
+                                    <strong>Degree Completion</strong> (Class Days)
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/roadmap/better-day" className="hover-link">
+                                    <strong>Better Day</strong> (Mindset)
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/roadmap/rate-myself" className="hover-link">
+                                    <strong>Self-Rating</strong> (Binary Check)
+                                </Link>
+                            </li>
+                        </ol>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Discipline Graphs */}
             <div className="card" style={{ marginTop: '3rem', padding: '2rem' }}>
