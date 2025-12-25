@@ -13,6 +13,8 @@ import Loader from './components/Loader';
 
 import type { ReactNode } from 'react';
 import MasterRoadmap from './pages/MasterRoadmap';
+import BackendMasteryGraph from './pages/BackendMasteryGraph';
+import ProjectMasteryGraph from './pages/ProjectMasteryGraph';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
@@ -89,6 +91,22 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <MasterRoadmap />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/backend-graph"
+                            element={
+                                <PrivateRoute>
+                                    <BackendMasteryGraph />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/project-graph"
+                            element={
+                                <PrivateRoute>
+                                    <ProjectMasteryGraph />
                                 </PrivateRoute>
                             }
                         />

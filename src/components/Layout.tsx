@@ -14,6 +14,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
         { label: 'Dashboard', path: '/' },
         { label: 'Goals', path: '/goals' },
         { label: 'Master Roadmap', path: '/master-roadmap' },
+        { label: 'Graph', path: '/backend-graph' },
+        { label: 'Projects', path: '/project-graph' },
         { label: 'Log Today', path: '/log' },
         { label: 'History', path: '/history' },
     ];

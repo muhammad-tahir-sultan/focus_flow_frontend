@@ -13,6 +13,7 @@ interface DashboardStats {
     streak: number;
     activeGoals: number;
     logsThisWeek: number;
+    avgFocus?: number;
 }
 
 interface Log {
@@ -40,47 +41,18 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [logsRes, goalsRes] = await Promise.all([
+                const [logsRes, goalsRes, backendStatsRes] = await Promise.all([
                     axios.get<Log[]>(`${backendUrl}/daily-logs`),
-                    axios.get<Goal[]>(`${backendUrl}/goals`)
+                    axios.get<Goal[]>(`${backendUrl}/goals`),
+                    axios.get<any>(`${backendUrl}/daily-logs/stats`)
                 ]);
 
                 const logs = logsRes.data;
                 const goals = goalsRes.data;
+                const backendStats = backendStatsRes.data;
 
-                // Calculate Streak (Simplified: consecutive days ending today or yesterday)
-                let streak = 0;
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
-
-                // Sort logs descending
-                const sortedLogs = logs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-                if (sortedLogs.length > 0) {
-                    const lastLogDate = new Date(sortedLogs[0].date);
-                    lastLogDate.setHours(0, 0, 0, 0);
-
-                    const diffTime = Math.abs(today.getTime() - lastLogDate.getTime());
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    if (diffDays <= 1) {
-                        streak = 1;
-                        // Check previous days
-                        for (let i = 1; i < sortedLogs.length; i++) {
-                            const prevDate = new Date(sortedLogs[i - 1].date);
-                            const currDate = new Date(sortedLogs[i].date);
-                            prevDate.setHours(0, 0, 0, 0);
-                            currDate.setHours(0, 0, 0, 0);
-
-                            const gap = (prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24);
-                            if (gap === 1) {
-                                streak++;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                }
 
                 // Active Goals
                 const activeGoals = goals.filter(g => g.status === 'Active').length;
@@ -90,7 +62,12 @@ const Dashboard = () => {
                 startOfWeek.setDate(today.getDate() - today.getDay()); // Sunday
                 const logsThisWeek = logs.filter(l => new Date(l.date) >= startOfWeek).length;
 
-                setStats({ streak, activeGoals, logsThisWeek });
+                setStats({
+                    streak: backendStats.streak,
+                    activeGoals,
+                    logsThisWeek,
+                    avgFocus: backendStats.avgFocus
+                });
             } catch (err) {
                 console.error(err);
             } finally {

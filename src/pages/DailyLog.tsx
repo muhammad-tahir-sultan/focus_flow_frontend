@@ -12,6 +12,7 @@ const DailyLog = () => {
         timeSpent: '',
         reflection: '',
         date: new Date().toISOString().split('T')[0],
+        mood: 'neutral' as 'high' | 'neutral' | 'good' | 'low',
     });
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [error, setError] = useState('');
@@ -51,6 +52,7 @@ const DailyLog = () => {
                         timeSpent: log.timeSpent.toString(),
                         reflection: log.reflection,
                         date: new Date(log.date).toISOString().split('T')[0],
+                        mood: log.mood || 'neutral',
                     });
                     setCheckedItems(newCheckedItems);
                 } catch (err) {
@@ -186,6 +188,37 @@ const DailyLog = () => {
                             required
                             placeholder="e.g., 2.5"
                         />
+                    </div>
+
+                    <div className="mb-4">
+                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Mood / Focus Quality</label>
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            {[
+                                { val: 'high', label: '⚡ High', color: '#3b82f6' },
+                                { val: 'neutral', label: '💡 Neutral', color: '#eab308' },
+                                { val: 'good', label: '✓ Good', color: '#22c55e' },
+                                { val: 'low', label: '📉 Low', color: '#ef4444' }
+                            ].map(m => (
+                                <button
+                                    key={m.val}
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, mood: m.val as any })}
+                                    style={{
+                                        flex: 1,
+                                        padding: '0.5rem',
+                                        borderRadius: '8px',
+                                        border: `2px solid ${formData.mood === m.val ? m.color : 'var(--border-color)'}`,
+                                        backgroundColor: formData.mood === m.val ? `${m.color}20` : 'transparent',
+                                        color: formData.mood === m.val ? m.color : 'var(--text-secondary)',
+                                        cursor: 'pointer',
+                                        fontWeight: '600',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
+                                    {m.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="mb-8">
