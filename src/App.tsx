@@ -14,6 +14,7 @@ import ControlList from './pages/ControlList';
 import Vision from './pages/Vision';
 import TechnicalRoadmapList from './pages/TechnicalRoadmapList';
 import TechnicalRoadmapDetail from './pages/TechnicalRoadmapDetail';
+import MasterRoadmap from './pages/MasterRoadmap';
 import Loader from './components/Loader';
 
 import type { ReactNode } from 'react';
@@ -133,6 +134,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <Vision />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/master-roadmap"
+                            element={
+                                <PrivateRoute>
+                                    <MasterRoadmap />
                                 </PrivateRoute>
                             }
                         />
