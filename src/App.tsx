@@ -7,17 +7,12 @@ import Dashboard from './pages/Dashboard';
 import Goals from './pages/Goals';
 import DailyLog from './pages/DailyLog';
 import History from './pages/History';
-import RoadmapDetail from './pages/RoadmapDetail';
-import Roadmaps from './pages/Roadmaps';
-import RoadmapEditor from './pages/RoadmapEditor';
 import ControlList from './pages/ControlList';
 import Vision from './pages/Vision';
-import TechnicalRoadmapList from './pages/TechnicalRoadmapList';
-import TechnicalRoadmapDetail from './pages/TechnicalRoadmapDetail';
-import MasterRoadmap from './pages/MasterRoadmap';
 import Loader from './components/Loader';
 
 import type { ReactNode } from 'react';
+import MasterRoadmap from './pages/MasterRoadmap';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
@@ -74,58 +69,10 @@ function App() {
                             }
                         />
                         <Route
-                            path="/roadmap/:id"
-                            element={
-                                <PrivateRoute>
-                                    <RoadmapDetail />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/roadmaps"
-                            element={
-                                <PrivateRoute>
-                                    <Roadmaps />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/roadmaps/new"
-                            element={
-                                <PrivateRoute>
-                                    <RoadmapEditor />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/roadmaps/edit/:id"
-                            element={
-                                <PrivateRoute>
-                                    <RoadmapEditor />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
                             path="/control-list"
                             element={
                                 <PrivateRoute>
                                     <ControlList />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/future-roadmap"
-                            element={
-                                <PrivateRoute>
-                                    <TechnicalRoadmapList />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/future-roadmap/:slug"
-                            element={
-                                <PrivateRoute>
-                                    <TechnicalRoadmapDetail />
                                 </PrivateRoute>
                             }
                         />

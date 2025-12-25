@@ -13,8 +13,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     const navItems = [
         { label: 'Dashboard', path: '/' },
         { label: 'Goals', path: '/goals' },
-        { label: 'Roadmaps', path: '/roadmaps' },
-        { label: 'Future Roadmap', path: '/future-roadmap' },
         { label: 'Master Roadmap', path: '/master-roadmap' },
         { label: 'Log Today', path: '/log' },
         { label: 'History', path: '/history' },
