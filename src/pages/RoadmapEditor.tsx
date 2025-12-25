@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import MDEditor from '@uiw/react-md-editor';
 import { backendUrl } from '../main';
 import { useAuth } from '../context/AuthContext';
 import Loader from '../components/Loader';
@@ -89,7 +90,7 @@ const RoadmapEditor = () => {
     if (loading && id) return <Loader />;
 
     return (
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem' }}>
+        <div className="container" style={{ maxWidth: '1000px', margin: '0 auto', padding: '2rem 1rem' }}>
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
                 <h1 className="heading-xl" style={{ marginBottom: '0.5rem' }}>
                     {id ? 'Edit Roadmap' : 'Upload New Roadmap'}
@@ -147,27 +148,26 @@ const RoadmapEditor = () => {
                     />
                 </div>
 
-                <div className="mb-4">
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Content (Blog-style)</label>
-                    <textarea
-                        rows={12}
+                <div className="mb-8" data-color-mode="dark">
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Content (Rich Markdown Editor)</label>
+                    <MDEditor
                         value={formData.content}
-                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                        placeholder="Write detailed blog-type content here. You can use markdown formatting..."
-                        style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}
+                        onChange={(val) => setFormData({ ...formData, content: val || '' })}
+                        height={500}
+                        preview="edit"
+                        data-color-mode="dark"
+                        style={{ backgroundColor: 'var(--surface-color)', borderColor: 'var(--border-color)' }}
                     />
-                    <small style={{ display: 'block', marginTop: '0.5rem', color: 'var(--text-secondary)' }}>
-                        Supports Markdown formatting (headings, lists, code blocks, etc.)
-                    </small>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }} className="mb-8">
+                <div className="form-row-2 mb-8">
                     <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem' }}>Difficulty</label>
                         <select
                             value={formData.difficulty}
                             onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
                             className="input"
+                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', backgroundColor: 'var(--surface-color)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
                         >
                             <option value="Beginner">Beginner</option>
                             <option value="Intermediate">Intermediate</option>
@@ -180,6 +180,7 @@ const RoadmapEditor = () => {
                             value={formData.isActive ? 'active' : 'inactive'}
                             onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'active' })}
                             className="input"
+                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', backgroundColor: 'var(--surface-color)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
                         >
                             <option value="active">Active</option>
                             <option value="inactive">Draft</option>

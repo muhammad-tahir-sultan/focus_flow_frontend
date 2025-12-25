@@ -66,7 +66,7 @@ const Roadmaps = () => {
     const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
     return (
-        <div className="container" style={{ padding: '2rem 3rem' }}>
+        <div className="container" style={{ paddingBlock: '2rem' }}>
             <div className="flex-between mb-8" style={{ marginBottom: '2rem' }}>
                 <div>
                     <h1 className="heading-xl" style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>Technology Roadmaps</h1>
@@ -81,7 +81,7 @@ const Roadmaps = () => {
 
             {/* Filters */}
             <div className="card" style={{ marginBottom: '2.5rem', padding: '1.5rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
+                <div className="filters-grid-3">
                     <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Search</label>
                         <input
@@ -117,7 +117,7 @@ const Roadmaps = () => {
                         </select>
                     </div>
                 </div>
-                <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                         Showing {filteredRoadmaps.length} of {roadmaps.length} roadmaps
                     </span>
@@ -135,7 +135,7 @@ const Roadmaps = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2.5rem' }}>
+            <div className="grid-responsive-3">
                 {filteredRoadmaps.map(roadmap => (
                     <div key={roadmap._id} className="card roadmap-card" style={{
                         display: 'flex',

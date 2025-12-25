@@ -28,6 +28,7 @@ const TechnicalRoadmapList = () => {
     const [selectedPriority, setSelectedPriority] = useState<string>('All');
     const [selectedStatus, setSelectedStatus] = useState<string>('All');
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
+    const [showFilters, setShowFilters] = useState(false);
 
     useEffect(() => {
         const fetchRoadmaps = async () => {
@@ -110,7 +111,7 @@ const TechnicalRoadmapList = () => {
     if (loading && roadmaps.length === 0) return <Loader />;
 
     return (
-        <div className="container" style={{ padding: '2rem 3rem' }}>
+        <div className="container" style={{ paddingBlock: '2rem' }}>
             <div className="flex-between mb-8" style={{ alignItems: 'flex-end', marginBottom: '2rem' }}>
                 <div>
                     <h1 className="heading-xl" style={{ marginBottom: '0.75rem', fontSize: '2.5rem' }}>Future Roadmap (Technical)</h1>
@@ -122,8 +123,15 @@ const TechnicalRoadmapList = () => {
             </div>
 
             {/* Filters */}
-            <div className="card" style={{ marginBottom: '2.5rem', padding: '1.5rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <button
+                className="filter-toggle-btn"
+                onClick={() => setShowFilters(!showFilters)}
+            >
+                {showFilters ? 'Hide Filters' : 'Show Filters & Search'}
+                <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>{showFilters ? '−' : '+'}</span>
+            </button>
+            <div className={`card ${!showFilters ? 'filters-container-mobile-hidden' : ''}`} style={{ marginBottom: '2.5rem', padding: '1.5rem' }}>
+                <div className="filters-grid-4">
                     <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Category</label>
                         <select
@@ -173,7 +181,7 @@ const TechnicalRoadmapList = () => {
                         </select>
                     </div>
                 </div>
-                <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                         Showing {filteredRoadmaps.length} of {roadmaps.length} roadmaps
                     </span>
@@ -192,47 +200,67 @@ const TechnicalRoadmapList = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2.5rem' }}>
+            <div className="grid-responsive-2">
                 {filteredRoadmaps.map(roadmap => (
-                    <Link key={roadmap._id} to={`/future-roadmap/${roadmap.slug}`} className="card roadmap-card" style={{
+                    <Link key={roadmap._id} to={`/future-roadmap/${roadmap.slug}`} className="card card-premium" style={{
                         textDecoration: 'none',
                         color: 'inherit',
                         display: 'flex',
                         flexDirection: 'column',
-                        borderLeft: `5px solid ${getPriorityColor(roadmap.priority)}`,
                         cursor: 'pointer',
                         padding: '2rem',
-                        minHeight: '280px'
+                        minHeight: '280px',
+                        borderLeft: `4px solid ${getPriorityColor(roadmap.priority)}`
                     }}>
                         <div className="flex-between mb-4">
-                            <span className="text-sm" style={{ fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>
+                            <span className="badge badge-filled">
                                 {roadmap.category}
                             </span>
-                            <span className="text-sm" style={{
+                            <span className="badge badge-outline" style={{
                                 color: getStatusColor(roadmap.status),
-                                fontWeight: '600',
-                                fontSize: '0.9rem'
+                                borderColor: getStatusColor(roadmap.status)
                             }}>
-                                ● {roadmap.status}
+                                {roadmap.status === 'InProgress' ? 'In Progress' : roadmap.status}
                             </span>
                         </div>
 
-                        <h2 className="heading-lg" style={{ fontSize: '1.6rem', marginBottom: '1.25rem', lineHeight: '1.3' }}>{roadmap.title}</h2>
-                        <p className="text-sm" style={{ marginBottom: '1.5rem', flexGrow: 1, lineHeight: '1.7', fontSize: '1rem', color: 'var(--text-secondary)' }}>
+                        <h2 className="heading-lg" style={{ fontSize: '1.5rem', marginBottom: '1rem', lineHeight: '1.3' }}>{roadmap.title}</h2>
+                        <p className="text-sm" style={{ marginBottom: '1.5rem', flexGrow: 1, lineHeight: '1.6', fontSize: '1rem', color: 'var(--text-secondary)' }}>
                             {roadmap.summary}
                         </p>
 
-                        <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem', marginTop: 'auto' }}>
-                            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
-                                <span className="text-sm" style={{ fontSize: '0.95rem' }}>Difficulty: <strong>{roadmap.difficulty}/5</strong></span>
-                                <span className="text-sm" style={{ fontSize: '0.95rem' }}>Priority: <strong style={{ color: getPriorityColor(roadmap.priority) }}>{roadmap.priority}</strong></span>
+                        {/* Desktop & Mobile Responsive Footer */}
+                        <div className="mobile-meta-grid">
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                <span className="text-sm" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7 }}>Priority</span>
+                                <span style={{ fontWeight: '700', color: getPriorityColor(roadmap.priority) }}>{roadmap.priority}</span>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span className="text-sm" style={{ color: 'var(--accent-color)', fontWeight: '600', fontSize: '0.95rem' }}>
-                                    ⏱ Est. Time: <strong>{getTimeEstimate(roadmap.difficulty)}</strong>
-                                </span>
-                                <span className="text-sm" style={{ opacity: 0.6, fontSize: '0.9rem' }}>{new Date(roadmap.createdAt).toLocaleDateString()}</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                <span className="text-sm" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7 }}>Difficulty</span>
+                                <div style={{ display: 'flex', gap: '2px', alignItems: 'center', height: '100%' }}>
+                                    {[1, 2, 3, 4, 5].map(i => (
+                                        <div key={i} style={{
+                                            height: '4px',
+                                            width: '12px',
+                                            borderRadius: '2px',
+                                            backgroundColor: i <= roadmap.difficulty ? 'var(--accent-color)' : 'var(--border-color)'
+                                        }} />
+                                    ))}
+                                </div>
                             </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                <span className="text-sm" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7 }}>Est. Time</span>
+                                <span style={{ fontWeight: '600' }}>{getTimeEstimate(roadmap.difficulty)}</span>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                <span className="text-sm" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7 }}>Added</span>
+                                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{new Date(roadmap.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                            </div>
+                        </div>
+
+                        {/* Desktop Only View - Hidden via CSS on mobile if needed, but current mobile-meta-grid likely replaces standard footer */}
+                        <div className="desktop-meta" style={{ display: 'none' }}>
+                            {/* Intentionally left blank as mobile-meta-grid handles both via media queries or we adjust styles below */}
                         </div>
                     </Link>
                 ))}
