@@ -276,7 +276,7 @@ const Dashboard = () => {
             )}
 
             {/* Discipline Graphs */}
-            <div className="card" style={{ marginTop: '3rem', padding: '2rem' }}>
+            <div className="card" style={{ marginTop: '3rem' }}>
                 <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
                     <h2 className="heading-lg">Execution Truth</h2>
                     <button

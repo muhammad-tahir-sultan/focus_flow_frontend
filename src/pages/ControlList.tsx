@@ -12,7 +12,7 @@ const ControlList = () => {
                 "Focus on what you can control, and accept what you cannot."
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
                 {/* Can Control */}
                 <div className="card" style={{ borderTop: '4px solid var(--accent-color)' }}>
                     <h2 className="heading-lg mb-6" style={{ textAlign: 'center', color: 'var(--accent-color)' }}>✅ What I Can Control</h2>

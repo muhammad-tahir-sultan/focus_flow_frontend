@@ -100,7 +100,7 @@ const Goals = () => {
                             />
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                        <div className="form-row-2">
                             <div>
                                 <label style={{
                                     display: 'block',
