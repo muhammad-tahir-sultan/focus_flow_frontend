@@ -793,16 +793,168 @@ const ProjectMasteryGraph = () => {
                 .topic-card h4 { color: white; margin: 0 0 0.5rem 0; font-size: 1rem; }
                 .topic-card p { color: #a1a1aa; font-size: 0.9rem; margin: 0; line-height: 1.5; }
 
+                /* Enhanced Mobile Responsive Styles */
+                @media (max-width: 1024px) {
+                    .page-title {
+                        font-size: 2rem;
+                    }
+                    
+                    .reasoning-grid {
+                        grid-template-columns: 1fr 1fr;
+                    }
+                }
+
                 @media (max-width: 768px) {
-                    .reasoning-grid, .topics-grid { grid-template-columns: 1fr; }
-                    .modal-title { font-size: 1.75rem; }
-                    .stats-row { flex-direction: column; gap: 0.75rem; }
+                    .backend-graph-page {
+                        padding: 1rem 0.5rem;
+                    }
+                    
+                    .page-header {
+                        margin-bottom: 2rem;
+                    }
+                    
+                    .page-title {
+                        font-size: 1.75rem;
+                        line-height: 1.2;
+                    }
+                    
+                    .page-subtitle {
+                        font-size: 0.95rem;
+                    }
+                    
+                    .graph-scroll-container {
+                        padding: 1rem;
+                        border-radius: 12px;
+                    }
+                    
+                    .node-box {
+                        min-width: 180px;
+                        padding: 1rem;
+                    }
+                    
+                    .node-label {
+                        font-size: 0.9rem;
+                    }
+                    
+                    .node-desc {
+                        font-size: 0.75rem;
+                    }
+                    
+                    .modal-overlay {
+                        padding: 0.5rem;
+                        align-items: flex-end;
+                    }
+                    
+                    .modal-content-roadmap {
+                        max-height: 95vh;
+                        border-radius: 20px 20px 0 0;
+                    }
+                    
+                    .modal-header {
+                        padding: 1.5rem;
+                    }
+                    
+                    .header-top-row {
+                        flex-direction: column;
+                        gap: 0.5rem;
+                        align-items: flex-start;
+                    }
+                    
+                    .modal-title {
+                        font-size: 1.5rem;
+                    }
+                    
+                    .modal-subtitle {
+                        font-size: 0.75rem;
+                    }
+                    
+                    .modal-body {
+                        padding: 1.25rem;
+                    }
+                    
+                    .stats-row {
+                        flex-direction: column;
+                        gap: 0.75rem;
+                    }
+                    
+                    .stat-item {
+                        padding: 0.4rem 0.75rem;
+                        font-size: 0.85rem;
+                    }
+                    
+                    .reasoning-grid, .topics-grid {
+                        grid-template-columns: 1fr;
+                        gap: 1rem;
+                    }
+                    
+                    .reasoning-card {
+                        padding: 1rem;
+                    }
+                    
+                    .reasoning-title {
+                        font-size: 0.85rem;
+                    }
+                    
+                    .reasoning-card p {
+                        font-size: 0.85rem;
+                    }
+                    
+                    .section-heading {
+                        font-size: 1.1rem;
+                    }
+                    
+                    .topic-card {
+                        padding: 1.25rem;
+                    }
+                    
+                    .topic-card h4 {
+                        font-size: 0.95rem;
+                    }
+                    
+                    .topic-card p {
+                        font-size: 0.85rem;
+                    }
+                    
+                    .checklist-item {
+                        padding: 0.75rem;
+                    }
+                    
+                    .checklist-item label {
+                        font-size: 0.85rem;
+                    }
+                    
+                    .close-btn {
+                        top: 1rem;
+                        right: 1rem;
+                        width: 32px;
+                        height: 32px;
+                        font-size: 1.25rem;
+                    }
+                    
+                    .difficulty-badge {
+                        font-size: 0.65rem;
+                        padding: 0.2rem 0.5rem;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .page-title {
+                        font-size: 1.5rem;
+                    }
+                    
+                    .modal-title {
+                        font-size: 1.25rem;
+                    }
+                    
+                    .checklist-item label {
+                        font-size: 0.8rem;
+                    }
                 }
             `}</style>
 
             <header className="page-header">
                 <h1 className="page-title">Project Mastery Roadmap</h1>
-                <p className="page-subtitle">Build these 6 systems to prove your engineering expertise.</p>
+                <p className="page-subtitle">Build these 15 systems to prove your engineering expertise.</p>
             </header>
 
             <div className="graph-scroll-container">

@@ -105,50 +105,40 @@ const DailyLog = () => {
     if (isLoading) return <Loader />;
 
     return (
-        <div style={{
-            minHeight: '80vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '2rem'
-        }}>
-            <div style={{ maxWidth: '700px', width: '100%' }}>
-                <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                    <h2 className="heading-xl" style={{ marginBottom: '0.5rem' }}>
+        <div className="daily-log-page">
+            <div className="container" style={{ maxWidth: '800px' }}>
+                <header className="page-header center-text mb-8">
+                    <h2 className="heading-xl gradient-text">
                         {id ? 'Edit Daily Execution' : 'Log Daily Execution'}
                     </h2>
-                    <p className="text-sm" style={{ fontSize: '1rem' }}>
+                    <p className="text-secondary quote-text">
                         "Consistency is the key to success."
                     </p>
-                </div>
+                </header>
 
-                <form onSubmit={handleSubmit} className="card" style={{ padding: '2.5rem' }}>
+                <form onSubmit={handleSubmit} className="card-premium animate-fade-in">
                     {error && (
-                        <div style={{
-                            color: 'var(--error-color)',
-                            marginBottom: '1.5rem',
-                            padding: '0.75rem 1rem',
-                            border: '1px solid var(--error-color)',
-                            borderRadius: '8px',
-                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                            fontSize: '0.9rem'
-                        }}>
+                        <div className="error-banner">
                             {error}
                         </div>
                     )}
 
-                    <div className="mb-8" style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                        <label style={{ display: 'block', marginBottom: '1rem', fontWeight: '600', color: 'var(--accent-color)' }}>✅ Daily Non-Negotiables Checklist</label>
-                        <div style={{ display: 'grid', gap: '0.75rem' }}>
+                    <div className="non-negotiables-section mb-8">
+                        <label className="section-label accent-color">
+                            ✅ Daily Non-Negotiables Checklist
+                        </label>
+                        <div className="checklist-grid">
                             {nonNegotiables.map((item) => (
-                                <label key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={!!checkedItems[item]}
-                                        onChange={() => handleCheckChange(item)}
-                                        style={{ width: '1.2rem', height: '1.2rem', accentColor: 'var(--accent-color)' }}
-                                    />
-                                    <span style={{ fontSize: '0.9rem', color: checkedItems[item] ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                                <label key={item} className={`checklist-item ${checkedItems[item] ? 'checked' : ''}`}>
+                                    <div className="checkbox-wrapper">
+                                        <input
+                                            type="checkbox"
+                                            checked={!!checkedItems[item]}
+                                            onChange={() => handleCheckChange(item)}
+                                        />
+                                        <div className="custom-checkbox-display"></div>
+                                    </div>
+                                    <span className="checklist-text">
                                         {item}
                                     </span>
                                 </label>
@@ -156,20 +146,22 @@ const DailyLog = () => {
                         </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Date</label>
+                    <div className="form-group mb-6">
+                        <label className="input-label">Date</label>
                         <input
                             type="date"
+                            className="input-field"
                             value={formData.date}
                             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                             required
                         />
                     </div>
 
-                    <div className="mb-4">
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>What else did you execute today?</label>
+                    <div className="form-group mb-6">
+                        <label className="input-label">What else did you execute today?</label>
                         <textarea
                             rows={4}
+                            className="input-field textarea-field"
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             required
@@ -177,12 +169,13 @@ const DailyLog = () => {
                         />
                     </div>
 
-                    <div className="mb-4">
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Time Spent (Hours)</label>
+                    <div className="form-group mb-6">
+                        <label className="input-label">Time Spent (Hours)</label>
                         <input
                             type="number"
                             step="0.5"
                             min="0"
+                            className="input-field"
                             value={formData.timeSpent}
                             onChange={(e) => setFormData({ ...formData, timeSpent: e.target.value })}
                             required
@@ -190,30 +183,24 @@ const DailyLog = () => {
                         />
                     </div>
 
-                    <div className="mb-4">
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Mood / Focus Quality</label>
-                        <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="form-group mb-6">
+                        <label className="input-label">Mood / Focus Quality</label>
+                        <div className="mood-grid">
                             {[
-                                { val: 'high', label: '⚡ High', color: '#3b82f6' },
-                                { val: 'neutral', label: '💡 Neutral', color: '#eab308' },
-                                { val: 'good', label: '✓ Good', color: '#22c55e' },
-                                { val: 'low', label: '📉 Low', color: '#ef4444' }
+                                { val: 'high', label: '⚡ High', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
+                                { val: 'neutral', label: '💡 Neutral', color: '#eab308', bg: 'rgba(234, 179, 8, 0.1)' },
+                                { val: 'good', label: '✓ Good', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)' },
+                                { val: 'low', label: '📉 Low', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)' }
                             ].map(m => (
                                 <button
                                     key={m.val}
                                     type="button"
                                     onClick={() => setFormData({ ...formData, mood: m.val as any })}
+                                    className={`mood-btn ${formData.mood === m.val ? 'active' : ''}`}
                                     style={{
-                                        flex: 1,
-                                        padding: '0.5rem',
-                                        borderRadius: '8px',
-                                        border: `2px solid ${formData.mood === m.val ? m.color : 'var(--border-color)'}`,
-                                        backgroundColor: formData.mood === m.val ? `${m.color}20` : 'transparent',
-                                        color: formData.mood === m.val ? m.color : 'var(--text-secondary)',
-                                        cursor: 'pointer',
-                                        fontWeight: '600',
-                                        transition: 'all 0.2s'
-                                    }}
+                                        '--mood-color': m.color,
+                                        '--mood-bg': m.bg
+                                    } as any}
                                 >
                                     {m.label}
                                 </button>
@@ -221,10 +208,11 @@ const DailyLog = () => {
                         </div>
                     </div>
 
-                    <div className="mb-8">
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>One Learning / Reflection</label>
+                    <div className="form-group mb-8">
+                        <label className="input-label">One Learning / Reflection</label>
                         <textarea
-                            rows={2}
+                            rows={3}
+                            className="input-field textarea-field"
                             value={formData.reflection}
                             onChange={(e) => setFormData({ ...formData, reflection: e.target.value })}
                             required
@@ -232,11 +220,250 @@ const DailyLog = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1.05rem', fontWeight: '600' }}>
+                    <button type="submit" className="btn btn-primary submit-btn">
                         {id ? 'Update Log' : 'Submit Log'}
                     </button>
                 </form>
             </div>
+
+            <style>{`
+                .daily-log-page {
+                    min-height: 80vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 3rem 1rem;
+                }
+
+                .center-text { text-align: center; }
+                .text-secondary { color: var(--text-secondary); }
+                .gradient-text {
+                    background: linear-gradient(to right, #fff, #94a3b8);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .quote-text {
+                    font-style: italic;
+                    opacity: 0.8;
+                    margin-top: 0.5rem;
+                }
+
+                .animate-fade-in {
+                    animation: fadeIn 0.5s ease-out;
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                .error-banner {
+                    color: var(--error-color);
+                    margin-bottom: 1.5rem;
+                    padding: 0.75rem 1rem;
+                    border: 1px solid rgba(239, 68, 68, 0.3);
+                    border-radius: 8px;
+                    background-color: rgba(239, 68, 68, 0.1);
+                    font-size: 0.9rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                .non-negotiables-section {
+                    background-color: rgba(255, 255, 255, 0.02);
+                    padding: 1.5rem;
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                }
+
+                .section-label {
+                    display: block;
+                    font-weight: 700;
+                    margin-bottom: 1rem;
+                    font-size: 0.95rem;
+                    letter-spacing: 0.02em;
+                }
+                .accent-color { color: var(--accent-color); }
+
+                .checklist-grid {
+                    display: grid;
+                    gap: 0.75rem;
+                }
+
+                .checklist-item {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 0.75rem;
+                    cursor: pointer;
+                    padding: 0.75rem;
+                    border-radius: 8px;
+                    background: rgba(255, 255, 255, 0.01);
+                    border: 1px solid transparent;
+                    transition: all 0.2s;
+                }
+
+                .checklist-item:hover {
+                    background: rgba(255, 255, 255, 0.04);
+                }
+
+                .checklist-item.checked {
+                    background: rgba(59, 130, 246, 0.08); /* slight blue tint */
+                    border-color: rgba(59, 130, 246, 0.2);
+                }
+
+                .checkbox-wrapper {
+                    position: relative;
+                    width: 1.25rem;
+                    height: 1.25rem;
+                    flex-shrink: 0;
+                    margin-top: 0.1rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .checkbox-wrapper input {
+                    opacity: 0;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                    z-index: 2;
+                }
+
+                .custom-checkbox-display {
+                    width: 100%;
+                    height: 100%;
+                    border: 2px solid var(--text-secondary);
+                    border-radius: 4px;
+                    transition: all 0.2s;
+                }
+
+                .checklist-item.checked .custom-checkbox-display {
+                    background-color: var(--accent-color);
+                    border-color: var(--accent-color);
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='18px' height='18px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+
+                .checklist-text {
+                    font-size: 0.95rem;
+                    color: var(--text-secondary);
+                    transition: color 0.2s;
+                    line-height: 1.5;
+                }
+
+                .checklist-item.checked .checklist-text {
+                    color: var(--text-primary);
+                    text-decoration: line-through;
+                    opacity: 0.7;
+                }
+
+                .form-group { position: relative; }
+                
+                .input-label {
+                    display: block;
+                    margin-bottom: 0.5rem;
+                    font-weight: 500;
+                    color: var(--text-primary);
+                    font-size: 0.95rem;
+                }
+
+                .input-field {
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, 0.2);
+                    border: 1px solid var(--border-color);
+                    color: var(--text-primary);
+                    padding: 0.875rem 1rem;
+                    border-radius: 8px;
+                    transition: all 0.2s;
+                    font-size: 0.95rem;
+                }
+
+                .input-field:focus {
+                    border-color: var(--accent-color);
+                    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+                    outline: none;
+                }
+
+                .textarea-field {
+                    resize: vertical;
+                    min-height: 100px;
+                }
+
+                .mood-grid {
+                    display: flex;
+                    gap: 0.75rem;
+                }
+
+                .mood-btn {
+                    flex: 1;
+                    padding: 0.75rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border-color);
+                    background: transparent;
+                    color: var(--text-secondary);
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    transition: all 0.2s;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.4rem;
+                }
+
+                .mood-btn:hover {
+                    background: rgba(255, 255, 255, 0.03);
+                    transform: translateY(-2px);
+                }
+
+                .mood-btn.active {
+                    border-color: var(--mood-color);
+                    background-color: var(--mood-bg);
+                    color: var(--mood-color);
+                    box-shadow: 0 0 10px -2px var(--mood-bg);
+                }
+
+                .submit-btn {
+                    width: 100%;
+                    padding: 1rem;
+                    font-size: 1.1rem;
+                    margin-top: 1rem;
+                    background: var(--accent-color);
+                    border: none;
+                }
+
+                .submit-btn:hover {
+                    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+                }
+
+                /* Mobile Responsive */
+                @media (max-width: 640px) {
+                    .daily-log-page {
+                        padding: 1rem;
+                    }
+
+                    .heading-xl {
+                        font-size: 1.75rem;
+                    }
+
+                    .card-premium {
+                        padding: 1.5rem;
+                    }
+
+                    .checklist-grid {
+                        gap: 0.5rem;
+                    }
+
+                    .mood-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 0.75rem;
+                    }
+                }
+            `}</style>
         </div>
     );
 };

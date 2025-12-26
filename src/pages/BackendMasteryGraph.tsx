@@ -910,12 +910,150 @@ const BackendMasteryGraph = () => {
                     border-color: var(--text-primary);
                 }
 
+                /* Mobile Responsive Styles */
+                @media (max-width: 1024px) {
+                    .graph-header h1 {
+                        font-size: 2.5rem;
+                    }
+                    
+                    .reasoning-grid {
+                        grid-template-columns: 1fr 1fr;
+                    }
+                }
+
                 @media (max-width: 768px) {
-                    .modal-header { padding: 2rem 1.5rem; }
-                    .modal-body { padding: 1.5rem; }
-                    .modal-title { font-size: 1.75rem; }
-                    .topics-grid { grid-template-columns: 1fr; }
-                    .reasoning-grid { grid-template-columns: 1fr; }
+                    .backend-graph-page {
+                        padding: 1rem 0.5rem;
+                    }
+                    
+                    .graph-header {
+                        margin-bottom: 2rem;
+                    }
+                    
+                    .graph-header h1 {
+                        font-size: 1.75rem;
+                        line-height: 1.2;
+                    }
+                    
+                    .graph-header p {
+                        font-size: 0.95rem;
+                    }
+                    
+                    .badge-founder {
+                        font-size: 0.65rem;
+                        padding: 0.4rem 0.75rem;
+                    }
+                    
+                    .graph-scroll-container {
+                        padding: 1rem;
+                        border-radius: 12px;
+                    }
+                    
+                    .modal-overlay {
+                        padding: 0.5rem;
+                        align-items: flex-end;
+                    }
+                    
+                    .modal-content-roadmap {
+                        max-height: 95vh;
+                        border-radius: 20px 20px 0 0;
+                    }
+                    
+                    .modal-header {
+                        padding: 1.5rem;
+                    }
+                    
+                    .header-top-row {
+                        flex-direction: column;
+                        gap: 0.75rem;
+                        align-items: flex-start;
+                    }
+                    
+                    .modal-title {
+                        font-size: 1.5rem;
+                    }
+                    
+                    .modal-subtitle {
+                        font-size: 0.75rem;
+                    }
+                    
+                    .modal-body {
+                        padding: 1.25rem;
+                    }
+                    
+                    .section-heading {
+                        font-size: 1.1rem;
+                        padding-left: 0.75rem;
+                    }
+                    
+                    .topics-grid {
+                        grid-template-columns: 1fr;
+                        gap: 1rem;
+                    }
+                    
+                    .topic-card {
+                        padding: 1.25rem;
+                    }
+                    
+                    .reasoning-grid {
+                        grid-template-columns: 1fr;
+                        gap: 1rem;
+                    }
+                    
+                    .reasoning-card {
+                        padding: 1rem;
+                    }
+                    
+                    .reasoning-title {
+                        font-size: 0.85rem;
+                    }
+                    
+                    .reasoning-card p {
+                        font-size: 0.85rem;
+                    }
+                    
+                    .checklist-item {
+                        padding: 0.6rem 0.75rem;
+                    }
+                    
+                    .checklist-item label {
+                        font-size: 0.85rem;
+                    }
+                    
+                    .resources-list {
+                        gap: 0.5rem;
+                    }
+                    
+                    .resource-tag {
+                        font-size: 0.8rem;
+                        padding: 0.4rem 0.75rem;
+                    }
+                    
+                    .close-btn {
+                        top: 1rem;
+                        right: 1rem;
+                        width: 32px;
+                        height: 32px;
+                        font-size: 1.25rem;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .graph-header h1 {
+                        font-size: 1.5rem;
+                    }
+                    
+                    .modal-title {
+                        font-size: 1.25rem;
+                    }
+                    
+                    .topic-title {
+                        font-size: 1rem;
+                    }
+                    
+                    .topic-desc {
+                        font-size: 0.85rem;
+                    }
                 }
 
                 /* REASONING SECTION STYLES */
