@@ -6,7 +6,7 @@
     justify-content: center;
     padding: 2rem;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .auth-bg-gradient {
@@ -16,11 +16,11 @@
     width: 100%;
     height: 100%;
     background:
-        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(15, 15, 17, 1) 0%, rgba(10, 10, 12, 1) 100%);
+        radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(10, 10, 12, 1) 0%, rgba(5, 5, 5, 1) 100%);
     z-index: -1;
-    animation: bgPulse 10s ease-in-out infinite alternate;
+    animation: bgPulse 12s ease-in-out infinite alternate;
 }
 
 @keyframes bgPulse {
@@ -91,8 +91,8 @@
 
 .auth-input:focus {
     background: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(59, 130, 246, 0.5) !important;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 0 20px rgba(59, 130, 246, 0.1) !important;
+    border-color: rgba(34, 197, 94, 0.5) !important;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15), 0 0 20px rgba(34, 197, 94, 0.1) !important;
     transform: translateY(-1px);
 }
 
@@ -118,15 +118,41 @@
     width: 100%;
     padding: 1.125rem !important;
     border-radius: 12px !important;
-    font-size: 1.1rem !important;
+    font-size: 1rem !important;
     font-weight: 700 !important;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
+
+    /* Premium Outline Style */
+    background: rgba(34, 197, 94, 0.1) !important;
+    border: 1px solid rgba(34, 197, 94, 0.5) !important;
+    color: #4ade80 !important;
+
+    /* Typography */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    /* Tech feel */
+
+    box-shadow: 0 0 0 rgba(34, 197, 94, 0);
+}
+
+.auth-submit-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(34, 197, 94, 0.15) !important;
+    border-color: #4ade80 !important;
+    color: #4ade80 !important;
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.3), inset 0 0 10px rgba(74, 222, 128, 0.1);
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+.auth-submit-btn:active {
+    transform: translateY(0);
 }
 
 .auth-footer {

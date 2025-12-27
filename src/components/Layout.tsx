@@ -9,7 +9,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     if (!user) {
-        return <div className="container" style={{ marginTop: '4rem' }}>{children}</div>;
+        return <>{children}</>;
     }
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
