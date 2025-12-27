@@ -10,16 +10,18 @@ import NonNegotiablesChart from '../components/charts/NonNegotiablesChart';
 import ConsistencyChart from '../components/charts/ConsistencyChart';
 import '../styles/dashboard.css';
 
-interface DashboardStats {
-    streak: number;
-    activeGoals: number;
-    droppedGoals: number;
-    logsThisWeek: number;
-    avgFocus?: number;
-}
+import StatCard from '../components/features/dashboard/StatCard';
+import type { DashboardStats } from '../types/dashboard';
+import Modal from '../components/common/Modal';
+import { formatHours } from '../utils/dateUtils';
+import '../styles/dashboard.css';
+
+type TimelineRange = 'Week' | 'Month' | '3M' | '6M' | 'Year' | 'Custom';
 
 interface Log {
     date: string;
+    timeSpent: number;
+    mood?: string;
 }
 
 interface Goal {
@@ -28,9 +30,29 @@ interface Goal {
 
 const Dashboard = () => {
     const { isAdmin } = useAuth();
-    const [stats, setStats] = useState<DashboardStats>({ streak: 0, activeGoals: 0, droppedGoals: 0, logsThisWeek: 0 });
+    const [stats, setStats] = useState<DashboardStats>({
+        streak: 0,
+        activeGoals: 0,
+        droppedGoals: 0,
+        logsThisWeek: 0,
+        totalTime: 0,
+        consistencyScore: 0,
+        dominantMood: 'N/A'
+    });
     const [loading, setLoading] = useState(true);
     const [showGraphs, setShowGraphs] = useState(true);
+    const [timeline, setTimeline] = useState<TimelineRange>('Month');
+    const [allLogs, setAllLogs] = useState<Log[]>([]);
+    const [allGoals, setAllGoals] = useState<Goal[]>([]);
+    const [backendBaseStats, setBackendBaseStats] = useState<any>(null);
+    const [showCustomPicker, setShowCustomPicker] = useState(false);
+    const [customRange, setCustomRange] = useState({ start: '', end: '' });
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
 
     // Analytics data
     const [streakData, setStreakData] = useState<{ date: string; value: number }[]>([]);
@@ -41,7 +63,7 @@ const Dashboard = () => {
     const [analyticsError, setAnalyticsError] = useState('');
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchBaseData = async () => {
             try {
                 const [logsRes, goalsRes, backendStatsRes] = await Promise.all([
                     axios.get<Log[]>(`${backendUrl}/daily-logs`),
@@ -49,29 +71,9 @@ const Dashboard = () => {
                     axios.get<any>(`${backendUrl}/daily-logs/stats`)
                 ]);
 
-                const logs = logsRes.data;
-                const goals = goalsRes.data;
-                const backendStats = backendStatsRes.data;
-
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                // Active Goals
-                const activeGoals = goals.filter(g => g.status === 'Active').length;
-                const droppedGoals = goals.filter(g => g.status === 'Dropped').length;
-
-                // Logs this week
-                const startOfWeek = new Date(today);
-                startOfWeek.setDate(today.getDate() - today.getDay()); // Sunday
-                const logsThisWeek = logs.filter(l => new Date(l.date) >= startOfWeek).length;
-
-                setStats({
-                    streak: backendStats.streak,
-                    activeGoals,
-                    droppedGoals,
-                    logsThisWeek,
-                    avgFocus: backendStats.avgFocus
-                });
+                setAllLogs(logsRes.data);
+                setAllGoals(goalsRes.data);
+                setBackendBaseStats(backendStatsRes.data);
             } catch (err) {
                 console.error(err);
             } finally {
@@ -79,8 +81,93 @@ const Dashboard = () => {
             }
         };
 
-        fetchData();
+        fetchBaseData();
     }, []);
+
+    useEffect(() => {
+        if (!allLogs.length && !allGoals.length) return;
+
+        const calculateTimelineStats = () => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let startDate = new Date(today);
+            let endDate = new Date(today);
+            endDate.setHours(23, 59, 59, 999);
+
+            if (timeline === 'Week') {
+                startDate.setDate(today.getDate() - 7);
+            } else if (timeline === 'Month') {
+                startDate.setMonth(today.getMonth() - 1);
+            } else if (timeline === '3M') {
+                startDate.setMonth(today.getMonth() - 3);
+            } else if (timeline === '6M') {
+                startDate.setMonth(today.getMonth() - 6);
+            } else if (timeline === 'Year') {
+                startDate.setFullYear(today.getFullYear() - 1);
+            } else if (timeline === 'Custom' && customRange.start && customRange.end) {
+                startDate = new Date(customRange.start);
+                endDate = new Date(customRange.end);
+                endDate.setHours(23, 59, 59, 999);
+            }
+
+            const filteredLogs = allLogs.filter(l => {
+                const d = new Date(l.date);
+                return d >= startDate && d <= endDate;
+            });
+
+            // Active Goals (Context independent as they are current status)
+            const activeGoals = allGoals.filter(g => g.status === 'Active').length;
+            const droppedGoals = allGoals.filter(g => g.status === 'Dropped').length;
+
+            const totalTime = filteredLogs.reduce((sum, l) => sum + (l.timeSpent || 0), 0);
+
+            // Logs in this specific range for "Logs in Period"
+            const logsInPeriod = filteredLogs.length;
+
+            // Consistency Score for THIS period
+            const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+            const consistencyScore = Math.min(Math.round((logsInPeriod / diffDays) * 100), 100);
+
+            // Dominant Mood Calculation
+            const moodCounts: Record<string, number> = {};
+            filteredLogs.forEach(l => {
+                if (l.mood) {
+                    moodCounts[l.mood] = (moodCounts[l.mood] || 0) + 1;
+                }
+            });
+
+            let dominantMood = 'N/A';
+            let maxCount = 0;
+            const moodIcons: Record<string, string> = {
+                high: '🔥 High',
+                good: '✨ Good',
+                neutral: '😐 Neutral',
+                low: '📉 Low'
+            };
+
+            Object.entries(moodCounts).forEach(([mood, count]) => {
+                if (count > maxCount) {
+                    maxCount = count;
+                    dominantMood = moodIcons[mood] || mood;
+                }
+            });
+
+            setStats({
+                streak: backendBaseStats?.streak || 0,
+                activeGoals,
+                droppedGoals,
+                logsThisWeek: logsInPeriod,
+                avgFocus: backendBaseStats?.avgFocus || 0,
+                totalTime,
+                consistencyScore,
+                dominantMood
+            });
+        };
+
+        calculateTimelineStats();
+    }, [timeline, allLogs, allGoals, backendBaseStats, customRange]);
 
     useEffect(() => {
         const fetchAnalytics = async () => {
@@ -110,7 +197,6 @@ const Dashboard = () => {
 
     if (loading) return <Loader />;
 
-    const todayDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
     return (
         <div className="dashboard-page">
@@ -119,9 +205,33 @@ const Dashboard = () => {
             <div className="dashboard-content">
                 <div className="dashboard-header mb-8">
                     <div>
-                        <h2 className="text-sm" style={{ color: 'var(--text-secondary)', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Today is</h2>
-                        <h1 className="heading-xl">{todayDate}</h1>
+                        <h2 className="text-sm" style={{ color: 'var(--text-secondary)', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>System Time</h2>
+                        <h1 className="heading-xl">
+                            {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                            <span className="header-date-subtext">
+                                {currentTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
+                            </span>
+                        </h1>
                     </div>
+
+                    <div className="timeline-selector">
+                        {(['Week', 'Month', '3M', '6M', 'Year'] as TimelineRange[]).map(r => (
+                            <button
+                                key={r}
+                                className={`timeline-btn ${timeline === r ? 'active' : ''}`}
+                                onClick={() => setTimeline(r)}
+                            >
+                                {r}
+                            </button>
+                        ))}
+                        <button
+                            className={`timeline-btn ${timeline === 'Custom' ? 'active' : ''}`}
+                            onClick={() => setShowCustomPicker(true)}
+                        >
+                            📅 Custom
+                        </button>
+                    </div>
+
                     {isAdmin() && (
                         <Link to="/vision" className="btn-vision">
                             ✨ Long-term Vision
@@ -129,24 +239,52 @@ const Dashboard = () => {
                     )}
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
-                    <div className="stats-card-main">
-                        <h3 className="text-sm">Current Streak</h3>
-                        <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#3b82f6', lineHeight: 1, margin: '1rem 0 0.5rem' }}>{stats.streak} <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>days</span></div>
-                    </div>
-                    <div className="stats-card-main">
-                        <h3 className="text-sm">Active Goals</h3>
-                        <div style={{ fontSize: '3.5rem', fontWeight: '800', lineHeight: 1, margin: '1rem 0 0.5rem' }}>{stats.activeGoals}</div>
-                    </div>
-                    <div className="stats-card-main">
-                        <h3 className="text-sm">Terminated</h3>
-                        <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#ef4444', lineHeight: 1, margin: '1rem 0 0.5rem' }}>{stats.droppedGoals}</div>
-                    </div>
-                    <div className="stats-card-main">
-                        <h3 className="text-sm">Logs This Week</h3>
-                        <div style={{ fontSize: '3.5rem', fontWeight: '800', lineHeight: 1, margin: '1rem 0 0.5rem' }}>{stats.logsThisWeek}</div>
-                    </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+                    <StatCard label="Current Streak" value={`${stats.streak} Days`} color="#3b82f6" />
+                    <StatCard label="Active Goals" value={stats.activeGoals} />
+                    <StatCard label="Dominant Mood" value={stats.dominantMood} color="#a855f7" />
+                    <StatCard label={timeline === 'Custom' ? 'Logs in Range' : `Logs this ${timeline}`} value={stats.logsThisWeek} />
+                    <StatCard label="Time Invested" value={formatHours(stats.totalTime)} color="#10b981" />
+                    <StatCard label="Consistency" value={`${stats.consistencyScore}%`} color="#f59e0b" />
                 </div>
+
+                <Modal
+                    show={showCustomPicker}
+                    title="📅 SELECT TARGET RANGE"
+                    onClose={() => setShowCustomPicker(false)}
+                    footer={
+                        <button
+                            className="btn-confirm-abort"
+                            onClick={() => {
+                                setTimeline('Custom');
+                                setShowCustomPicker(false);
+                            }}
+                        >
+                            APPLY RANGE
+                        </button>
+                    }
+                >
+                    <div className="custom-range-inputs">
+                        <div className="input-group">
+                            <label>START DATE</label>
+                            <input
+                                type="date"
+                                className="premium-input"
+                                value={customRange.start}
+                                onChange={(e) => setCustomRange({ ...customRange, start: e.target.value })}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>END DATE</label>
+                            <input
+                                type="date"
+                                className="premium-input"
+                                value={customRange.end}
+                                onChange={(e) => setCustomRange({ ...customRange, end: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                </Modal>
 
                 <div className="flex-between" >
                     <h2 className="heading-lg">Quick Actions</h2>

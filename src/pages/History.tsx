@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
 import Loader from '../components/Loader';
 import toast from 'react-hot-toast';
+import { formatHours } from '../utils/dateUtils';
 import '../styles/history.css';
 
 interface Log {
@@ -21,11 +22,12 @@ interface LogStats {
     streak: number;
     avgFocus: number;
     improvement: number;
+    totalTime: number;
 }
 
 const History = () => {
     const [logs, setLogs] = useState<Log[]>([]);
-    const [stats, setStats] = useState<LogStats>({ totalLogs: 0, streak: 0, avgFocus: 0, improvement: 0 });
+    const [stats, setStats] = useState<LogStats>({ totalLogs: 0, streak: 0, avgFocus: 0, improvement: 0, totalTime: 0 });
     const [initialLoading, setInitialLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [periodFilter, setPeriodFilter] = useState('this-month');
@@ -163,6 +165,15 @@ const History = () => {
                         <div className="stat-subtitle">
                             {stats.improvement >= 0 ? '↗' : '↘'} {Math.abs(stats.improvement).toFixed(1)}h from last month
                         </div>
+                    </div>
+                </div>
+
+                <div className="stat-card">
+                    <div className="stat-icon" style={{ color: '#10b981' }}>⌛</div>
+                    <div className="stat-content">
+                        <div className="stat-label">Total Invested</div>
+                        <div className="stat-value">{formatHours(stats.totalTime)}</div>
+                        <div className="stat-subtitle">Mission Duration Sum</div>
                     </div>
                 </div>
             </div>
