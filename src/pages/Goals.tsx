@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import axios from 'axios';
-import { backendUrl } from '../main';
+import { BACKEND_URL } from '../constants/api';
 import Loader from '../components/Loader';
 import toast from 'react-hot-toast';
 
@@ -26,7 +26,7 @@ const Goals = () => {
 
     const fetchGoals = async () => {
         try {
-            const res = await axios.get<Goal[]>(`${backendUrl}/goals`);
+            const res = await axios.get<Goal[]>(`${BACKEND_URL}/goals`);
             const sortedGoals = res.data.sort((a, b) => b._id.localeCompare(a._id));
             setGoals(sortedGoals);
         } catch (err) {
@@ -43,7 +43,7 @@ const Goals = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post(`${backendUrl}/goals`, formData);
+            await axios.post(`${BACKEND_URL}/goals`, formData);
             toast.success('Mission Initialized: Objectives set and logged.', {
                 style: {
                     background: '#0f0f11',
@@ -69,7 +69,7 @@ const Goals = () => {
         }
 
         try {
-            await axios.patch(`${backendUrl}/goals/${id}/status`, {
+            await axios.patch(`${BACKEND_URL}/goals/${id}/status`, {
                 status,
                 dropReason: reason || ''
             });

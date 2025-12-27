@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { backendUrl } from '../main';
+import { BACKEND_URL } from '../constants/api';
 
 const api = axios.create({
-    baseURL: backendUrl,
+    baseURL: BACKEND_URL,
 });
 
 // Add a request interceptor to include the JWT token

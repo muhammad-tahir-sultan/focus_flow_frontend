@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { backendUrl } from '../main';
+import { BACKEND_URL } from '../constants/api';
 import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
 import ExecutionStreakChart from '../components/charts/ExecutionStreakChart';
@@ -66,9 +66,9 @@ const Dashboard = () => {
         const fetchBaseData = async () => {
             try {
                 const [logsRes, goalsRes, backendStatsRes] = await Promise.all([
-                    axios.get<Log[]>(`${backendUrl}/daily-logs`),
-                    axios.get<Goal[]>(`${backendUrl}/goals`),
-                    axios.get<any>(`${backendUrl}/daily-logs/stats`)
+                    axios.get<Log[]>(`${BACKEND_URL}/daily-logs`),
+                    axios.get<Goal[]>(`${BACKEND_URL}/goals`),
+                    axios.get<any>(`${BACKEND_URL}/daily-logs/stats`)
                 ]);
 
                 setAllLogs(logsRes.data);
@@ -174,10 +174,10 @@ const Dashboard = () => {
             try {
                 setAnalyticsLoading(true);
                 const [streakRes, timeRes, nonNegRes, consistencyRes] = await Promise.all([
-                    axios.get(`${backendUrl}/daily-logs/analytics/streak`),
-                    axios.get(`${backendUrl}/daily-logs/analytics/time-invested`),
-                    axios.get(`${backendUrl}/daily-logs/analytics/non-negotiables`),
-                    axios.get(`${backendUrl}/daily-logs/analytics/consistency`),
+                    axios.get(`${BACKEND_URL}/daily-logs/analytics/streak`),
+                    axios.get(`${BACKEND_URL}/daily-logs/analytics/time-invested`),
+                    axios.get(`${BACKEND_URL}/daily-logs/analytics/non-negotiables`),
+                    axios.get(`${BACKEND_URL}/daily-logs/analytics/consistency`),
                 ]);
 
                 setStreakData(streakRes.data);

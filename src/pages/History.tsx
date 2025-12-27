@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { backendUrl } from '../main';
+import { BACKEND_URL } from '../constants/api';
 import Loader from '../components/Loader';
 import toast from 'react-hot-toast';
 import { formatHours } from '../utils/dateUtils';
@@ -52,8 +52,8 @@ const History = () => {
             }
 
             const [logsRes, statsRes] = await Promise.all([
-                axios.get<Log[]>(`${backendUrl}/daily-logs`, { params }),
-                axios.get<LogStats>(`${backendUrl}/daily-logs/stats`)
+                axios.get<Log[]>(`${BACKEND_URL}/daily-logs`, { params }),
+                axios.get<LogStats>(`${BACKEND_URL}/daily-logs/stats`)
             ]);
 
             setLogs(logsRes.data);
@@ -80,7 +80,7 @@ const History = () => {
 
     const handleToggleFavorite = async (log: Log) => {
         try {
-            await axios.patch(`${backendUrl}/daily-logs/${log._id}`, {
+            await axios.patch(`${BACKEND_URL}/daily-logs/${log._id}`, {
                 isFavorite: !log.isFavorite
             });
             setLogs(logs.map(l => l._id === log._id ? { ...l, isFavorite: !l.isFavorite } : l));

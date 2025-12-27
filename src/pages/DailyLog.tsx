@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { backendUrl } from '../main';
+import { BACKEND_URL } from '../constants/api';
 import Loader from '../components/Loader';
 import toast from 'react-hot-toast';
 
@@ -34,7 +34,7 @@ const DailyLog = () => {
             const fetchLog = async () => {
                 try {
                     setIsLoading(true);
-                    const res = await axios.get(`${backendUrl}/daily-logs/${id}`);
+                    const res = await axios.get(`${BACKEND_URL}/daily-logs/${id}`);
                     const log = res.data;
 
                     // Parse description for checked items
@@ -86,7 +86,7 @@ const DailyLog = () => {
             const finalDescription = `${formData.description}\n\n**Completed Non-Negotiables:**\n${completedItems}`;
 
             if (id) {
-                await axios.patch(`${backendUrl}/daily-logs/${id}`, {
+                await axios.patch(`${BACKEND_URL}/daily-logs/${id}`, {
                     ...formData,
                     description: finalDescription,
                     timeSpent: Number(formData.timeSpent),
@@ -100,7 +100,7 @@ const DailyLog = () => {
                     icon: '🔄',
                 });
             } else {
-                await axios.post(`${backendUrl}/daily-logs`, {
+                await axios.post(`${BACKEND_URL}/daily-logs`, {
                     ...formData,
                     description: finalDescription,
                     timeSpent: Number(formData.timeSpent),
