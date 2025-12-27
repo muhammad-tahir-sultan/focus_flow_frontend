@@ -18,6 +18,7 @@ import ProjectMasteryGraph from './pages/ProjectMasteryGraph';
 import GoogleRoadmap from './pages/GoogleRoadmap';
 import NextPath from './pages/NextPath';
 import CleanCodeGuide from './pages/CleanCodeGuide';
+import { Toaster } from 'react-hot-toast';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
@@ -28,6 +29,7 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
 function App() {
     return (
         <AuthProvider>
+            <Toaster position="top-right" reverseOrder={false} />
             <Router>
                 <Layout>
                     <Routes>

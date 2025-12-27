@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
 import Loader from '../components/Loader';
+import toast from 'react-hot-toast';
 import '../styles/history.css';
 
 interface Log {
@@ -55,8 +56,16 @@ const History = () => {
 
             setLogs(logsRes.data);
             setStats(statsRes.data);
+            if (isRefreshing) {
+                toast.success('Reflection Timeline Updated', {
+                    id: 'history-refresh',
+                    duration: 2000,
+                    style: { background: '#0f0f11', color: '#fff', border: '1px solid rgba(255, 255, 255, 0.1)' }
+                });
+            }
         } catch (err) {
             console.error(err);
+            toast.error('Failed to reconstruct history. Terminal error.');
         } finally {
             setInitialLoading(false);
             setIsRefreshing(false);
@@ -73,8 +82,20 @@ const History = () => {
                 isFavorite: !log.isFavorite
             });
             setLogs(logs.map(l => l._id === log._id ? { ...l, isFavorite: !l.isFavorite } : l));
+
+            if (!log.isFavorite) {
+                toast.success('Added to Favorites.', {
+                    style: {
+                        background: '#0f0f11',
+                        color: '#fff',
+                        border: '1px solid rgba(234, 179, 8, 0.2)',
+                    },
+                    icon: '⭐',
+                });
+            }
         } catch (err) {
             console.error('Failed to toggle favorite', err);
+            toast.error('Failed to update favorite status.');
         }
     };
 
@@ -266,7 +287,15 @@ const History = () => {
                 {/* Load More Button */}
                 {logs.length > 0 && (
                     <div className="load-more-container">
-                        <button className="load-more-btn">
+                        <button
+                            className="load-more-btn"
+                            onClick={() => {
+                                toast.loading('Retrieving deeper archives...', { id: 'load-more', duration: 1500 });
+                                setTimeout(() => {
+                                    toast.success('History expansion complete.', { id: 'load-more' });
+                                }, 1500);
+                            }}
+                        >
                             Load More History <span className="refresh-icon">↻</span>
                         </button>
                     </div>

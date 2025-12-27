@@ -1,14 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
-
+import { toast } from 'react-hot-toast';
 const Vision = () => {
     const { isAdmin } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!isAdmin()) {
-            alert('Access denied. This page is only available to administrators.');
+            toast.error('Access denied. This page is only available to administrators.');
             navigate('/');
         }
     }, [isAdmin, navigate]);

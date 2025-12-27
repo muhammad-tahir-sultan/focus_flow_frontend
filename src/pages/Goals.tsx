@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import axios from 'axios';
 import { backendUrl } from '../main';
 import Loader from '../components/Loader';
+import toast from 'react-hot-toast';
 import '../styles/goals.css';
 
 interface Goal {
@@ -12,6 +13,7 @@ interface Goal {
     horizon: string;
     endDate: string;
     status: string;
+    dropReason?: string;
 }
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -20,6 +22,35 @@ const CATEGORY_ICONS: Record<string, string> = {
     'Finance': '💰',
     'Skills': '🛠️',
     'Personal': '🧘'
+};
+
+const TimeRemaining = ({ endDate }: { endDate: string }) => {
+    const [timeLeft, setTimeLeft] = useState('');
+
+    useEffect(() => {
+        const calculateTime = () => {
+            const now = new Date().getTime();
+            const target = new Date(endDate).getTime();
+            const diff = target - now;
+
+            if (diff <= 0) return 'ELAPSED';
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+            if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+            return `${minutes}m ${seconds}s`;
+        };
+
+        setTimeLeft(calculateTime());
+        const timer = setInterval(() => setTimeLeft(calculateTime()), 1000);
+        return () => clearInterval(timer);
+    }, [endDate]);
+
+    return <span className="time-remaining-value">{timeLeft}</span>;
 };
 
 const Goals = () => {
@@ -31,11 +62,32 @@ const Goals = () => {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [showDropModal, setShowDropModal] = useState(false);
+    const [droppingGoalId, setDroppingGoalId] = useState<string | null>(null);
+    const [tempDropReason, setTempDropReason] = useState('');
+
+    const calculateExpectedDate = (horizon: string) => {
+        const date = new Date();
+        switch (horizon) {
+            case 'Daily': date.setDate(date.getDate() + 1); break;
+            case '30 Days': date.setDate(date.getDate() + 30); break;
+            case '3 Months': date.setMonth(date.getMonth() + 3); break;
+            case '6 Months': date.setMonth(date.getMonth() + 6); break;
+            case '1 Year': date.setFullYear(date.getFullYear() + 1); break;
+            case '2 Years': date.setFullYear(date.getFullYear() + 2); break;
+            case '3 Years': date.setFullYear(date.getFullYear() + 3); break;
+            case '5 Years': date.setFullYear(date.getFullYear() + 5); break;
+            default: date.setDate(date.getDate() + 30);
+        }
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    };
 
     const fetchGoals = async () => {
         try {
             const res = await axios.get<Goal[]>(`${backendUrl}/goals`);
-            setGoals(res.data);
+            // Sort newest first using _id timestamp or slice().reverse()
+            const sortedGoals = res.data.sort((a, b) => b._id.localeCompare(a._id));
+            setGoals(sortedGoals);
         } catch (err) {
             console.error(err);
         } finally {
@@ -51,19 +103,64 @@ const Goals = () => {
         e.preventDefault();
         try {
             await axios.post(`${backendUrl}/goals`, formData);
+            toast.success('Mission Initialized: Objectives set and logged.', {
+                style: {
+                    background: '#0f0f11',
+                    color: '#fff',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                },
+                icon: '🚀',
+            });
             setFormData({ title: '', category: 'Career', horizon: '30 Days' });
             fetchGoals();
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to create goal');
+            toast.error('Initialization Failed: Critical System Error.');
         }
     };
 
-    const updateStatus = async (id: string, status: string) => {
+    const updateStatus = async (id: string, status: string, reason?: string) => {
+        // Only trigger modal if we are dropping AND reason is strictly undefined (initial call)
+        if (status === 'Dropped' && reason === undefined) {
+            setDroppingGoalId(id);
+            setTempDropReason('');
+            setShowDropModal(true);
+            return;
+        }
+
         try {
-            await axios.patch(`${backendUrl}/goals/${id}/status`, { status });
+            await axios.patch(`${backendUrl}/goals/${id}/status`, {
+                status,
+                dropReason: reason || ''
+            });
+
+            if (status === 'Completed') {
+                toast.success('Mission Accomplished: Honor Gained.', {
+                    style: {
+                        background: '#0f0f11',
+                        color: '#fff',
+                        border: '1px solid rgba(34, 197, 94, 0.2)',
+                    },
+                    icon: '✅',
+                });
+            } else if (status === 'Dropped') {
+                toast.error('Mission Aborted: Logged for Archive.', {
+                    style: {
+                        background: '#0f0f11',
+                        color: '#fff',
+                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                    },
+                    icon: '🚨',
+                });
+            }
+
+            setShowDropModal(false);
+            setDroppingGoalId(null);
+            setTempDropReason('');
             fetchGoals();
         } catch (err) {
-            console.error(err);
+            console.error('Failed to update mission status:', err);
+            toast.error('Protocol Update Failed.');
         }
     };
 
@@ -122,6 +219,10 @@ const Goals = () => {
                         </div>
                     </div>
 
+                    <div className="deadline-preview">
+                        🏁 Expected Mission Completion: <strong>{calculateExpectedDate(formData.horizon)}</strong>
+                    </div>
+
                     <button type="submit" className="create-goal-btn">
                         INITIALIZE MISSION
                     </button>
@@ -136,10 +237,21 @@ const Goals = () => {
                                 {CATEGORY_ICONS[goal.category] || '🎯'} {goal.category}
                             </div>
                             <h3 className="goal-card-title">{goal.title}</h3>
+                            {goal.status === 'Active' && (
+                                <div className="mission-timer">
+                                    <span className="timer-label">TIME REMAINING:</span>
+                                    <TimeRemaining endDate={goal.endDate} />
+                                </div>
+                            )}
                             {goal.status !== 'Active' && (
                                 <span className={`status-badge status-${goal.status.toLowerCase()}`}>
                                     {goal.status}
                                 </span>
+                            )}
+                            {goal.status === 'Dropped' && (
+                                <div className="drop-reason-box">
+                                    <strong>ABORT REASON:</strong> {goal.dropReason || 'Strategic redirection (no additional details recorded).'}
+                                </div>
                             )}
                         </div>
 
@@ -170,6 +282,38 @@ const Goals = () => {
                     </div>
                 ))}
             </div>
+
+            {/* Premium Abort Modal */}
+            {showDropModal && (
+                <div className="modal-overlay">
+                    <div className="premium-modal">
+                        <div className="modal-header">
+                            <h3>🚨 MISSION ABORTION</h3>
+                            <button className="close-btn" onClick={() => setShowDropModal(false)}>×</button>
+                        </div>
+                        <div className="modal-body">
+                            <p>Are you sure you want to terminate this objective? Document your reasoning for the technical debt archive.</p>
+                            <textarea
+                                className="premium-input"
+                                placeholder="State reason for abortion..."
+                                value={tempDropReason}
+                                onChange={(e) => setTempDropReason(e.target.value)}
+                                rows={4}
+                                autoFocus
+                            />
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn-cancel" onClick={() => setShowDropModal(false)}>CANCEL</button>
+                            <button
+                                className="btn-confirm-abort"
+                                onClick={() => droppingGoalId && updateStatus(droppingGoalId, 'Dropped', tempDropReason)}
+                            >
+                                CONFIRM TERMINATION
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

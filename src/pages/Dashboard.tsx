@@ -13,6 +13,7 @@ import '../styles/dashboard.css';
 interface DashboardStats {
     streak: number;
     activeGoals: number;
+    droppedGoals: number;
     logsThisWeek: number;
     avgFocus?: number;
 }
@@ -27,7 +28,7 @@ interface Goal {
 
 const Dashboard = () => {
     const { isAdmin } = useAuth();
-    const [stats, setStats] = useState<DashboardStats>({ streak: 0, activeGoals: 0, logsThisWeek: 0 });
+    const [stats, setStats] = useState<DashboardStats>({ streak: 0, activeGoals: 0, droppedGoals: 0, logsThisWeek: 0 });
     const [loading, setLoading] = useState(true);
     const [showGraphs, setShowGraphs] = useState(true);
 
@@ -57,6 +58,7 @@ const Dashboard = () => {
 
                 // Active Goals
                 const activeGoals = goals.filter(g => g.status === 'Active').length;
+                const droppedGoals = goals.filter(g => g.status === 'Dropped').length;
 
                 // Logs this week
                 const startOfWeek = new Date(today);
@@ -66,6 +68,7 @@ const Dashboard = () => {
                 setStats({
                     streak: backendStats.streak,
                     activeGoals,
+                    droppedGoals,
                     logsThisWeek,
                     avgFocus: backendStats.avgFocus
                 });
@@ -134,6 +137,10 @@ const Dashboard = () => {
                     <div className="stats-card-main">
                         <h3 className="text-sm">Active Goals</h3>
                         <div style={{ fontSize: '3.5rem', fontWeight: '800', lineHeight: 1, margin: '1rem 0 0.5rem' }}>{stats.activeGoals}</div>
+                    </div>
+                    <div className="stats-card-main">
+                        <h3 className="text-sm">Terminated</h3>
+                        <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#ef4444', lineHeight: 1, margin: '1rem 0 0.5rem' }}>{stats.droppedGoals}</div>
                     </div>
                     <div className="stats-card-main">
                         <h3 className="text-sm">Logs This Week</h3>

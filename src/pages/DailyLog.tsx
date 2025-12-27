@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { backendUrl } from '../main';
 import Loader from '../components/Loader';
+import toast from 'react-hot-toast';
 
 const DailyLog = () => {
     const { id } = useParams();
@@ -58,6 +59,7 @@ const DailyLog = () => {
                 } catch (err) {
                     console.error('Failed to fetch log', err);
                     setError('Failed to load log data');
+                    toast.error('Archive Retrieval Failed: Log not found.');
                 } finally {
                     setIsLoading(false);
                 }
@@ -89,16 +91,33 @@ const DailyLog = () => {
                     description: finalDescription,
                     timeSpent: Number(formData.timeSpent),
                 });
+                toast.success('Log Synchronized: Execution record updated.', {
+                    style: {
+                        background: '#0f0f11',
+                        color: '#fff',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                    },
+                    icon: '🔄',
+                });
             } else {
                 await axios.post(`${backendUrl}/daily-logs`, {
                     ...formData,
                     description: finalDescription,
                     timeSpent: Number(formData.timeSpent),
                 });
+                toast.success('Execution Recorded: Your progress is archived.', {
+                    style: {
+                        background: '#0f0f11',
+                        color: '#fff',
+                        border: '1px solid rgba(34, 197, 94, 0.2)',
+                    },
+                    icon: '📝',
+                });
             }
             navigate('/history');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to submit log');
+            toast.error('Submission Failed: Protocol interrupted.');
         }
     };
 
