@@ -1,0 +1,351 @@
+/* History Page Premium Styles */
+.history-page {
+    min-height: 100vh;
+    background: #050505;
+    color: #fff;
+    padding: 3rem 1.5rem;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+.bg-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 10% 10%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.history-header {
+    text-align: center;
+    margin-bottom: 5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.history-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+    background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.6) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.history-subtitle {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.history-quote {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: inline-block;
+}
+
+.quote-text {
+    font-style: italic;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.quote-author {
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: #64748b;
+}
+
+/* Stats Styling */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-card {
+    background: rgba(15, 15, 17, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.stat-icon {
+    font-size: 2rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.stat-subtitle {
+    font-size: 0.8rem;
+    color: #475569;
+}
+
+/* Filters Styling */
+.filters-container {
+    background: rgba(20, 20, 22, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    padding: 0.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-group-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-dropdown {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.divider-vr {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Timeline Styling */
+.timeline-container {
+    position: relative;
+    z-index: 1;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 45px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.2) 0%, transparent 100%);
+}
+
+.timeline-entry {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+.timeline-date-badge {
+    width: 90px;
+    height: 90px;
+    background: #0f0f11;
+    border: 1px solid #1f1f23;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: 0.3s;
+}
+
+.timeline-entry:hover .timeline-date-badge {
+    border-color: #22c55e;
+    transform: scale(1.05);
+}
+
+.date-day-name {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #475569;
+}
+
+.date-day {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1;
+    margin: 0.2rem 0;
+}
+
+.date-month {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #64748b;
+}
+
+.timeline-content {
+    flex: 1;
+    background: #0f0f11;
+    border: 1px solid #1f1f23;
+    border-radius: 24px;
+    padding: 2rem;
+    transition: 0.3s;
+}
+
+.timeline-entry:hover .timeline-content {
+    border-color: rgba(34, 197, 94, 0.2);
+    box-shadow: 0 10px 30px -10px rgba(34, 197, 94, 0.1);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.timeline-description {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.timeline-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timeline-tags {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.tag {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.4rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.mood-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .history-title {
+        font-size: 2.5rem;
+    }
+
+    .timeline::before {
+        left: 35px;
+    }
+
+    .timeline-date-badge {
+        width: 70px;
+        height: 70px;
+    }
+
+    .date-day {
+        font-size: 1.25rem;
+    }
+
+    .timeline-entry {
+        gap: 1rem;
+    }
+
+    .filters-container {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 1.5rem;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .divider-vr {
+        display: none;
+    }
+}

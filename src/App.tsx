@@ -15,6 +15,9 @@ import type { ReactNode } from 'react';
 import MasterRoadmap from './pages/MasterRoadmap';
 import BackendMasteryGraph from './pages/BackendMasteryGraph';
 import ProjectMasteryGraph from './pages/ProjectMasteryGraph';
+import GoogleRoadmap from './pages/GoogleRoadmap';
+import NextPath from './pages/NextPath';
+import CleanCodeGuide from './pages/CleanCodeGuide';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
@@ -107,6 +110,30 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <ProjectMasteryGraph />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/google-roadmap"
+                            element={
+                                <PrivateRoute>
+                                    <GoogleRoadmap />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/next-path"
+                            element={
+                                <PrivateRoute>
+                                    <NextPath />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/clean-code"
+                            element={
+                                <PrivateRoute>
+                                    <CleanCodeGuide />
                                 </PrivateRoute>
                             }
                         />

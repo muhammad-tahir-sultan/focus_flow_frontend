@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../main';
 import Loader from '../components/Loader';
+import '../styles/history.css';
 
 interface Log {
     _id: string;
@@ -99,6 +100,7 @@ const History = () => {
 
     return (
         <div className="history-page">
+            <div className="bg-gradient"></div>
 
             {/* Header Section */}
             <div className="history-header">

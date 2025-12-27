@@ -9,6 +9,12 @@ interface SubTopic {
     isKey: boolean;
 }
 
+interface Resource {
+    name: string;
+    url: string;
+    type: 'video' | 'article' | 'documentation' | 'practice';
+}
+
 interface ProjectValues {
     difficulty: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
     timeline: string;
@@ -20,6 +26,7 @@ interface ProjectDetail {
     subtitle: string;
     values: ProjectValues;
     objectives: SubTopic[];
+    resources: Resource[];
     reasoning: {
         scenario: string;
         challenge: string;
@@ -60,6 +67,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Handling basic HTTP request flows, validating untrusted user input, and managing user sessions without storing passwords in plain text.",
             solution: "A RESTful API with a structured controller-service-repository pattern and robust middleware for AuthN/AuthZ."
         },
+        resources: [
+            { name: 'NestJS REST API Guide', url: 'https://docs.nestjs.com/first-steps', type: 'documentation' },
+            { name: 'JWT Authentication Guide', url: 'https://jwt.io/introduction/', type: 'article' }
+        ],
         milestones: [
             { title: "Day 1: Setup NestJS/Express project & DB Connection", checked: false },
             { title: "Day 2: Implement User Registration & Login (JWT)", checked: false },
@@ -87,6 +98,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "HTTP is stateless and request-driven. Maintaining open connections for thousands of users and broadcasting messages in real-time is resource-intensive.",
             solution: "Stateful WebSocket connections handled by an event-driven architecture, using Redis to broadcast events between disparate server nodes."
         },
+        resources: [
+            { name: 'Socket.io Get Started', url: 'https://socket.io/get-started/chat', type: 'practice' },
+            { name: 'Scaling WebSockets with Redis', url: 'https://socket.io/docs/v4/redis-adapter/', type: 'documentation' }
+        ],
         milestones: [
             { title: "Week 1: Build basic Socket.io server & client", checked: false },
             { title: "Week 1: Implement 1-on-1 private messaging", checked: false },
@@ -113,6 +128,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Race conditions in inventory management and ensuring distributed integrity between your DB and the Payment Gateway.",
             solution: "Database transactions (Row-level locking) alongside idempotent webhook handlers and message queues for non-critical side effects."
         },
+        resources: [
+            { name: 'Stripe API Design', url: 'https://stripe.com/docs/api', type: 'documentation' },
+            { name: 'Handling Webhooks Safely', url: 'https://stripe.com/docs/webhooks/best-practices', type: 'article' }
+        ],
         milestones: [
             { title: "Week 1: Database Schema Design (Products, Orders, Users)", checked: false },
             { title: "Week 1: Advanced Filtering API (Price, Category, Ratings)", checked: false },
@@ -139,6 +158,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Generating feeds for users with 1M+ followers instantly while maintaining fresh content.",
             solution: "Hybrid approach: Pre-computing feeds (Push) for active users and caching them in Redis, while using specialized search engines (Elastic) for discovery."
         },
+        resources: [
+            { name: 'System Design: News Feed', url: 'https://bytebytego.com/courses/system-design-interview/design-a-news-feed-system', type: 'article' },
+            { name: 'Cursor Pagination Deep Dive', url: 'https://slack.engineering/evolving-api-pagination-at-slack/', type: 'article' }
+        ],
         milestones: [
             { title: "Week 1: Implement Cursor-based pagination API", checked: false },
             { title: "Week 2: Build 'Fan-out-on-write' service for post distribution", checked: false },
@@ -165,6 +188,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Memory management and bandwidth optimization. Processing video requires heavy CPU usage that blocks the Node.js event loop.",
             solution: "Using Node.js Streams to pipe data directly to response. Offloading CPU tasks (FFmpeg) to child processes or worker threads."
         },
+        resources: [
+            { name: 'Node.js Streams Guide', url: 'https://nodejs.org/en/docs/guides/backpressuring-in-streams/', type: 'documentation' },
+            { name: 'FFmpeg with Node.js', url: 'https://github.com/fluent-ffmpeg/node-fluent-ffmpeg', type: 'documentation' }
+        ],
         milestones: [
             { title: "Week 1: Implement basic video streaming (Range headers)", checked: false },
             { title: "Week 2: File upload service (Chunked uploads)", checked: false },
@@ -190,6 +217,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Geospatial indexing updates at high frequency. Coordinating state across multiple independent services.",
             solution: "PostGIS for spatial data. Event sourcing with Kafka to handle high-throughput location updates. gRPC for low-latency inter-service communication."
         },
+        resources: [
+            { name: 'System Design: Uber', url: 'https://www.youtube.com/watch?v=Tp8kpMe-ZKw', type: 'video' },
+            { name: 'PostGIS Introduction', url: 'https://postgis.net/workshops/postgis-intro/', type: 'documentation' }
+        ],
         milestones: [
             { title: "Week 1: Design Microservices Arch & Proto files", checked: false },
             { title: "Week 2: Implement Driver Location service with PostGIS", checked: false },
@@ -216,6 +247,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Manual deployments are slow and error-prone. Blindly running servers without metrics is a recipe for disaster.",
             solution: "A fully automated CI/CD pipeline for reliable deployments, paired with a Prometheus/Grafana stack for real-time visibility."
         },
+        resources: [
+            { name: 'GitHub Actions Official Documentation', url: 'https://docs.github.com/en/actions', type: 'documentation' },
+            { name: 'Prometheus & Grafana (Beginners)', url: 'https://www.prometheus.io/docs/introduction/overview/', type: 'documentation' }
+        ],
         milestones: [
             { title: "Week 1: Write Dockerfiles & Compose for an existing app", checked: false },
             { title: "Week 1: Create a GitHub Action to run tests & build images", checked: false },
@@ -242,6 +277,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Real-time synchronization without a central locking mechanism (which kills UX). Latency makes ordering events difficult.",
             solution: "Using CRDTs (like Yjs) to mathematically guarantee eventual consistency across all clients, regardless of network timing."
         },
+        resources: [
+            { name: 'CRDTs Guide (Yjs)', url: 'https://yjs.dev/', type: 'documentation' },
+            { name: 'Real-time collaborative editing algorithms', url: 'https://blog.kevinjahns.de/are-crdts-the-future/', type: 'article' }
+        ],
         milestones: [
             { title: "Week 1: Implement basic WebSocket sync", checked: false },
             { title: "Week 2: Integrate Yjs for simple text sync", checked: false },
@@ -268,6 +307,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Building a database requires understanding file I/O, memory management, and distributed consensus algorithms from scratch.",
             solution: "A custom in-memory KV store that supports SET/GET, persistence via Write-Ahead-Logs (WAL), and basic replication."
         },
+        resources: [
+            { name: 'Build your own Redis (Book)', url: 'https://build-your-own.org/redis/', type: 'article' },
+            { name: 'Raft Consensus Algorithm', url: 'https://raft.github.io/', type: 'documentation' }
+        ],
         milestones: [
             { title: "Week 1: Build a TCP server handling custom commands", checked: false },
             { title: "Week 2: Implement an in-memory Hash Table", checked: false },
@@ -294,6 +337,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "High throughput delivery, preventing duplication (idempotency), and respecting third-party API rate limits.",
             solution: "An asynchronous queue-based architecture with separate workers for each channel (Email, SMS) and a robust retry mechanism."
         },
+        resources: [
+            { name: 'RabbitMQ Tutorials', url: 'https://www.rabbitmq.com/getstarted.html', type: 'practice' },
+            { name: 'Exponential Backoff Concept', url: 'https://en.wikipedia.org/wiki/Exponential_backoff', type: 'article' }
+        ],
         milestones: [
             { title: "Week 1: Setup RabbitMQ/Kafka producer", checked: false },
             { title: "Week 1: Build flexible templating engine", checked: false },
@@ -320,6 +367,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Counting requests accurately in a distributed environment without locking the database or slowing down requests.",
             solution: "High-performance in-memory counting (Redis) using atomic operations or Lua scripts to enforce quotas."
         },
+        resources: [
+            { name: 'Redis Rate Limiting Patterns', url: 'https://redis.io/commands/incr/', type: 'documentation' },
+            { name: 'Better Rate Limiting (Stripe)', url: 'https://stripe.com/blog/rate-limiters', type: 'article' }
+        ],
         milestones: [
             { title: "Week 1: Implement Fixed Window counter", checked: false },
             { title: "Week 1: Upgrade to Sliding Window (Token Bucket)", checked: false },
@@ -345,6 +396,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Bandwidth efficiency, storage costs, and reliability of large binary transfers.",
             solution: "Breaking files into chunks based on content (CDC), hashing them for deduplication, and adhering to the S3 multipart upload protocol."
         },
+        resources: [
+            { name: 'S3 Multipart Upload Guide', url: 'https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html', type: 'documentation' },
+            { name: 'Dropbox Syncing Architecture', url: 'https://blogs.dropbox.com/tech/2014/07/streaming-file-synchronization/', type: 'article' }
+        ],
         milestones: [
             { title: "Week 1: Basic multipart upload/download API", checked: false },
             { title: "Week 2: Implement Deduplication logic", checked: false },
@@ -370,6 +425,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "The web is infinite and messy. Managing a queue of URLs to visit across multiple workers is a graph traversal problem at massive scale.",
             solution: "A URL Frontier managed by Kafka/Redis, distributed workers for fetching/parsing, and probabalistic data structures (Bloom Filters) to track history."
         },
+        resources: [
+            { name: 'Distributed Web Crawler (System Design)', url: 'https://bytebytego.com/courses/system-design-interview/design-a-web-crawler', type: 'article' },
+            { name: 'Bloom Filters Explained', url: 'https://llimllib.github.io/bloomfilter-tutorial/', type: 'article' }
+        ],
         milestones: [
             { title: "Week 1: Build URL Frontier and basic fetcher", checked: false },
             { title: "Week 2: Implement Robots.txt parsing & Politeness", checked: false },
@@ -396,6 +455,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Security (running arbitrary code) and multi-tenancy. Routing traffic instantly to ephemeral containers.",
             solution: "Using lightweight micro-VMs (Firecracker) or containers for isolation. A reverse proxy that dynamically routes `project.platform.com` to internal container IPs."
         },
+        resources: [
+            { name: 'Firecracker MicroVMs', url: 'https://firecracker-microvm.github.io/', type: 'documentation' },
+            { name: 'Kubernetes Ingress Controllers', url: 'https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/', type: 'documentation' }
+        ],
         milestones: [
             { title: "Week 1: Build service to clone repo & build Docker image", checked: false },
             { title: "Week 2: Dynamic reverse proxy for subdomains", checked: false },
@@ -422,6 +485,10 @@ const PROJECT_DETAILS: Record<string, ProjectDetail> = {
             challenge: "Race conditions. Standard logic will oversell the venue instantly.",
             solution: "Database row-locking, distributed locks with Redis for hold-reservations, and a virtual waiting room to smooth out traffic spikes."
         },
+        resources: [
+            { name: 'Pessimistic vs Optimistic Locking', url: 'https://stackoverflow.com/questions/129329/optimistic-vs-pessimistic-locking', type: 'article' },
+            { name: 'Redis Distributed Locks (Redlock)', url: 'https://redis.io/docs/reference/patterns/distributed-locks/', type: 'documentation' }
+        ],
         milestones: [
             { title: "Week 1: basic booking flow (with race conditions)", checked: false },
             { title: "Week 2: Implement Redis Distributed Locks", checked: false },

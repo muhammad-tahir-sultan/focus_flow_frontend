@@ -7,12 +7,18 @@ interface SubTopic {
     isKey: boolean; // Highlights "Must Know" topics
 }
 
+interface Resource {
+    name: string;
+    url: string;
+    type: 'video' | 'article' | 'documentation' | 'practice';
+}
+
 interface NodeDetail {
     title: string;
     subtitle: string;
     timeline: string; // Estimated time to complete
     topics: SubTopic[];
-    resources: string[];
+    resources: Resource[];
     reasoning: {
         problem: string;
         solution: string;
@@ -43,10 +49,13 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'TCP/IP Model', description: 'Packets, subnets, and reliable data delivery.', isKey: false },
             { title: 'Browsers & Rendering', description: 'How browsers parse HTML, CSS, and execute JS.', isKey: false }
         ],
-        resources: ['MDN Web Docs', 'CS50 Introduction to Networks'],
+        resources: [
+            { name: 'How DNS Works', url: 'https://howdns.works/', type: 'article' },
+            { name: 'HTTP/3 Explained', url: 'https://http3-explained.haxx.se/en/', type: 'documentation' }
+        ],
         reasoning: {
-            problem: "Computers only understand numbers (IPs), but humans remember names. Sending data across the world requires a standardized, reliable delivery system.",
-            solution: "DNS solves the naming problem. TCP/IP solves the delivery problem by slicing data into packets. HTTP provides a common language for browsers and servers to talk.",
+            problem: "The web feels like magic, but without understanding how packets move through routers and how DNS resolves names, you cannot debug performance or security issues in production.",
+            solution: "Learn the foundational protocols (TCP/IP, HTTP/S). Use tools like dig and nslookup to peel back the layers of DNS.",
             tradeoffs: "The abstraction layers (OSI Model) add overhead. HTTPS adds latency due to handshakes but is non-negotiable for security. DNS propagation can be slow."
         },
         checklist: [
@@ -66,10 +75,13 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'File Permissions', description: 'chmod, chown, users, groups.', isKey: true },
             { title: 'SSH & Keys', description: 'Secure remote access and key management.', isKey: false }
         ],
-        resources: ['Linux Journey', 'OverTheWire Wargames'],
+        resources: [
+            { name: 'Linux Journey', url: 'https://linuxjourney.com/', type: 'article' },
+            { name: 'Command Line Power User', url: 'https://commandlinepoweruser.com/', type: 'video' }
+        ],
         reasoning: {
-            problem: "Servers don't have GUIs. Managing thousands of servers manually via mouse clicks is impossible and inefficient.",
-            solution: "The CLI (Command Line Interface) allows robust automation, remote management via SSH, and direct interaction with the OS kernel for performance tuning.",
+            problem: "Modern backends run on Linux. Relying on GUIs or local 'Windows' environments makes deployment to production (Docker/Cloud) a nightmare of environment mismatches.",
+            solution: "Abandon the mouse. Master the Shell. Learn process signals, file permissions, and streams (stdout/stderr) to manage servers efficiently.",
             tradeoffs: "Steep learning curve compared to GUIs. One wrong command (rm -rf /) can be catastrophic. Requires memorization of arcane syntax."
         },
         checklist: [
@@ -90,10 +102,13 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Stashing & Cherry-picking', description: 'Advanced history manipulation.', isKey: false },
             { title: 'Hooks', description: 'Pre-commit, pre-push automation.', isKey: false }
         ],
-        resources: ['Pro Git Book', 'Git Krazen'],
+        resources: [
+            { name: 'Visualizing Git', url: 'https://git-school.github.io/visualizing-git/', type: 'practice' },
+            { name: 'Git Branching Game', url: 'https://learngitbranching.js.org/', type: 'practice' }
+        ],
         reasoning: {
-            problem: "Without VC, overwriting co-workers' code is rampant. 'Final_Final_v2.zip' is not a strategy. You need to travel back in time to debug regressions.",
-            solution: "Git provides a distributed history of every change. Branching allows isolation of features. Rebasing keeps history linear and readable.",
+            problem: "Losing code or breaking a shared codebase due to 'merge conflicts' or 'force pushes' stops development and causes team friction.",
+            solution: "Treat Git as a tree of snapshots. Learn rebase for clean history and hooks for automated quality checks before code leaves your machine.",
             tradeoffs: "Git's conceptual model (DAG) is complex. Merge conflicts are painful. Submodules are notoriously difficult to manage."
         },
         checklist: [
@@ -114,10 +129,13 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Firewalls & Proxies', description: 'Reverse proxies, forward proxies, WAF.', isKey: true },
             { title: 'SSL/TLS Handshake', description: 'Symmetric vs Asymmetric encryption.', isKey: true }
         ],
-        resources: ['Cloudflare Learning Center'],
+        resources: [
+            { name: 'Nginx Fundamentals', url: 'https://www.nginx.com/resources/glossary/reverse-proxy-server/', type: 'article' },
+            { name: 'Computer Networking (Khan Academy)', url: 'https://www.khanacademy.org/computing/computers-and-internet', type: 'video' }
+        ],
         reasoning: {
-            problem: "Directly exposing application servers to the internet is dangerous and unscalable. Single servers cannot handle 100k+ concurrent connections.",
-            solution: "Reverse Proxies (Nginx) and Load Balancers distribute traffic and handle SSL termination, relieving the app server. Firewalls block malicious traffic.",
+            problem: "Basic request/response is easy, but scaling horizontally requires load balancers, reverse proxies, and securing the transport layer with SSL/TLS to prevent man-in-the-middle attacks.",
+            solution: "Use Nginx as a gateway. Implement TLS for all connections. Understand the OSI model to troubleshoot where a connection is failing (DNS vs TCP vs Application).",
             tradeoffs: "Adds another hop in the network request (latency). Introducing a Load Balancer introduces a new single point of failure if not redundant."
         },
         checklist: [
@@ -137,10 +155,13 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Dependency Injection', description: 'Inversion of Control in NestJS.', isKey: true },
             { title: 'Modules & Decorators', description: 'Metaprogramming in TypeScript.', isKey: false }
         ],
-        resources: ['Node.js Design Patterns Book', 'NestJS Official Docs'],
+        resources: [
+            { name: 'NestJS Official Documentation', url: 'https://docs.nestjs.com/', type: 'documentation' },
+            { name: 'Node.js Event Loop Visualizer', url: 'https://www.jsv9000.app/', type: 'practice' }
+        ],
         reasoning: {
-            problem: "Traditional blocking I/O (Thread-per-request) runs out of memory efficiently under high concurrency (e.g., 10k connections).",
-            solution: "Node.js uses a Single-Threaded Event Loop with non-blocking I/O, perfect for I/O-bound apps. NestJS adds structure (Angular-like) to the unopinionated Node ecosystem.",
+            problem: "Express is great but lacks structure for large teams. Without a framework like NestJS, backends become a spaghetti mess of inconsistent patterns and difficult-to-test logic.",
+            solution: "Leverage NestJS's modularity and Dependency Injection. Understand the Node.js Event Loop to avoid blocking operations that kill throughput.",
             tradeoffs: "Nodejs is terrible at CPU-intensive tasks (image processing, ML) as it blocks the event loop. NestJS adds boilerplate and learning curve over Express."
         },
         checklist: [
@@ -161,7 +182,10 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Normalization', description: '1NF, 2NF, 3NF to avoid redundancy.', isKey: false },
             { title: 'Transactions & Locking', description: 'Row-level locking, Deadlocks, Isolation levels.', isKey: true }
         ],
-        resources: ['Postgres Weekly', 'The Art of PostgreSQL'],
+        resources: [
+            { name: 'Use The Index, Luke!', url: 'https://use-the-index-luke.com/', type: 'article' },
+            { name: 'Postgres University', url: 'https://pganalyze.com/blog/how-to-learn-postgres-expert', type: 'article' }
+        ],
         reasoning: {
             problem: "Data integrity is critical for financial/user data. Example: Deducting money from User A but crashing before adding to User B destroys value.",
             solution: "ACID transactions guarantee all-or-nothing execution. Relational schemas enforce strict data structure and consistency.",
@@ -184,7 +208,10 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Schema Design', description: 'Embedding vs Referencing trade-offs.', isKey: true },
             { title: 'Geospatial Queries', description: 'Location-based services.', isKey: false }
         ],
-        resources: ['MongoDB University'],
+        resources: [
+            { name: 'MongoDB University', url: 'https://university.mongodb.com/', type: 'practice' },
+            { name: 'MongoDB Schema Design Patterns', url: 'https://www.mongodb.com/blog/post/building-with-patterns-a-summary', type: 'article' }
+        ],
         reasoning: {
             problem: "Relational databases struggle with massive volumes of unstructured data (logs, IoT) and require complex JOINs for hierarchical data.",
             solution: "MongoDB (Document stores) allow flexible schemas and fast read/writes. Sharding is built-in for massive horizontal scale.",
@@ -206,7 +233,10 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Migrations', description: 'Versioning database schema changes.', isKey: true },
             { title: 'Query Builders', description: 'When to drop down to raw SQL.', isKey: false }
         ],
-        resources: ['Prisma Docs', 'TypeORM Docs'],
+        resources: [
+            { name: 'Prisma Data Guide', url: 'https://www.prisma.io/dataguide', type: 'article' },
+            { name: 'TypeORM Official Docs', url: 'https://typeorm.io/', type: 'documentation' }
+        ],
         reasoning: {
             problem: "Writing raw SQL is error-prone, vulnerable to SQL injection, and lacks type safety in TS codebases.",
             solution: "ORMs provide a type-safe abstraction, handle basic security sanitization, and manage schema migrations automatically.",
@@ -229,7 +259,10 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Redis Data Structures', description: 'Strings, Hashes, Lists, Sets, Sorted Sets.', isKey: false },
             { title: 'Pub/Sub', description: 'Real-time messaging with Redis.', isKey: false }
         ],
-        resources: ['Redis University'],
+        resources: [
+            { name: 'Redis University', url: 'https://university.redis.io/', type: 'practice' },
+            { name: 'Caching Strategies Guide', url: 'https://codeahoy.com/2017/08/11/caching-strategies-and-design-patterns/', type: 'article' }
+        ],
         reasoning: {
             problem: "Database operations are slow (disk I/O). Calculating the same dashboard stats on every page refresh kills the database.",
             solution: "Redis stores data in RAM (Sub-millisecond access). Caching frequently accessed read-heavy data drastically reduces DB load.",
@@ -252,7 +285,10 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'gRPC & Protobuf', description: 'High-performance microservices comms.', isKey: true },
             { title: 'WebSockets', description: 'Bidirectional full-duplex communication.', isKey: false }
         ],
-        resources: ['API Design Patterns Book'],
+        resources: [
+            { name: 'API Design Patterns (Book)', url: 'https://www.manning.com/books/api-design-patterns', type: 'article' },
+            { name: 'GraphQL Official Tutorial', url: 'https://graphql.org/learn/', type: 'documentation' }
+        ],
         reasoning: {
             problem: "Frontends and Backends need a contract to communicate. REST is standard but suffers from over-fetching. WebSockets are needed for real-time.",
             solution: "GraphQL solves over-fetching. gRPC solves internal microservice latency with binary serialization. WebSockets enable chat/live-updates.",
@@ -275,7 +311,10 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Rate Limiting', description: 'Preventing DDoS and abuse.', isKey: false },
             { title: 'Encryption', description: 'Hashing passwords (Argon2, Bcrypt).', isKey: true }
         ],
-        resources: ['OWASP Top 10'],
+        resources: [
+            { name: 'OWASP Top Ten Project', url: 'https://owasp.org/www-project-top-ten/', type: 'documentation' },
+            { name: 'Auth0 Blog - Security Best Practices', url: 'https://auth0.com/blog/', type: 'article' }
+        ],
         reasoning: {
             problem: "The web is hostile. Script kiddies and bots will scan your API for vulnerabilities 24/7. Data breaches destroy trust.",
             solution: "Implement OWASP standards. Use established libraries for Auth (Passport/Auth0). Never roll your own crypto.",
@@ -298,11 +337,14 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'E2E Testing', description: 'Cypress / Playwright flows.', isKey: false },
             { title: 'Mocking', description: 'Isolating dependencies.', isKey: true }
         ],
-        resources: ['Jest Docs', 'Testing Trophy'],
+        resources: [
+            { name: 'Testing Library', url: 'https://testing-library.com/', type: 'documentation' },
+            { name: 'Kent C. Dodds - Testing Blog', url: 'https://kentcdodds.com/blog?q=testing', type: 'article' }
+        ],
         reasoning: {
-            problem: "Manual testing is slow, inconsistent, and unscalable. Fear of breaking existing code freezes development speed.",
-            solution: "Automated tests provide a safety net (CI/CD). Unit tests catch logic bugs. Integration tests verify DB connections.",
-            tradeoffs: "Writing tests doubles the initial development time. Maintaining brittle tests (that break on every CSS change) is a nightmare."
+            problem: "Refactoring code without tests is like jumping without a parachute. You won't know you broke something until production crashes.",
+            solution: "Adopt the Testing Pyramid: Heavy on unit tests, moderate on integration, light on E2E. Use TDD for complex business logic.",
+            tradeoffs: "Writing tests takes time (20-30% overhead). Brittle tests that break on every UI change become a maintenance burden."
         },
         checklist: [
             { title: "Week 1: Write Unit Tests for all Service methods", checked: false },
@@ -321,11 +363,13 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Networking', description: 'Bridge, Host, Overlay networks.', isKey: false },
             { title: 'Volumes', description: 'Persisting data.', isKey: false }
         ],
-        resources: ['Docker Mastery Course'],
+        resources: [
+            { name: 'Docker Labs', url: 'https://training.play-with-docker.com/', type: 'practice' }
+        ],
         reasoning: {
-            problem: "'It works on my machine' syndrome. Different OS versions and dependencies between Dev, Stage, and Prod cause crashes.",
-            solution: "Containers package the code + OS + Dependencies together. Guaranteed consistency across all environments.",
-            tradeoffs: "Adds complexity to the build pipeline. Learning curve for filesystem/networking inside containers. Docker performance overhead on Mac/Windows."
+            problem: "The manual 'It works on my machine' syndrome. Managing dependencies and OS versions across Dev, QA, and Prod lead to 'deployment hell'.",
+            solution: "Containerize the app. Docker ensures the exact same environment runs everywhere. Use multi-stage builds to keep production images tiny.",
+            tradeoffs: "Layers add storage overhead. Docker on Windows/Mac runs in a VM (performance hit). Networking between containers can be complex."
         },
         checklist: [
             { title: "Day 1-2: Write a multi-stage Dockerfile for NestJS", checked: false },
@@ -344,11 +388,14 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Serverless', description: 'AWS Lambda, API Gateway.', isKey: true },
             { title: 'Infrastructure as Code', description: 'Terraform / CDK.', isKey: true }
         ],
-        resources: ['Kubernetes.io', 'AWS Certified Solutions Architect'],
+        resources: [
+            { name: 'Kubernetes Academy', url: 'https://kubernetes.academy/', type: 'video' },
+            { name: 'AWS Skill Builder', url: 'https://explore.skillbuilder.aws/', type: 'practice' }
+        ],
         reasoning: {
-            problem: "Managing 100 docker containers manually is impossible. What happens when a node crashes? How do you zero-downtime deploy?",
-            solution: "K8s automates deployment, scaling, and management of containerized apps. It self-heals crashing pods.",
-            tradeoffs: "Extreme complexity ('K8s is hard'). Overkill for small apps. Operational cost of managing the control plane."
+            problem: "Manually restarting crashed containers and scaling them during a traffic spike is impossible. You need a system that 'self-heals' and scales automatically.",
+            solution: "Kubernetes orchestrates containers. It monitors health, restarts failed pods, and manages load balancing and storage across a cluster of machines.",
+            tradeoffs: "Kubernetes is notoriously complex ('The steep wall'). Overkill for small apps. Cloud costs (EKS/GKE) add up quickly."
         },
         checklist: [
             { title: "Week 1: Deploy a simple pod and service using Minikube", checked: false },
@@ -367,7 +414,10 @@ const NODE_DETAILS: Record<string, NodeDetail> = {
             { title: 'Scalability', description: 'Vertical vs Horizontal scaling.', isKey: true },
             { title: 'Message Queues', description: 'Kafka, RabbitMQ decoupling.', isKey: true }
         ],
-        resources: ['System Design Primer', 'Designing Data-Intensive Applications'],
+        resources: [
+            { name: 'System Design Primer', url: 'https://github.com/donnemartin/system-design-primer', type: 'article' },
+            { name: 'High Scalability Blog', url: 'http://highscalability.com/', type: 'article' }
+        ],
         reasoning: {
             problem: "Monoliths become unmaintainable as teams grow. Single DB becomes the bottleneck at millions of users.",
             solution: "Microservices decouple domains. Message queues handle backpressure. Eventual consistency allows massive scale.",
@@ -488,9 +538,25 @@ const SubRoadmapModal = ({ nodeId, onClose }: { nodeId: string; onClose: () => v
 
                     <div className="resources-section">
                         <h3 className="section-heading">Recommended Resources</h3>
-                        <div className="resources-list">
+                        <div className="resources-grid-modal">
                             {detail.resources.map((res, idx) => (
-                                <span key={idx} className="resource-tag">📚 {res}</span>
+                                <a
+                                    key={idx}
+                                    href={res.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`resource-card-link ${res.type}`}
+                                >
+                                    <span className="res-icon">
+                                        {res.type === 'video' ? '📺' :
+                                            res.type === 'article' ? '📝' :
+                                                res.type === 'practice' ? '🧪' : '📚'}
+                                    </span>
+                                    <div className="res-info">
+                                        <span className="res-name">{res.name}</span>
+                                        <span className="res-type-label">{res.type}</span>
+                                    </div>
+                                </a>
                             ))}
                         </div>
                     </div>
@@ -1142,6 +1208,50 @@ const BackendMasteryGraph = () => {
                     border-top: 3px solid #fb923c; /* Orange for Trade-offs */
                 }
 
+                /* Resources in Modal */
+                .resources-grid-modal {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 1rem;
+                }
+
+                .resource-card-link {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    padding: 0.75rem 1rem;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    text-decoration: none;
+                    transition: all 0.2s;
+                }
+
+                .resource-card-link:hover {
+                    background: rgba(255, 255, 255, 0.06);
+                    border-color: var(--accent-color);
+                    transform: translateY(-2px);
+                }
+
+                .res-info {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .res-name {
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: #fff;
+                }
+
+                .res-type-label {
+                    font-size: 0.7rem;
+                    text-transform: uppercase;
+                    color: rgba(255,255,255,0.4);
+                    letter-spacing: 0.05em;
+                }
+
+                /* Keep previous styles */
             `}</style>
         </div>
     );

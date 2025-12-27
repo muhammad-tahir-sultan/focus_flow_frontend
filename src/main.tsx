@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import './styles/navigation.css'
 import App from './App'
 
 // export const backendUrl = 'http://localhost:3000';

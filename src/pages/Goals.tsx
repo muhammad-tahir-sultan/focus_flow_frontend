@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import axios from 'axios';
 import { backendUrl } from '../main';
 import Loader from '../components/Loader';
+import '../styles/goals.css';
 
 interface Goal {
     _id: string;
@@ -12,6 +13,14 @@ interface Goal {
     endDate: string;
     status: string;
 }
+
+const CATEGORY_ICONS: Record<string, string> = {
+    'Career': '💼',
+    'Health': '🏃',
+    'Finance': '💰',
+    'Skills': '🛠️',
+    'Personal': '🧘'
+};
 
 const Goals = () => {
     const [goals, setGoals] = useState<Goal[]>([]);
@@ -61,126 +70,101 @@ const Goals = () => {
     if (loading) return <Loader />;
 
     return (
-        <div style={{ width: '100%' }}>
-            <h2 className="heading-xl mb-8" style={{ textAlign: 'center' }}>Manage Goals</h2>
+        <div className="goals-page">
+            <div className="bg-gradient"></div>
+            <header className="goals-header">
+                <h1>MISSION TRACKER</h1>
+                <p>Define your horizons. Execute with precision. Master your life.</p>
+            </header>
 
-            <div style={{ maxWidth: '700px', margin: '0 auto 3rem' }}>
-                <form onSubmit={handleSubmit} className="card" style={{ padding: '2rem' }}>
-                    {error && (
-                        <div style={{
-                            color: 'var(--error-color)',
-                            marginBottom: '1.5rem',
-                            padding: '0.75rem 1rem',
-                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                            border: '1px solid var(--error-color)',
-                            borderRadius: '8px',
-                            fontSize: '0.9rem'
-                        }}>
-                            {error}
-                        </div>
-                    )}
+            <div className="goal-form-container">
+                <h2 className="form-title"><span>🎯</span> New Objective</h2>
+                <form onSubmit={handleSubmit}>
+                    {error && <div className="error-banner">{error}</div>}
 
-                    <div style={{ display: 'grid', gap: '1.25rem' }}>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '0.75rem',
-                                fontWeight: '600',
-                                fontSize: '0.95rem'
-                            }}>
-                                Goal Title
-                            </label>
-                            <input
-                                type="text"
-                                value={formData.title}
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                required
-                                placeholder="e.g., Learn NestJS"
-                                style={{ fontSize: '1rem', padding: '0.875rem 1rem' }}
-                            />
-                        </div>
-
-                        <div className="form-row-2">
-                            <div>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '0.75rem',
-                                    fontWeight: '600',
-                                    fontSize: '0.95rem'
-                                }}>
-                                    Category
-                                </label>
-                                <select
-                                    value={formData.category}
-                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    style={{ fontSize: '1rem', padding: '0.875rem 1rem' }}
-                                >
-                                    {['Career', 'Health', 'Finance', 'Skills', 'Personal'].map(c => (
-                                        <option key={c} value={c}>{c}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '0.75rem',
-                                    fontWeight: '600',
-                                    fontSize: '0.95rem'
-                                }}>
-                                    Time Horizon
-                                </label>
-                                <select
-                                    value={formData.horizon}
-                                    onChange={(e) => setFormData({ ...formData, horizon: e.target.value })}
-                                    style={{ fontSize: '1rem', padding: '0.875rem 1rem' }}
-                                >
-                                    {['Daily', '30 Days', '3 Months', '6 Months', '1 Year', '2 Years', '3 Years', '5 Years'].map(h => (
-                                        <option key={h} value={h}>{h}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                            style={{
-                                padding: '1rem',
-                                fontSize: '1.05rem',
-                                fontWeight: '600'
-                            }}
-                        >
-                            Create Goal
-                        </button>
+                    <div className="input-group">
+                        <label>Target Objective</label>
+                        <input
+                            type="text"
+                            className="premium-input"
+                            value={formData.title}
+                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            required
+                            placeholder="Identify your next target..."
+                        />
                     </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="input-group">
+                            <label>Domain</label>
+                            <select
+                                className="premium-select"
+                                value={formData.category}
+                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            >
+                                {Object.keys(CATEGORY_ICONS).map(c => (
+                                    <option key={c} value={c}>{CATEGORY_ICONS[c]} {c}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="input-group">
+                            <label>Time Horizon</label>
+                            <select
+                                className="premium-select"
+                                value={formData.horizon}
+                                onChange={(e) => setFormData({ ...formData, horizon: e.target.value })}
+                            >
+                                {['Daily', '30 Days', '3 Months', '6 Months', '1 Year', '2 Years', '3 Years', '5 Years'].map(h => (
+                                    <option key={h} value={h}>{h}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" className="create-goal-btn">
+                        INITIALIZE MISSION
+                    </button>
                 </form>
             </div>
 
-            <div style={{ display: 'grid', gap: '1rem' }}>
-                {goals.map(goal => (
-                    <div key={goal._id} className="card flex-between">
-                        <div>
-                            <h3 className="heading-lg" style={{ marginBottom: '0.25rem' }}>{goal.title}</h3>
-                            <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                {goal.category} • Ends: {new Date(goal.endDate).toLocaleDateString()}
+            <div className="goals-grid">
+                {goals.map((goal, index) => (
+                    <div key={goal._id} className="goal-card-premium" style={{ animationDelay: `${index * 0.1}s` }}>
+                        <div className="goal-card-top">
+                            <div className="goal-card-category">
+                                {CATEGORY_ICONS[goal.category] || '🎯'} {goal.category}
                             </div>
+                            <h3 className="goal-card-title">{goal.title}</h3>
+                            {goal.status !== 'Active' && (
+                                <span className={`status-badge status-${goal.status.toLowerCase()}`}>
+                                    {goal.status}
+                                </span>
+                            )}
                         </div>
-                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                            <span style={{
-                                padding: '0.25rem 0.5rem',
-                                borderRadius: '4px',
-                                fontSize: '0.75rem',
-                                backgroundColor: goal.status === 'Active' ? 'var(--accent-color)' : 'var(--surface-color)',
-                                color: goal.status === 'Active' ? '#000' : 'var(--text-secondary)'
-                            }}>
-                                {goal.status}
-                            </span>
+
+                        <div className="goal-card-footer">
+                            <div className="goal-horizon">
+                                ⏳ {goal.horizon} • {new Date(goal.endDate).toLocaleDateString()}
+                            </div>
+
                             {goal.status === 'Active' && (
-                                <>
-                                    <button onClick={() => updateStatus(goal._id, 'Completed')} className="btn" style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}>Done</button>
-                                    <button onClick={() => updateStatus(goal._id, 'Dropped')} className="btn" style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', backgroundColor: 'transparent', border: '1px solid var(--error-color)', color: 'var(--error-color)' }}>Drop</button>
-                                </>
+                                <div className="goal-actions">
+                                    <button
+                                        onClick={() => updateStatus(goal._id, 'Completed')}
+                                        className="btn-goal-action btn-complete"
+                                        title="Complete Mission"
+                                    >
+                                        ✅ Done
+                                    </button>
+                                    <button
+                                        onClick={() => updateStatus(goal._id, 'Dropped')}
+                                        className="btn-goal-action btn-drop"
+                                        title="Drop Mission"
+                                    >
+                                        ❌ Drop
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -191,3 +175,4 @@ const Goals = () => {
 };
 
 export default Goals;
+

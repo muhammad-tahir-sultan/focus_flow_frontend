@@ -1,9 +1,16 @@
 import { useState } from 'react';
 
+interface Resource {
+    name: string;
+    url: string;
+    type: 'video' | 'article' | 'documentation' | 'practice';
+}
+
 interface Task {
     id: string;
     text: string;
     completed: boolean;
+    resources?: Resource[];
 }
 
 interface Week {
@@ -44,11 +51,11 @@ const MasterRoadmap = () => {
                     title: 'WEEK 1 — N+1 Query Mastery',
                     subtitle: '⏱ 2–3 hours deep focus • ✍️ Notes after learning • 🧪 Small experiment daily',
                     tasks: [
-                        { id: 'w1-1', text: 'Understand what N+1 problem really is (GraphQL context)', completed: false },
+                        { id: 'w1-1', text: 'Understand what N+1 problem really is (GraphQL context)', completed: false, resources: [{ name: 'N+1 Guide', url: 'https://stackoverflow.com/questions/97197/what-is-the-n1-select-query-issue', type: 'article' }] },
                         { id: 'w1-2', text: 'Identify N+1 in your existing FocusFlow GraphQL APIs', completed: false },
                         { id: 'w1-3', text: 'Trace resolver execution flow', completed: false },
-                        { id: 'w1-4', text: 'Learn DataLoader fundamentals', completed: false },
-                        { id: 'w1-5', text: 'Implement DataLoader in NestJS (request-scoped)', completed: false },
+                        { id: 'w1-4', text: 'Learn DataLoader fundamentals', completed: false, resources: [{ name: 'DataLoader Repo', url: 'https://github.com/graphql/dataloader', type: 'documentation' }] },
+                        { id: 'w1-5', text: 'Implement DataLoader in NestJS (request-scoped)', completed: false, resources: [{ name: 'NestJS DataLoader Guide', url: 'https://docs.nestjs.com/graphql/dataloader', type: 'documentation' }] },
                         { id: 'w1-6', text: 'Test batching behavior', completed: false },
                         { id: 'w1-7', text: 'Compare API calls with vs without DataLoader', completed: false },
                     ],
@@ -58,11 +65,11 @@ const MasterRoadmap = () => {
                     id: 'week-2',
                     title: 'WEEK 2 — MongoDB Performance Engineering',
                     tasks: [
-                        { id: 'w2-1', text: 'Learn MongoDB index internals (B-Tree concept)', completed: false },
+                        { id: 'w2-1', text: 'Learn MongoDB index internals (B-Tree concept)', completed: false, resources: [{ name: 'B-Tree Visualization', url: 'https://www.cs.usfca.edu/~galles/visualization/BTree.html', type: 'practice' }] },
                         { id: 'w2-2', text: 'Understand single vs compound indexes', completed: false },
                         { id: 'w2-3', text: 'Practice left-most index rule', completed: false },
                         { id: 'w2-4', text: 'Create indexes: userId + createdAt, email', completed: false },
-                        { id: 'w2-5', text: 'Run explain() on slow queries', completed: false },
+                        { id: 'w2-5', text: 'Run explain() on slow queries', completed: false, resources: [{ name: 'MongoDB Explain() Guide', url: 'https://www.mongodb.com/docs/manual/reference/method/db.collection.explain/', type: 'documentation' }] },
                         { id: 'w2-6', text: 'Compare query execution time: Without vs With index', completed: false },
                         { id: 'w2-7', text: 'Learn when indexes hurt performance', completed: false },
                         { id: 'w2-8', text: 'Optimize GraphQL queries based on index strategy', completed: false },
@@ -76,9 +83,9 @@ const MasterRoadmap = () => {
                         { id: 'w3-1', text: 'Learn GraphQL response shaping', completed: false },
                         { id: 'w3-2', text: 'Analyze over-fetching & under-fetching', completed: false },
                         { id: 'w3-3', text: 'Learn pagination performance trade-offs', completed: false },
-                        { id: 'w3-4', text: 'Implement Redis basic caching', completed: false },
+                        { id: 'w3-4', text: 'Implement Redis basic caching', completed: false, resources: [{ name: 'Redis Fundamentals', url: 'https://redis.io/docs/getting-started/', type: 'documentation' }] },
                         { id: 'w3-5', text: 'Cache read-heavy queries', completed: false },
-                        { id: 'w3-6', text: 'Design cache invalidation logic', completed: false },
+                        { id: 'w3-6', text: 'Design cache invalidation logic', completed: false, resources: [{ name: 'Cache Invalidation Strategies', url: 'https://codeahoy.com/2017/08/11/caching-strategies-and-design-patterns/', type: 'article' }] },
                         { id: 'w3-7', text: 'Measure API response improvements', completed: false },
                     ],
                     outcome: 'My APIs are production-ready, not tutorial-level.',
@@ -356,7 +363,30 @@ const MasterRoadmap = () => {
                                                                 <span className="task-checkbox">
                                                                     {completedTasks.has(task.id) ? '✓' : ''}
                                                                 </span>
-                                                                <span className="task-text">{task.text}</span>
+                                                                <div className="task-content">
+                                                                    <span className="task-label">{task.text}</span>
+                                                                    {task.resources && task.resources.length > 0 && (
+                                                                        <div className="task-resources">
+                                                                            {task.resources.map((res, idx) => (
+                                                                                <a
+                                                                                    key={idx}
+                                                                                    href={res.url}
+                                                                                    target="_blank"
+                                                                                    rel="noopener noreferrer"
+                                                                                    className={`resource-link ${res.type}`}
+                                                                                    onClick={(e) => e.stopPropagation()}
+                                                                                >
+                                                                                    <span className="res-icon">
+                                                                                        {res.type === 'video' ? '📺' :
+                                                                                            res.type === 'article' ? '📝' :
+                                                                                                res.type === 'practice' ? '🧪' : '📚'}
+                                                                                    </span>
+                                                                                    {res.name}
+                                                                                </a>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </li>
                                                         ))}
                                                     </ul>
