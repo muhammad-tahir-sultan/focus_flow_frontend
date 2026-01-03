@@ -14,8 +14,29 @@ export interface AnalyticsData {
     value: number;
 }
 
-export interface NonNegotiableData {
-    name: string;
+export interface NonNegotiablesData {
+    completedCount: number;
+    totalCount: number;
+}
+
+export interface ConsistencyData {
+    week: number;
     value: number;
-    total: number;
+}
+
+export type TimelineRange = 'Week' | 'Month' | '3M' | '6M' | 'Year' | 'Custom';
+
+export interface Log {
+    date: string;
+    timeSpent: number;
+    mood?: string;
+}
+
+export interface Goal {
+    status: string;
+}
+
+export interface CustomRange {
+    start: string;
+    end: string;
 }
