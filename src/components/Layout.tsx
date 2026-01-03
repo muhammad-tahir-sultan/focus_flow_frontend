@@ -18,6 +18,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         { label: 'Dashboard', path: '/', icon: '🏠' },
         { label: 'NEXT PATH', path: '/next-path', icon: '🎯' },
         { label: 'Clean Code', path: '/clean-code', icon: '🧼' },
+        { label: 'Skills', path: '/skills', icon: '🧠' },
         { label: 'Log Today', path: '/log', icon: '✍️' },
         { label: 'History', path: '/history', icon: '📜' },
         { label: 'Goals', path: '/goals', icon: '🏆' },

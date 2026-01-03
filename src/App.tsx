@@ -18,6 +18,7 @@ import ProjectMasteryGraph from './pages/ProjectMasteryGraph';
 import GoogleRoadmap from './pages/GoogleRoadmap';
 import NextPath from './pages/NextPath';
 import CleanCodeGuide from './pages/CleanCodeGuide';
+import SkillsManager from './pages/SkillsManager';
 import { Toaster } from 'react-hot-toast';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
@@ -136,6 +137,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <CleanCodeGuide />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/skills"
+                            element={
+                                <PrivateRoute>
+                                    <SkillsManager />
                                 </PrivateRoute>
                             }
                         />

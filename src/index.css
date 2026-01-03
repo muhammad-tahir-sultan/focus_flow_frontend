@@ -171,6 +171,27 @@ select:focus {
   margin-bottom: 2rem;
 }
 
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.d-block {
+  display: block;
+}
+
+.grid-stack {
+  display: grid;
+  gap: 1rem;
+}
+
 .hover-link {
   position: relative;
   transition: all 0.2s;
