@@ -122,7 +122,7 @@ const Login = () => {
                     textTransform: 'uppercase',
                     letterSpacing: '0.2em'
                 }}>
-                    Protected by Focus Flow Security Protocol v2.0
+                    Protected by Nauman Majeed v2.0
                 </p>
             </div>
         </div>
