@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BACKEND_URL } from '../constants/api';
+import { loginUser } from '../api/auth';
+import AuthInput from '../components/auth/AuthInput';
+import AuthHeader from '../components/auth/AuthHeader';
+import AuthFooter from '../components/auth/AuthFooter';
+import AuthProtection from '../components/auth/AuthProtection';
 import '../styles/auth.css';
 
 const Login = () => {
@@ -20,8 +23,8 @@ const Login = () => {
         setIsLoading(true);
         setError('');
         try {
-            const res = await axios.post(`${BACKEND_URL}/auth/login`, { email, password });
-            login(res.data.token);
+            const data = await loginUser({ email, password });
+            login(data.token);
             navigate('/');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Authentication failed. Please check your credentials.');
@@ -35,13 +38,10 @@ const Login = () => {
             <div className="auth-bg-gradient"></div>
 
             <div className="auth-container">
-                <div className="auth-header">
-                    <h2 className="heading-xl gradient-text" style={{ marginBottom: '0.5rem' }}>Focus Flow</h2>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>Initiate Session Protocol</p>
-                </div>
+                <AuthHeader />
 
                 <div className="auth-card">
-                    <h3 className="heading-lg" style={{ marginBottom: '2rem', textAlign: 'center' }}>Welcome Back</h3>
+                    <h3 className="heading-lg auth-welcome">Welcome Back</h3>
 
                     <form onSubmit={handleSubmit}>
                         {error && (
@@ -51,45 +51,28 @@ const Login = () => {
                             </div>
                         )}
 
-                        <div className="auth-form-group">
-                            <label className="auth-label">Email Address</label>
-                            <div className="auth-input-wrapper">
-                                <input
-                                    type="email"
-                                    className="auth-input"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    placeholder="operator@focusflow.ai"
-                                    autoComplete="email"
-                                />
-                            </div>
-                        </div>
+                        <AuthInput
+                            label="Email Address"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="operator@focusflow.ai"
+                            required
+                            autoComplete="email"
+                        />
 
-                        <div className="auth-form-group">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <label className="auth-label">Security Key</label>
-                            </div>
-                            <div className="auth-input-wrapper">
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    className="auth-input"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    placeholder="••••••••"
-                                    autoComplete="current-password"
-                                />
-                                <button
-                                    type="button"
-                                    className="auth-input-icon"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    title={showPassword ? 'Mask Key' : 'Reveal Key'}
-                                >
-                                    {showPassword ? '👁️' : '👁️‍🗨️'}
-                                </button>
-                            </div>
-                        </div>
+                        <AuthInput
+                            label="Security Key"
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            required
+                            autoComplete="current-password"
+                            showToggle
+                            onToggle={() => setShowPassword(!showPassword)}
+                            isPasswordVisible={showPassword}
+                        />
 
                         <button
                             type="submit"
@@ -104,26 +87,10 @@ const Login = () => {
                         </button>
                     </form>
 
-                    <div className="auth-footer">
-                        <p>
-                            New Operator?{' '}
-                            <Link to="/register" className="auth-link">
-                                Request Access
-                            </Link>
-                        </p>
-                    </div>
+                    <AuthFooter />
                 </div>
 
-                <p style={{
-                    textAlign: 'center',
-                    marginTop: '3rem',
-                    fontSize: '0.8rem',
-                    color: 'rgba(255, 255, 255, 0.2)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.2em'
-                }}>
-                    Protected by Nauman Majeed v2.0
-                </p>
+                <AuthProtection />
             </div>
         </div>
     );
