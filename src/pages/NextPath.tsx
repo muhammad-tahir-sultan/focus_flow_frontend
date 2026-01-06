@@ -1,6 +1,7 @@
 // ------------------- PRECISION VISION ROADMAP (PREMIUM V5 - FULL QUARTER DEEP DIVE) -------------------
 
 import { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 interface Resource {
     name: string;
@@ -232,6 +233,23 @@ const PHASES: Record<string, PhaseContent> = {
 };
 
 const NextPath = () => {
+    const { isAdmin } = useAuth();
+
+    if (!isAdmin()) {
+        return (
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                backgroundColor: 'black',
+                color: 'white'
+            }}>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Access Denied: Admins Only</h1>
+            </div>
+        );
+    }
+
     // Seniority Score State with Persistence
     const [score, setScore] = useState(() => {
         const saved = localStorage.getItem('seniority_score');
