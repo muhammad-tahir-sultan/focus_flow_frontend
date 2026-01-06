@@ -4,6 +4,7 @@ import DashboardHeader from '../components/features/dashboard/DashboardHeader';
 import DashboardStatsGrid from '../components/features/dashboard/DashboardStatsGrid';
 import CustomRangeModal from '../components/features/dashboard/CustomRangeModal';
 import QuickActions from '../components/features/dashboard/QuickActions';
+import RoadmapLinks from '../components/features/dashboard/RoadmapLinks';
 import NonNegotiablesCard from '../components/features/dashboard/NonNegotiablesCard';
 import GoalsCard from '../components/features/dashboard/GoalsCard';
 import ExecutionTruth from '../components/features/dashboard/ExecutionTruth';
@@ -63,6 +64,8 @@ const Dashboard = () => {
                 />
 
                 <QuickActions />
+
+                <RoadmapLinks />
 
                 {isAdmin() && (
                     <>
