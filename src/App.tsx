@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import Loader from './components/Loader';
+import './styles/modal.css';
 import { lazy, Suspense } from 'react';
 import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
