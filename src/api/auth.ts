@@ -5,9 +5,10 @@ interface LoginCredentials {
     password: string;
 }
 
-interface LoginResponse {
-    token: string;
-    user: {
+interface AuthResponse {
+    accessToken: string;
+    refreshToken: string;
+    user?: {
         id: string;
         name: string;
         email: string;
@@ -15,8 +16,8 @@ interface LoginResponse {
     };
 }
 
-export const loginUser = async (credentials: LoginCredentials): Promise<LoginResponse> => {
-    const response = await api.post<LoginResponse>('/auth/login', credentials);
+export const loginUser = async (credentials: LoginCredentials): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/auth/login', credentials);
     return response.data;
 };
 
@@ -26,17 +27,16 @@ interface RegisterCredentials {
     password: string;
 }
 
-interface RegisterResponse {
-    token: string;
-    user: {
-        id: string;
-        name: string;
-        email: string;
-        role: string;
-    };
-}
+export const registerUser = async (credentials: RegisterCredentials): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/auth/register', credentials);
+    return response.data;
+};
 
-export const registerUser = async (credentials: RegisterCredentials): Promise<RegisterResponse> => {
-    const response = await api.post<RegisterResponse>('/auth/register', credentials);
+export const logoutUser = async (): Promise<void> => {
+    await api.post('/auth/logout');
+};
+
+export const refreshTokens = async (refreshToken: string): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/auth/refresh', { refreshToken });
     return response.data;
 };

@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useContext } from 'react';
 import type { ReactNode } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { refreshTokens } from '../api/auth';
 
 interface User {
     id: string;
@@ -13,7 +14,7 @@ interface User {
 
 interface AuthContextType {
     user: User | null;
-    login: (token: string) => void;
+    login: (accessToken: string, refreshToken: string) => void;
     logout: () => void;
     loading: boolean;
     isAdmin: () => boolean;
@@ -34,33 +35,62 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const decoded = jwtDecode<User>(token);
-                // Check expiry
-                if (decoded.exp * 1000 < Date.now()) {
-                    logout();
-                } else {
-                    setUser(decoded);
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                }
-            } catch (error) {
+        const initializeAuth = async () => {
+            const accessToken = localStorage.getItem('accessToken');
+            const refreshToken = localStorage.getItem('refreshToken');
+
+            if (accessToken && !isTokenExpired(accessToken)) {
+                restoreSession(accessToken);
+            } else if (refreshToken) {
+                await tryRefresh(refreshToken);
+            } else {
                 logout();
             }
-        }
-        setLoading(false);
+            setLoading(false);
+        };
+
+        initializeAuth();
     }, []);
 
-    const login = (token: string) => {
-        localStorage.setItem('token', token);
-        const decoded = jwtDecode<User>(token);
+    const isTokenExpired = (token: string): boolean => {
+        try {
+            const decoded = jwtDecode<User>(token);
+            return decoded.exp * 1000 < Date.now();
+        } catch {
+            return true;
+        }
+    };
+
+    const restoreSession = (token: string) => {
+        try {
+            const decoded = jwtDecode<User>(token);
+            setUser(decoded);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } catch {
+            logout();
+        }
+    };
+
+    const tryRefresh = async (refreshToken: string) => {
+        try {
+            const data = await refreshTokens(refreshToken);
+            login(data.accessToken, data.refreshToken);
+        } catch {
+            logout();
+        }
+    };
+
+    const login = (accessToken: string, refreshToken: string) => {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        const decoded = jwtDecode<User>(accessToken);
         setUser(decoded);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token} `;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         setUser(null);
         delete axios.defaults.headers.common['Authorization'];
     };

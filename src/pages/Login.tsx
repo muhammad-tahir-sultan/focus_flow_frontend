@@ -24,7 +24,7 @@ const Login = () => {
         setError('');
         try {
             const data = await loginUser({ email, password });
-            login(data.token);
+            login(data.accessToken, data.refreshToken);
             navigate('/');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Authentication failed. Please check your credentials.');
