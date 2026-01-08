@@ -32,7 +32,7 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
 function App() {
     return (
         <AuthProvider>
-            <Toaster position="top-right" reverseOrder={false} />
+            <Toaster position="bottom-left" reverseOrder={false} />
             <Router>
                 <Layout>
                     <Suspense fallback={<Loader />}>

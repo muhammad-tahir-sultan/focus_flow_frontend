@@ -1,16 +1,22 @@
 /* --- PREMIUM NAVIGATION SYSTEM --- */
 .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 2rem;
     position: sticky;
     top: 0;
     background: rgba(5, 5, 5, 0.85);
     backdrop-filter: blur(16px);
     z-index: 1000;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    width: 100%;
+    height: 100%;
 }
 
 .header-logo {
@@ -161,7 +167,9 @@
     .header-nav {
         position: fixed;
         top: 0;
-        right: -100%;
+        right: 0;
+        transform: translateX(100%);
+        visibility: hidden;
         width: 75%;
         max-width: 300px;
         height: 100vh;
@@ -170,7 +178,7 @@
         flex-direction: column;
         align-items: flex-start;
         padding: 6rem 2rem 2rem;
-        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
         z-index: 2000;
         gap: 1rem;
         border-left: 1px solid rgba(255, 255, 255, 0.08);
@@ -178,7 +186,8 @@
     }
 
     .header-nav.mobile-open {
-        right: 0;
+        transform: translateX(0);
+        visibility: visible;
     }
 
     .nav-link {
@@ -205,8 +214,11 @@
         top: 0;
         background: #050505;
         z-index: 1000;
-        padding: 0.75rem 0;
         margin-bottom: 2rem;
+    }
+
+    .header-inner {
+        padding: 0.75rem 0;
     }
 
     .container {
