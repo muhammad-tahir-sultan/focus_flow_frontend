@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { refreshTokens } from '../api/auth';
+import Loader from '../components/Loader';
 
 interface User {
     id: string;
@@ -99,9 +100,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return user?.role === 'admin';
     };
 
+    if (loading) {
+        return <Loader />;
+    }
+
     return (
         <AuthContext.Provider value={{ user, login, logout, loading, isAdmin }}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 };
