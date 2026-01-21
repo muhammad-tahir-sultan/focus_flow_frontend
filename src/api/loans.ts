@@ -17,6 +17,7 @@ export const createLoan = async (loanData: LoanFormData): Promise<Loan> => {
         amount: parseFloat(loanData.amount),
         paidAmount: parseFloat(loanData.paidAmount) || 0,
         interestRate: parseFloat(loanData.interestRate) || 0,
+        dueDate: loanData.dueDate || undefined,
     };
     const response = await api.post('/loans', payload);
     return response.data;
@@ -27,6 +28,7 @@ export const updateLoan = async (id: string, loanData: Partial<LoanFormData>): P
     if (loanData.amount) payload.amount = parseFloat(loanData.amount);
     if (loanData.paidAmount) payload.paidAmount = parseFloat(loanData.paidAmount);
     if (loanData.interestRate) payload.interestRate = parseFloat(loanData.interestRate);
+    if (loanData.dueDate === '') payload.dueDate = undefined;
 
     const response = await api.patch(`/loans/${id}`, payload);
     return response.data;
