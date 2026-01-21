@@ -420,6 +420,10 @@ const Finance = () => {
 
     if (loading) return <Loader />;
 
+    const MAX_MONTHLY_EXPENSE = 20000;
+    const isExpenseWarning = totalExpenses >= MAX_MONTHLY_EXPENSE * 0.9;
+    const isExpenseCritical = totalExpenses >= MAX_MONTHLY_EXPENSE;
+
     const netWorth = totalIncome - totalExpenses + totalSaved + totalGave - totalTook;
 
     return (
@@ -440,11 +444,28 @@ const Finance = () => {
                         <p className="stat-value">₹{totalIncome.toLocaleString()}</p>
                     </div>
                 </div>
-                <div className="stat-card count-card">
-                    <div className="stat-icon">💸</div>
+                <div
+                    className={`stat-card count-card ${isExpenseCritical ? 'critical-alert' : isExpenseWarning ? 'warning-alert' : ''}`}
+                    style={isExpenseCritical ? { border: '1px solid #ef4444', boxShadow: '0 0 20px rgba(239, 68, 68, 0.4)', background: 'linear-gradient(145deg, rgba(239, 68, 68, 0.1), rgba(0, 0, 0, 0.6))' } : {}}
+                >
+                    <div className="stat-icon" style={isExpenseCritical ? { animation: 'pulse 1s infinite' } : {}}>
+                        {isExpenseCritical ? '🚨' : '💸'}
+                    </div>
                     <div className="stat-content">
                         <h3>Total Expenses</h3>
-                        <p className="stat-value">₹{totalExpenses.toLocaleString()}</p>
+                        <p className="stat-value" style={isExpenseCritical ? { color: '#ef4444' } : {}}>
+                            ₹{totalExpenses.toLocaleString()}
+                        </p>
+                        {isExpenseCritical && (
+                            <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                ⚠️ Limit Exceeded (₹{MAX_MONTHLY_EXPENSE / 1000}k)
+                            </div>
+                        )}
+                        {!isExpenseCritical && isExpenseWarning && (
+                            <div style={{ color: '#f59e0b', fontSize: '0.75rem', marginTop: '0.25rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                ⚠️ Nearing Limit (₹{MAX_MONTHLY_EXPENSE / 1000}k)
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="stat-card avg-card">
