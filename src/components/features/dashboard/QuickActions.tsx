@@ -13,6 +13,9 @@ const QuickActions = () => {
                 <Link to="/goals" className="action-btn btn-secondary">
                     🎯 Manage Goals
                 </Link>
+                <Link to="/expenses" className="action-btn btn-tertiary">
+                    💰 Finance Manager
+                </Link>
             </div>
         </>
     );

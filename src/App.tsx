@@ -23,6 +23,7 @@ const GoogleRoadmap = lazy(() => import('./pages/GoogleRoadmap'));
 const NextPath = lazy(() => import('./pages/NextPath'));
 const CleanCodeGuide = lazy(() => import('./pages/CleanCodeGuide'));
 const SkillsManager = lazy(() => import('./pages/SkillsManager'));
+const Finance = lazy(() => import('./pages/Finance'));
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
@@ -149,6 +150,14 @@ function App() {
                                 element={
                                     <PrivateRoute>
                                         <SkillsManager />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/expenses"
+                                element={
+                                    <PrivateRoute>
+                                        <Finance />
                                     </PrivateRoute>
                                 }
                             />
