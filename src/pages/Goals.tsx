@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import axios from 'axios';
 import { BACKEND_URL } from '../constants/api';
-import Loader from '../components/Loader';
+import PageSkeleton from '../components/PageSkeleton';
 import toast from 'react-hot-toast';
 
 import GoalCard from '../components/features/goals/GoalCard';
@@ -104,7 +104,7 @@ const Goals = () => {
         }
     };
 
-    if (loading) return <Loader />;
+    if (loading) return <PageSkeleton hasHeader hasForm hasCards cardsCount={4} />;
 
     return (
         <div className="goals-page">

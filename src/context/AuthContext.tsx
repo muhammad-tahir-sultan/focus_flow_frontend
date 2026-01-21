@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { refreshTokens } from '../api/auth';
-import Loader from '../components/Loader';
+import AppLoadingSkeleton from '../components/AppLoadingSkeleton';
 
 interface User {
     id: string;
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     if (loading) {
-        return <Loader />;
+        return <AppLoadingSkeleton />;
     }
 
     return (

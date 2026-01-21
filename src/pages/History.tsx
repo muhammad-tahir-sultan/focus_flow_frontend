@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Loader from '../components/Loader';
+import PageSkeleton from '../components/PageSkeleton';
 import { useHistory } from '../hooks/useHistory';
 import HistoryHeader from '../components/features/history/HistoryHeader';
 import HistoryStatsGrid from '../components/features/history/HistoryStatsGrid';
@@ -21,7 +21,7 @@ const History = () => {
         getMoodDetails
     } = useHistory();
 
-    if (initialLoading) return <Loader />;
+    if (initialLoading) return <PageSkeleton hasHeader hasCards cardsCount={10} />;
 
     return (
         <div className="history-page">

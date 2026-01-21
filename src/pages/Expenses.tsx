@@ -3,7 +3,7 @@ import type { FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import { createExpense, getAllExpenses, deleteExpense, getTotalExpenses } from '../api/expenses';
 import type { Expense, ExpenseFormData, ExpenseCategory, PaymentMethod } from '../types/expenses';
-import Loader from '../components/Loader';
+import PageSkeleton from '../components/PageSkeleton';
 import Modal from '../components/common/Modal';
 import '../styles/expenses.css';
 
@@ -143,7 +143,7 @@ const Expenses = () => {
         return icons[category] || '💰';
     };
 
-    if (loading) return <Loader />;
+    if (loading) return <PageSkeleton hasHeader hasStats statsCount={3} hasForm hasCards cardsCount={6} />;
 
     return (
         <div className="expenses-page">

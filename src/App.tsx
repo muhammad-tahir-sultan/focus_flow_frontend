@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
-import Loader from './components/Loader';
+import AppLoadingSkeleton from './components/AppLoadingSkeleton';
 import './styles/modal.css';
 import { lazy, Suspense } from 'react';
 import type { ReactNode } from 'react';
@@ -27,7 +27,7 @@ const Finance = lazy(() => import('./pages/Finance'));
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
-    if (loading) return <Loader />;
+    if (loading) return <AppLoadingSkeleton />;
     return user ? children : <Navigate to="/login" />;
 };
 
@@ -37,7 +37,7 @@ function App() {
             <Toaster position="bottom-left" reverseOrder={false} />
             <Router>
                 <Layout>
-                    <Suspense fallback={<Loader />}>
+                    <Suspense fallback={<AppLoadingSkeleton />}>
                         <Routes>
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />

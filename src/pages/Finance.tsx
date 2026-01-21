@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
-import Loader from '../components/Loader';
+import FinanceSkeleton from '../components/finance/FinanceSkeleton';
 import FinanceDashboard from '../components/finance/FinanceDashboard';
 import ExpensesTab from '../components/finance/ExpensesTab';
 import IncomeTab from '../components/finance/IncomeTab';
@@ -98,7 +98,7 @@ const Finance = () => {
         fetchAll();
     }, [fetchExpenses, fetchIncome, fetchSavings, fetchLoans]);
 
-    if (loading) return <Loader />;
+    if (loading) return <FinanceSkeleton />;
 
     return (
         <div className="expenses-page">

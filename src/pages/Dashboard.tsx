@@ -1,4 +1,4 @@
-import Loader from '../components/Loader';
+import PageSkeleton from '../components/PageSkeleton';
 import { useDashboard } from '../hooks/useDashboard';
 import DashboardHeader from '../components/features/dashboard/DashboardHeader';
 import DashboardStatsGrid from '../components/features/dashboard/DashboardStatsGrid';
@@ -32,7 +32,7 @@ const Dashboard = () => {
         isAdmin
     } = useDashboard();
 
-    if (loading) return <Loader />;
+    if (loading) return <PageSkeleton hasHeader hasStats statsCount={4} hasCards cardsCount={8} />;
 
     return (
         <div className="dashboard-page">

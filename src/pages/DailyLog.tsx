@@ -1,4 +1,4 @@
-import Loader from '../components/Loader';
+import PageSkeleton from '../components/PageSkeleton';
 import { useDailyLog } from '../hooks/useDailyLog';
 import DailyLogHero from '../components/features/daily-log/DailyLogHero';
 import DailyLogForm from '../components/features/daily-log/DailyLogForm';
@@ -16,7 +16,7 @@ const DailyLog = () => {
         isEditing
     } = useDailyLog();
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <PageSkeleton hasHeader hasForm hasCards cardsCount={5} />;
 
     return (
         <div className="daily-log-page">

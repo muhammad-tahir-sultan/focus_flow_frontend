@@ -1,4 +1,4 @@
-import Loader from '../../Loader';
+import '../../../styles/skeleton.css';
 import ExecutionStreakChart from '../../charts/ExecutionStreakChart';
 import TimeInvestedChart from '../../charts/TimeInvestedChart';
 import NonNegotiablesChart from '../../charts/NonNegotiablesChart';
@@ -41,7 +41,12 @@ const ExecutionTruth = ({
             {showGraphs && (
                 <>
                     {analyticsLoading ? (
-                        <Loader />
+                        <div style={{ padding: '3rem' }}>
+                            <div className="skeleton" style={{ width: '100%', height: '300px', marginBottom: '2rem' }}></div>
+                            <div className="skeleton" style={{ width: '100%', height: '300px', marginBottom: '2rem' }}></div>
+                            <div className="skeleton" style={{ width: '100%', height: '200px', marginBottom: '2rem' }}></div>
+                            <div className="skeleton" style={{ width: '100%', height: '300px' }}></div>
+                        </div>
                     ) : analyticsError ? (
                         <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--error-color)' }}>
                             {analyticsError}
