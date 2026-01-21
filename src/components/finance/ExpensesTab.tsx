@@ -283,4 +283,4 @@ const ExpensesTab: React.FC<ExpensesTabProps> = ({ expenses, onRefresh }) => {
     );
 };
 
-export default ExpensesTab;
+export default React.memo(ExpensesTab);

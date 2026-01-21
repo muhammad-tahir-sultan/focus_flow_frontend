@@ -216,4 +216,4 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
     );
 };
 
-export default FinanceDashboard;
+export default React.memo(FinanceDashboard);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import FinanceDashboard from '../components/finance/FinanceDashboard';
@@ -40,8 +40,8 @@ const Finance = () => {
 
     const netWorth = totalIncome - totalExpenses + totalSaved + totalGave - totalTook;
 
-    // Fetch Functions
-    const fetchExpenses = async () => {
+    // Fetch Functions - Memoized with useCallback
+    const fetchExpenses = useCallback(async () => {
         try {
             const [data, total] = await Promise.all([getAllExpenses(), getTotalExpenses()]);
             setExpenses(data);
@@ -50,9 +50,9 @@ const Finance = () => {
             console.error(err);
             toast.error('Failed to load expenses');
         }
-    };
+    }, []);
 
-    const fetchIncome = async () => {
+    const fetchIncome = useCallback(async () => {
         try {
             const [data, total] = await Promise.all([getAllIncome(), getTotalIncome()]);
             setIncomes(data);
@@ -61,9 +61,9 @@ const Finance = () => {
             console.error(err);
             toast.error('Failed to load income');
         }
-    };
+    }, []);
 
-    const fetchSavings = async () => {
+    const fetchSavings = useCallback(async () => {
         try {
             const [data, saved] = await Promise.all([getAllSavings(), getTotalSavings()]);
             setSavings(data);
@@ -72,9 +72,9 @@ const Finance = () => {
             console.error(err);
             toast.error('Failed to load savings');
         }
-    };
+    }, []);
 
-    const fetchLoans = async () => {
+    const fetchLoans = useCallback(async () => {
         try {
             const [data, took, gave] = await Promise.all([
                 getAllLoans(),
@@ -88,7 +88,7 @@ const Finance = () => {
             console.error(err);
             toast.error('Failed to load loans');
         }
-    };
+    }, []);
 
     useEffect(() => {
         const fetchAll = async () => {
@@ -96,7 +96,7 @@ const Finance = () => {
             setLoading(false);
         };
         fetchAll();
-    }, []);
+    }, [fetchExpenses, fetchIncome, fetchSavings, fetchLoans]);
 
     if (loading) return <Loader />;
 

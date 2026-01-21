@@ -322,4 +322,4 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
     );
 };
 
-export default LoansTab;
+export default React.memo(LoansTab);

@@ -284,4 +284,4 @@ const IncomeTab: React.FC<IncomeTabProps> = ({ incomes, onRefresh }) => {
     );
 };
 
-export default IncomeTab;
+export default React.memo(IncomeTab);

@@ -275,4 +275,4 @@ const SavingsTab: React.FC<SavingsTabProps> = ({ savings, onRefresh }) => {
     );
 };
 
-export default SavingsTab;
+export default React.memo(SavingsTab);
