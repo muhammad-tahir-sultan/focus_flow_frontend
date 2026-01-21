@@ -5,13 +5,15 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 import { createExpense, getAllExpenses, deleteExpense, getTotalExpenses } from '../api/expenses';
 import { createIncome, getAllIncome, deleteIncome, getTotalIncome } from '../api/income';
 import { createSaving, getAllSavings, deleteSaving, addContribution, getTotalSavings } from '../api/savings';
+import { createLoan, getAllLoans, deleteLoan, addPayment, getTotalTook, getTotalGave } from '../api/loans';
 import type { Expense, ExpenseFormData, ExpenseCategory, PaymentMethod } from '../types/expenses';
 import type { Income, IncomeFormData, IncomeCategory, IncomeSource, Saving, SavingFormData, SavingGoalType } from '../types/finance';
+import type { Loan, LoanFormData, LoanType } from '../types/loans';
 import Loader from '../components/Loader';
 import Modal from '../components/common/Modal';
 import '../styles/expenses.css';
 
-type TabType = 'expenses' | 'income' | 'savings';
+type TabType = 'expenses' | 'income' | 'savings' | 'loans';
 
 const Finance = () => {
     const [activeTab, setActiveTab] = useState<TabType>('expenses');
@@ -64,6 +66,28 @@ const Finance = () => {
     });
     const [totalSaved, setTotalSaved] = useState<number>(0);
 
+    // Loans State
+    const [loans, setLoans] = useState<Loan[]>([]);
+    const [loanFormData, setLoanFormData] = useState<LoanFormData>({
+        title: '',
+        amount: '',
+        paidAmount: '0',
+        type: 'Took',
+        partyName: '',
+        date: new Date().toISOString().split('T')[0],
+        dueDate: '',
+        interestRate: '0',
+        description: '',
+        tags: [],
+    });
+    const [totalTook, setTotalTook] = useState<number>(0);
+    const [totalGave, setTotalGave] = useState<number>(0);
+
+    // Loan Payment Modal
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState('');
+    const [payingLoanId, setPayingLoanId] = useState<string | null>(null);
+
     // Modal State
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -109,9 +133,25 @@ const Finance = () => {
         }
     };
 
+    const fetchLoans = async () => {
+        try {
+            const [data, took, gave] = await Promise.all([
+                getAllLoans(),
+                getTotalTook(),
+                getTotalGave()
+            ]);
+            setLoans(data);
+            setTotalTook(took);
+            setTotalGave(gave);
+        } catch (err) {
+            console.error(err);
+            toast.error('Failed to load loans');
+        }
+    };
+
     useEffect(() => {
         const fetchAll = async () => {
-            await Promise.all([fetchExpenses(), fetchIncome(), fetchSavings()]);
+            await Promise.all([fetchExpenses(), fetchIncome(), fetchSavings(), fetchLoans()]);
             setLoading(false);
         };
         fetchAll();
@@ -193,6 +233,10 @@ const Finance = () => {
                 await deleteIncome(deletingId);
                 toast.success('🗑️ Income Deleted');
                 fetchIncome();
+            } else if (deleteType === 'loans') {
+                await deleteLoan(deletingId);
+                toast.success('🗑️ Loan Deleted');
+                fetchLoans();
             } else {
                 await deleteSaving(deletingId);
                 toast.success('🗑️ Saving Goal Deleted');
@@ -217,6 +261,44 @@ const Finance = () => {
             fetchSavings();
         } catch (err) {
             toast.error('Failed to add contribution');
+        }
+    };
+
+    // Loan Handlers
+    const handleLoanSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        try {
+            await createLoan(loanFormData);
+            toast.success('🤝 Loan Recorded Successfully');
+            setLoanFormData({
+                title: '',
+                amount: '',
+                paidAmount: '0',
+                type: 'Took',
+                partyName: '',
+                date: new Date().toISOString().split('T')[0],
+                dueDate: '',
+                interestRate: '0',
+                description: '',
+                tags: [],
+            });
+            fetchLoans();
+        } catch (err) {
+            toast.error('Failed to create loan record');
+        }
+    };
+
+    const handlePayment = async () => {
+        if (!payingLoanId || !paymentAmount) return;
+        try {
+            await addPayment(payingLoanId, parseFloat(paymentAmount));
+            toast.success('💰 Payment Added Successfully');
+            setShowPaymentModal(false);
+            setPaymentAmount('');
+            setPayingLoanId(null);
+            fetchLoans();
+        } catch (err) {
+            toast.error('Failed to add payment');
         }
     };
 
@@ -338,7 +420,7 @@ const Finance = () => {
 
     if (loading) return <Loader />;
 
-    const netWorth = totalIncome - totalExpenses + totalSaved;
+    const netWorth = totalIncome - totalExpenses + totalSaved + totalGave - totalTook;
 
     return (
         <div className="expenses-page">
@@ -402,6 +484,12 @@ const Finance = () => {
                     onClick={() => setActiveTab('savings')}
                 >
                     🎯 Savings
+                </button>
+                <button
+                    className={`tab-btn ${activeTab === 'loans' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('loans')}
+                >
+                    🤝 Loans
                 </button>
             </div>
 
@@ -1020,6 +1108,206 @@ const Finance = () => {
                 </div>
             )}
 
+            {/* Tab Content - Loans */}
+            {activeTab === 'loans' && (
+                <div className="tab-content">
+                    {/* Loan Stats */}
+                    <div className="stats-dashboard" style={{ marginBottom: '2rem' }}>
+                        <div className="stat-card count-card">
+                            <div className="stat-icon">📉</div>
+                            <div className="stat-content">
+                                <h3>Total Borrowed (Took)</h3>
+                                <p className="stat-value">₹{totalTook.toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <div className="stat-card net-card">
+                            <div className="stat-icon">📈</div>
+                            <div className="stat-content">
+                                <h3>Total Lent (Gave)</h3>
+                                <p className="stat-value">₹{totalGave.toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Loan Form */}
+                    <div className="expense-form-container">
+                        <h2>🤝 Record New Loan</h2>
+                        <form onSubmit={handleLoanSubmit} className="expense-form">
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Title</label>
+                                    <input
+                                        type="text"
+                                        className="premium-input"
+                                        placeholder="e.g., Car Loan, Lent to John"
+                                        value={loanFormData.title}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, title: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Amount (₹)</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className="premium-input"
+                                        placeholder="0.00"
+                                        value={loanFormData.amount}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, amount: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Loan Type</label>
+                                    <select
+                                        className="premium-select"
+                                        value={loanFormData.type}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, type: e.target.value as LoanType })}
+                                    >
+                                        <option value="Took">Took (Borrowing)</option>
+                                        <option value="Gave">Gave (Lending)</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label>Party Name</label>
+                                    <input
+                                        type="text"
+                                        className="premium-input"
+                                        placeholder="Person or Bank Name"
+                                        value={loanFormData.partyName}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, partyName: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Initial Paid Amount (if any)</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className="premium-input"
+                                        value={loanFormData.paidAmount}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, paidAmount: e.target.value })}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Interest Rate (%)</label>
+                                    <input
+                                        type="number"
+                                        step="0.1"
+                                        className="premium-input"
+                                        value={loanFormData.interestRate}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, interestRate: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Date Taken/Given</label>
+                                    <input
+                                        type="date"
+                                        className="premium-input"
+                                        value={loanFormData.date}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, date: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Due Date (Optional)</label>
+                                    <input
+                                        type="date"
+                                        className="premium-input"
+                                        value={loanFormData.dueDate}
+                                        onChange={(e) => setLoanFormData({ ...loanFormData, dueDate: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                            <button type="submit" className="btn-submit">💾 RECORD LOAN</button>
+                        </form>
+                    </div>
+
+                    {/* Loans List */}
+                    <div className="expenses-list">
+                        <h2>📋 Recent Loans</h2>
+                        {loans.length === 0 ? (
+                            <div className="empty-state">
+                                <p>No loans found.</p>
+                            </div>
+                        ) : (
+                            <div className="expenses-grid">
+                                {loans.map((loan) => {
+                                    const progress = (loan.paidAmount / loan.amount) * 100;
+                                    const isPaid = loan.status === 'Fully Paid';
+                                    const isTook = loan.type === 'Took';
+                                    return (
+                                        <div key={loan._id} className="expense-card loan-card" style={{ borderLeft: `4px solid ${isTook ? '#ef4444' : '#10b981'}` }}>
+                                            <div className="expense-header">
+                                                <div className="expense-category-badge">
+                                                    <span className="category-icon">{isTook ? '📉' : '📈'}</span>
+                                                    <span>{loan.type === 'Took' ? 'Borrowed From' : 'Lent To'} {loan.partyName}</span>
+                                                </div>
+                                                <span className={`status-badge ${loan.status.toLowerCase().replace(' ', '-')}`}>
+                                                    {loan.status}
+                                                </span>
+                                            </div>
+                                            <h3 className="expense-title">{loan.title}</h3>
+                                            <div className="saving-progress">
+                                                <div className="progress-bar">
+                                                    <div className="progress-fill" style={{ width: `${Math.min(progress, 100)}%`, background: isTook ? 'linear-gradient(90deg, #ef4444, #dc2626)' : 'linear-gradient(90deg, #10b981, #059669)' }}></div>
+                                                </div>
+                                                <p className="progress-text">{progress.toFixed(1)}% Paid</p>
+                                            </div>
+                                            <div className="expense-details">
+                                                <div className="detail-item">
+                                                    <span className="detail-label">Amount:</span>
+                                                    <span>₹{loan.amount.toLocaleString()}</span>
+                                                </div>
+                                                <div className="detail-item">
+                                                    <span className="detail-label">Paid:</span>
+                                                    <span>₹{loan.paidAmount.toLocaleString()}</span>
+                                                </div>
+                                                <div className="detail-item">
+                                                    <span className="detail-label">Remaining:</span>
+                                                    <span style={{ color: isTook ? '#ef4444' : '#10b981', fontWeight: 'bold' }}>
+                                                        ₹{(loan.amount - loan.paidAmount).toLocaleString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="saving-actions">
+                                                {!isPaid && (
+                                                    <button
+                                                        className="btn-contribute"
+                                                        onClick={() => {
+                                                            setPayingLoanId(loan._id);
+                                                            setShowPaymentModal(true);
+                                                        }}
+                                                    >
+                                                        💰 Add {isTook ? 'Repayment' : 'Collection'}
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className="btn-delete"
+                                                    onClick={() => {
+                                                        setDeletingId(loan._id);
+                                                        setDeleteType('loans');
+                                                        setShowDeleteModal(true);
+                                                    }}
+                                                >
+                                                    🗑️ Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
             {/* Delete Modal */}
             <Modal
                 show={showDeleteModal}
@@ -1037,6 +1325,42 @@ const Finance = () => {
                 }
             >
                 <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+            </Modal>
+
+            {/* Payment Modal */}
+            <Modal
+                show={showPaymentModal}
+                title="💰 ADD PAYMENT"
+                onClose={() => {
+                    setShowPaymentModal(false);
+                    setPaymentAmount('');
+                }}
+                footer={
+                    <>
+                        <button className="btn-cancel" onClick={() => {
+                            setShowPaymentModal(false);
+                            setPaymentAmount('');
+                        }}>
+                            CANCEL
+                        </button>
+                        <button className="btn-confirm-contribute" onClick={handlePayment}>
+                            CONFIRM PAYMENT
+                        </button>
+                    </>
+                }
+            >
+                <div className="form-group">
+                    <label>Payment Amount (₹)</label>
+                    <input
+                        type="number"
+                        step="0.01"
+                        className="premium-input"
+                        placeholder="0.00"
+                        value={paymentAmount}
+                        onChange={(e) => setPaymentAmount(e.target.value)}
+                        autoFocus
+                    />
+                </div>
             </Modal>
 
             {/* Contribute Modal */}
