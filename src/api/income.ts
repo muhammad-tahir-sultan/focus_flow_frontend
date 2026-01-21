@@ -1,9 +1,8 @@
-import axios from 'axios';
-import { BACKEND_URL } from '../constants/api';
+import api from './axios';
 import type { Income, IncomeFormData } from '../types/finance';
 
 export const createIncome = async (incomeData: IncomeFormData): Promise<Income> => {
-    const response = await axios.post(`${BACKEND_URL}/income`, {
+    const response = await api.post('/income', {
         ...incomeData,
         amount: parseFloat(incomeData.amount),
     });
@@ -11,26 +10,26 @@ export const createIncome = async (incomeData: IncomeFormData): Promise<Income> 
 };
 
 export const getAllIncome = async (): Promise<Income[]> => {
-    const response = await axios.get(`${BACKEND_URL}/income`);
+    const response = await api.get('/income');
     return response.data;
 };
 
 export const getIncomeById = async (id: string): Promise<Income> => {
-    const response = await axios.get(`${BACKEND_URL}/income/${id}`);
+    const response = await api.get(`/income/${id}`);
     return response.data;
 };
 
 export const updateIncome = async (id: string, incomeData: Partial<IncomeFormData>): Promise<Income> => {
-    const payload = { ...incomeData };
+    const payload: any = { ...incomeData };
     if (incomeData.amount) {
-        payload.amount = parseFloat(incomeData.amount) as any;
+        payload.amount = parseFloat(incomeData.amount);
     }
-    const response = await axios.patch(`${BACKEND_URL}/income/${id}`, payload);
+    const response = await api.patch(`/income/${id}`, payload);
     return response.data;
 };
 
 export const deleteIncome = async (id: string): Promise<void> => {
-    await axios.delete(`${BACKEND_URL}/income/${id}`);
+    await api.delete(`/income/${id}`);
 };
 
 export const getTotalIncome = async (startDate?: string, endDate?: string): Promise<number> => {
@@ -38,6 +37,6 @@ export const getTotalIncome = async (startDate?: string, endDate?: string): Prom
     if (startDate) params.append('startDate', startDate);
     if (endDate) params.append('endDate', endDate);
 
-    const response = await axios.get(`${BACKEND_URL}/income/stats/total?${params.toString()}`);
+    const response = await api.get(`/income/stats/total?${params.toString()}`);
     return response.data;
 };
