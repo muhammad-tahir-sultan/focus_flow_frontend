@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { createExpense, getAllExpenses, deleteExpense, getTotalExpenses } from '../api/expenses';
 import { createIncome, getAllIncome, deleteIncome, getTotalIncome } from '../api/income';
-import { createSaving, getAllSavings, deleteSaving, addContribution, getTotalSavings, getTotalTargets } from '../api/savings';
+import { createSaving, getAllSavings, deleteSaving, addContribution, getTotalSavings } from '../api/savings';
 import type { Expense, ExpenseFormData, ExpenseCategory, PaymentMethod } from '../types/expenses';
 import type { Income, IncomeFormData, IncomeCategory, IncomeSource, Saving, SavingFormData, SavingGoalType } from '../types/finance';
 import Loader from '../components/Loader';
@@ -63,7 +63,6 @@ const Finance = () => {
         tags: [],
     });
     const [totalSaved, setTotalSaved] = useState<number>(0);
-    const [totalTargets, setTotalTargets] = useState<number>(0);
 
     // Modal State
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -98,14 +97,12 @@ const Finance = () => {
 
     const fetchSavings = async () => {
         try {
-            const [data, saved, targets] = await Promise.all([
+            const [data, saved] = await Promise.all([
                 getAllSavings(),
                 getTotalSavings(),
-                getTotalTargets(),
             ]);
             setSavings(data);
             setTotalSaved(saved);
-            setTotalTargets(targets);
         } catch (err) {
             console.error(err);
             toast.error('Failed to load savings');
