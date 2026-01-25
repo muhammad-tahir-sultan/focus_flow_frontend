@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import AppLoadingSkeleton from './components/AppLoadingSkeleton';
 import './styles/modal.css';
+import './styles/components.css';
 import { lazy, Suspense } from 'react';
 import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -24,6 +25,8 @@ const NextPath = lazy(() => import('./pages/NextPath'));
 const CleanCodeGuide = lazy(() => import('./pages/CleanCodeGuide'));
 const SkillsManager = lazy(() => import('./pages/SkillsManager'));
 const Finance = lazy(() => import('./pages/Finance'));
+const FocusFlowPage = lazy(() => import('./pages/FocusFlowPage'));
+const IdentityPage = lazy(() => import('./pages/IdentityPage'));
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
@@ -158,6 +161,22 @@ function App() {
                                 element={
                                     <PrivateRoute>
                                         <Finance />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/attract_not_chase"
+                                element={
+                                    <PrivateRoute>
+                                        <FocusFlowPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/identity"
+                                element={
+                                    <PrivateRoute>
+                                        <IdentityPage />
                                     </PrivateRoute>
                                 }
                             />

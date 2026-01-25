@@ -1,0 +1,261 @@
+/* Tab Styling */
+.tabs-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.5rem;
+    border-radius: 12px;
+    display: inline-flex;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Date Navigator Styling */
+.date-navigator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    padding: 0.35rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.date-navigator:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.date-input-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+    position: relative;
+}
+
+.date-input-icon {
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    opacity: 0.8;
+}
+
+.date-input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: 'Inter', monospace;
+    /* Monospaced numbers look better for dates */
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    letter-spacing: 0.02em;
+    width: auto;
+}
+
+/* Custom Calendar Picker Icon Styling */
+.date-input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.nav-arrow {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.nav-arrow:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.nav-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Month Cards Horizontal Scroll */
+.month-selector {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    scroll-behavior: smooth;
+}
+
+.month-btn {
+    min-width: 160px;
+    padding: 1rem;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-align: left;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.month-btn:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.month-btn.active {
+    background: linear-gradient(145deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.month-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent-color);
+}
+
+.month-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.month-phase {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Chart Tooltip Customization */
+.custom-tooltip {
+    background-color: rgba(20, 20, 20, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px;
+    padding: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.tooltip-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.tooltip-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+/* Level Checkbox Animation */
+.level-checkbox {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 20;
+}
+
+.level-checkbox:hover {
+    border-color: var(--accent-color);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.level-checkbox.checked {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    transform: scale(1.1);
+}
+
+.level-tick {
+    width: 16px;
+    height: 16px;
+    color: white;
+    opacity: 0;
+    transform: scale(0.5) rotate(-45deg);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.level-checkbox.checked .level-tick {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* Add a glowing line effect for completed levels in the timeline */
+.timeline-container .card-premium.completed {
+    border-color: rgba(59, 130, 246, 0.4);
+    background: linear-gradient(145deg, rgba(59, 130, 246, 0.05) 0%, rgba(20, 20, 20, 0.95) 100%);
+}
+
+.timeline-container .card-premium.completed::before {
+    background: #00ff88;
+    /* Green for completion */
+    box-shadow: 0 0 15px #00ff88;
+    border-color: #00ff88;
+}
