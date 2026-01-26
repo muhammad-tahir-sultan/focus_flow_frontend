@@ -27,6 +27,7 @@ const SkillsManager = lazy(() => import('./pages/SkillsManager'));
 const Finance = lazy(() => import('./pages/Finance'));
 const FocusFlowPage = lazy(() => import('./pages/FocusFlowPage'));
 const IdentityPage = lazy(() => import('./pages/IdentityPage'));
+const PracticeProjects = lazy(() => import('./pages/PracticeProjects'));
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { user, loading } = useAuth();
@@ -177,6 +178,14 @@ function App() {
                                 element={
                                     <PrivateRoute>
                                         <IdentityPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/practice-projects"
+                                element={
+                                    <PrivateRoute>
+                                        <PracticeProjects />
                                     </PrivateRoute>
                                 }
                             />
