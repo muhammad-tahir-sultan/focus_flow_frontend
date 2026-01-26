@@ -10,6 +10,9 @@ const DailyLog = () => {
         setFormData,
         checkedItems,
         handleCheckChange,
+        availableItems,
+        addItem,
+        deleteItem,
         error,
         isLoading,
         handleSubmit,
@@ -28,6 +31,9 @@ const DailyLog = () => {
                     setFormData={setFormData}
                     checkedItems={checkedItems}
                     handleCheckChange={handleCheckChange}
+                    availableItems={availableItems}
+                    addItem={addItem}
+                    deleteItem={deleteItem}
                     handleSubmit={handleSubmit}
                     error={error}
                     isEditing={isEditing}

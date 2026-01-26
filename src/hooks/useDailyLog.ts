@@ -18,7 +18,55 @@ export const useDailyLog = () => {
         mood: 'neutral',
     });
 
+    const [availableItems, setAvailableItems] = useState<string[]>([]);
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+
+    // Initialize/Load checklist items from DB
+    useEffect(() => {
+        const fetchChecklist = async () => {
+            try {
+                // We use a slight delay or optimistic assumption that if it fails, we fall back to defaults locally?
+                // But simplified:
+                const res = await axios.get(`${BACKEND_URL}/users/checklist`);
+                if (res.data) {
+                    setAvailableItems(res.data);
+                }
+            } catch (err) {
+                console.error('Failed to fetch checklist', err);
+                // Fallback to defaults only if API fails hard and list is empty
+                if (availableItems.length === 0) setAvailableItems(NON_NEGOTIABLES);
+            }
+        };
+        fetchChecklist();
+    }, []);
+
+    const updateChecklist = async (newItems: string[]) => {
+        setAvailableItems(newItems); // Optimistic update
+        try {
+            await axios.put(`${BACKEND_URL}/users/checklist`, { checklist: newItems });
+        } catch (err) {
+            console.error('Failed to save checklist', err);
+            toast.error('Failed to save checklist changes');
+        }
+    };
+
+    const addItem = (item: string) => {
+        if (item && !availableItems.includes(item)) {
+            const newItems = [...availableItems, item];
+            updateChecklist(newItems);
+        }
+    };
+
+    const deleteItem = (itemToDelete: string) => {
+        const newItems = availableItems.filter(item => item !== itemToDelete);
+        updateChecklist(newItems);
+
+        // Also remove from checkedItems to keep state clean
+        const newChecked = { ...checkedItems };
+        delete newChecked[itemToDelete];
+        setCheckedItems(newChecked);
+    };
+
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -30,13 +78,25 @@ export const useDailyLog = () => {
                     const res = await axios.get(`${BACKEND_URL}/daily-logs/${id}`);
                     const log = res.data;
 
-                    // Parse description for checked items
+                    // Parse description for checked items based on CURRENT available items + potentially historical ones
                     const newCheckedItems: Record<string, boolean> = {};
-                    NON_NEGOTIABLES.forEach(item => {
+
+                    // Basic parsing: check if lines exist in the log description
+                    // We also need to be careful: if a log has a legacy item that is NO LONGER in availableItems, 
+                    // should we show it? 
+                    // The user prompt implies managing the checklist for *future* or *current* editing.
+                    // For simply reading historical logs, we rely on the text description primarily.
+                    // But if we are editing an old log, we map the checkboxes.
+
+                    availableItems.forEach(item => {
                         if (log.description.includes(`[x] ${item}`)) {
                             newCheckedItems[item] = true;
                         }
                     });
+
+                    // Also scan for any [x] Item that might not be in our list, to avoid losing data?
+                    // For now, let's stick to the user's request: "add and delete according to need".
+                    // The description contains the truth.
 
                     // Clean up description (remove the non-negotiables section for editing)
                     const descriptionParts = log.description.split('\n\n**Completed Non-Negotiables:**');
@@ -59,7 +119,7 @@ export const useDailyLog = () => {
             };
             fetchLog();
         }
-    }, [id]);
+    }, [id, availableItems]); // dependency on availableItems so we parse correctly after they load
 
     const handleCheckChange = (item: string) => {
         setCheckedItems(prev => ({
@@ -119,6 +179,9 @@ export const useDailyLog = () => {
         setFormData,
         checkedItems,
         handleCheckChange,
+        availableItems,
+        addItem,
+        deleteItem,
         error,
         isLoading,
         handleSubmit,

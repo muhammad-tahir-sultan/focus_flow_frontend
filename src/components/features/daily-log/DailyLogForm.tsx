@@ -7,6 +7,9 @@ interface DailyLogFormProps {
     setFormData: (data: DailyLogFormData) => void;
     checkedItems: Record<string, boolean>;
     handleCheckChange: (item: string) => void;
+    availableItems: string[];
+    addItem: (item: string) => void;
+    deleteItem: (item: string) => void;
     handleSubmit: (e: React.FormEvent) => void;
     error: string;
     isEditing: boolean;
@@ -17,6 +20,9 @@ const DailyLogForm = ({
     setFormData,
     checkedItems,
     handleCheckChange,
+    availableItems,
+    addItem,
+    deleteItem,
     handleSubmit,
     error,
     isEditing
@@ -32,6 +38,9 @@ const DailyLogForm = ({
             <NonNegotiablesList
                 checkedItems={checkedItems}
                 onChange={handleCheckChange}
+                items={availableItems}
+                onAdd={addItem}
+                onDelete={deleteItem}
             />
 
             <div className="form-group mb-6">
