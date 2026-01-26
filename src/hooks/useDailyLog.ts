@@ -4,11 +4,12 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { BACKEND_URL } from '../constants/api';
 import type { DailyLogFormData } from '../types/dailyLog';
-import { NON_NEGOTIABLES } from '../data/dailyLogData';
+import { useAuth } from '../context/AuthContext';
 
 export const useDailyLog = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { isAdmin } = useAuth();
 
     const [formData, setFormData] = useState<DailyLogFormData>({
         description: '',
@@ -21,24 +22,29 @@ export const useDailyLog = () => {
     const [availableItems, setAvailableItems] = useState<string[]>([]);
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
-    // Initialize/Load checklist items from DB
+    // Initialize/Load checklist items from DB (only for admin)
     useEffect(() => {
         const fetchChecklist = async () => {
+            // Only fetch from backend if user is admin
+            if (!isAdmin()) {
+                // Regular users start with empty list, will build their own
+                setAvailableItems([]);
+                return;
+            }
+
             try {
-                // We use a slight delay or optimistic assumption that if it fails, we fall back to defaults locally?
-                // But simplified:
                 const res = await axios.get(`${BACKEND_URL}/users/checklist`);
                 if (res.data) {
                     setAvailableItems(res.data);
                 }
             } catch (err) {
                 console.error('Failed to fetch checklist', err);
-                // Fallback to defaults only if API fails hard and list is empty
-                if (availableItems.length === 0) setAvailableItems(NON_NEGOTIABLES);
+                // Admin fallback: if API fails, start with empty
+                setAvailableItems([]);
             }
         };
         fetchChecklist();
-    }, []);
+    }, [isAdmin]);
 
     const updateChecklist = async (newItems: string[]) => {
         setAvailableItems(newItems); // Optimistic update

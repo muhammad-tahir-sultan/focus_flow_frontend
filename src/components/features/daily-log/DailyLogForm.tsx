@@ -13,7 +13,6 @@ interface DailyLogFormProps {
     handleSubmit: (e: React.FormEvent) => void;
     error: string;
     isEditing: boolean;
-    isAdmin: boolean;
 }
 
 const DailyLogForm = ({
@@ -26,8 +25,7 @@ const DailyLogForm = ({
     deleteItem,
     handleSubmit,
     error,
-    isEditing,
-    isAdmin
+    isEditing
 }: DailyLogFormProps) => {
     return (
         <form onSubmit={handleSubmit} className="card-premium animate-fade-in">
@@ -37,15 +35,13 @@ const DailyLogForm = ({
                 </div>
             )}
 
-            {isAdmin && (
-                <NonNegotiablesList
-                    checkedItems={checkedItems}
-                    onChange={handleCheckChange}
-                    items={availableItems}
-                    onAdd={addItem}
-                    onDelete={deleteItem}
-                />
-            )}
+            <NonNegotiablesList
+                checkedItems={checkedItems}
+                onChange={handleCheckChange}
+                items={availableItems}
+                onAdd={addItem}
+                onDelete={deleteItem}
+            />
 
             <div className="form-group mb-6">
                 <label className="input-label">Date</label>
