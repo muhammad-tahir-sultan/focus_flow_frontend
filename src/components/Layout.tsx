@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import type { ReactNode } from 'react';
 
 const Layout = ({ children }: { children: ReactNode }) => {
-    const { user, logout } = useAuth();
+    const { user, logout, isAdmin } = useAuth();
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -17,13 +17,15 @@ const Layout = ({ children }: { children: ReactNode }) => {
     const navItems = [
         { label: 'Dashboard', path: '/', icon: '🏠' },
         { label: 'New Concept', path: '/skills', icon: '🧠' },
-        { label: 'Attract', path: '/attract_not_chase', icon: '🧲' },
-        { label: 'Identity', path: '/identity', icon: '🧱' },
+        { label: 'Attract', path: '/attract_not_chase', icon: '🧲', adminOnly: true },
+        { label: 'Identity', path: '/identity', icon: '🧱', adminOnly: true },
         { label: 'Log Today', path: '/log', icon: '✍️' },
         { label: 'History', path: '/history', icon: '📜' },
         { label: 'Goals', path: '/goals', icon: '🏆' },
-        { label: 'Elite Projects', path: '/practice-projects', icon: '🔥' },
+        { label: 'Elite Projects', path: '/practice-projects', icon: '🔥', adminOnly: true },
     ];
+
+    const filteredNavItems = navItems.filter(item => !item.adminOnly || isAdmin());
 
     return (
         <div>
@@ -41,7 +43,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                     </button>
 
                     <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
-                        {navItems.map((item) => (
+                        {filteredNavItems.map((item) => (
                             <Link
                                 key={item.path}
                                 to={item.path}

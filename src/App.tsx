@@ -29,10 +29,17 @@ const FocusFlowPage = lazy(() => import('./pages/FocusFlowPage'));
 const IdentityPage = lazy(() => import('./pages/IdentityPage'));
 const PracticeProjects = lazy(() => import('./pages/PracticeProjects'));
 
-const PrivateRoute = ({ children }: { children: ReactNode }) => {
-    const { user, loading } = useAuth();
+const PrivateRoute = ({ children, adminOnly = false }: { children: ReactNode, adminOnly?: boolean }) => {
+    const { user, loading, isAdmin } = useAuth();
     if (loading) return <AppLoadingSkeleton />;
-    return user ? children : <Navigate to="/login" />;
+
+    if (!user) return <Navigate to="/login" />;
+
+    if (adminOnly && !isAdmin()) {
+        return <Navigate to="/" />; // Or a generic Not Authorized page
+    }
+
+    return children;
 };
 
 function App() {
@@ -168,7 +175,7 @@ function App() {
                             <Route
                                 path="/attract_not_chase"
                                 element={
-                                    <PrivateRoute>
+                                    <PrivateRoute adminOnly={true}>
                                         <FocusFlowPage />
                                     </PrivateRoute>
                                 }
@@ -176,7 +183,7 @@ function App() {
                             <Route
                                 path="/identity"
                                 element={
-                                    <PrivateRoute>
+                                    <PrivateRoute adminOnly={true}>
                                         <IdentityPage />
                                     </PrivateRoute>
                                 }
@@ -184,7 +191,7 @@ function App() {
                             <Route
                                 path="/practice-projects"
                                 element={
-                                    <PrivateRoute>
+                                    <PrivateRoute adminOnly={true}>
                                         <PracticeProjects />
                                     </PrivateRoute>
                                 }
