@@ -4,7 +4,10 @@ import DailyLogHero from '../components/features/daily-log/DailyLogHero';
 import DailyLogForm from '../components/features/daily-log/DailyLogForm';
 import './DailyLog.css';
 
+import { useAuth } from '../context/AuthContext';
+
 const DailyLog = () => {
+    const { isAdmin } = useAuth();
     const {
         formData,
         setFormData,
@@ -37,6 +40,7 @@ const DailyLog = () => {
                     handleSubmit={handleSubmit}
                     error={error}
                     isEditing={isEditing}
+                    isAdmin={isAdmin()}
                 />
             </div>
         </div>
