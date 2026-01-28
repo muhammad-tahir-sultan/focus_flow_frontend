@@ -28,6 +28,13 @@ const Finance = lazy(() => import('./pages/Finance'));
 const FocusFlowPage = lazy(() => import('./pages/FocusFlowPage'));
 const IdentityPage = lazy(() => import('./pages/IdentityPage'));
 const PracticeProjects = lazy(() => import('./pages/PracticeProjects'));
+const SlowApiRescueBlog = lazy(() => import('./pages/SlowApiRescueBlog'));
+const AuthRoleChaosBlog = lazy(() => import('./pages/AuthRoleChaosBlog'));
+const MessyBackendRefactorBlog = lazy(() => import('./pages/MessyBackendRefactorBlog'));
+const ProductionDebuggingBlog = lazy(() => import('./pages/ProductionDebuggingBlog'));
+const DatabasePerformanceBlog = lazy(() => import('./pages/DatabasePerformanceBlog'));
+const GraphqlPerformanceBlog = lazy(() => import('./pages/GraphqlPerformanceBlog'));
+const ScalabilityStressTestBlog = lazy(() => import('./pages/ScalabilityStressTestBlog'));
 
 const PrivateRoute = ({ children, adminOnly = false }: { children: ReactNode, adminOnly?: boolean }) => {
     const { user, loading, isAdmin } = useAuth();
@@ -193,6 +200,62 @@ function App() {
                                 element={
                                     <PrivateRoute adminOnly={true}>
                                         <PracticeProjects />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/projects/slow-api-rescue"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <SlowApiRescueBlog />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/projects/auth-role-chaos"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <AuthRoleChaosBlog />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/projects/messy-backend-refactor"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <MessyBackendRefactorBlog />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/projects/production-debugging"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <ProductionDebuggingBlog />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/projects/database-performance"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <DatabasePerformanceBlog />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/projects/graphql-performance"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <GraphqlPerformanceBlog />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/projects/scalability-stress-test"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <ScalabilityStressTestBlog />
                                     </PrivateRoute>
                                 }
                             />

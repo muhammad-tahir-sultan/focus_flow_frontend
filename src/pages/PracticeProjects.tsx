@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import '../styles/PracticeProjects.css';
 import { practiceProjects } from '../data/practiceProjects';
 import type { ProjectTask, ProjectSection, PracticeProject } from '../data/practiceProjects';
+import { Link } from 'react-router-dom';
 
 const PracticeProjects = () => {
   // State to track checked items (by ID)
@@ -123,6 +124,132 @@ const PracticeProjects = () => {
         </div>
         <div className="project-content">
           {project.sections.map(section => renderSection(section))}
+
+          {project.id === 'project-1' && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+              <Link to="/projects/slow-api-rescue" style={{
+                display: 'inline-block',
+                padding: '0.6rem 1.2rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem'
+              }}>
+                🚀 Read Implementation Guide
+              </Link>
+            </div>
+          )}
+
+          {project.id === 'project-2' && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+              <Link to="/projects/auth-role-chaos" style={{
+                display: 'inline-block',
+                padding: '0.6rem 1.2rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem'
+              }}>
+                🔐 Read Implementation Guide
+              </Link>
+            </div>
+          )}
+
+          {project.id === 'project-3' && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+              <Link to="/projects/messy-backend-refactor" style={{
+                display: 'inline-block',
+                padding: '0.6rem 1.2rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem'
+              }}>
+                🧹 Read Implementation Guide
+              </Link>
+            </div>
+          )}
+
+          {project.id === 'project-4' && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+              <Link to="/projects/production-debugging" style={{
+                display: 'inline-block',
+                padding: '0.6rem 1.2rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem'
+              }}>
+                🐛 Read Implementation Guide
+              </Link>
+            </div>
+          )}
+
+          {project.id === 'project-5' && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+              <Link to="/projects/database-performance" style={{
+                display: 'inline-block',
+                padding: '0.6rem 1.2rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem'
+              }}>
+                🩺 Read Implementation Guide
+              </Link>
+            </div>
+          )}
+
+          {project.id === 'project-6' && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+              <Link to="/projects/graphql-performance" style={{
+                display: 'inline-block',
+                padding: '0.6rem 1.2rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem'
+              }}>
+                ⚡ Read Implementation Guide
+              </Link>
+            </div>
+          )}
+
+          {project.id === 'project-7' && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+              <Link to="/projects/scalability-stress-test" style={{
+                display: 'inline-block',
+                padding: '0.6rem 1.2rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem'
+              }}>
+                📉 Read Implementation Guide
+              </Link>
+            </div>
+          )}
         </div>
       </article>
     );
