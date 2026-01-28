@@ -20,10 +20,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
         { label: 'Attract', path: '/attract_not_chase', icon: '🧲', adminOnly: true },
         { label: 'Identity', path: '/identity', icon: '🧱', adminOnly: true },
         { label: 'Log Today', path: '/log', icon: '✍️' },
-        { label: 'Nutrition', path: '/calories', icon: '🥗' },
         { label: 'History', path: '/history', icon: '📜' },
         { label: 'Goals', path: '/goals', icon: '🏆' },
         { label: 'Elite Projects', path: '/practice-projects', icon: '🔥', adminOnly: true },
+        { label: 'Nutrition', path: '/calories', icon: '🥗' },
     ];
 
     const filteredNavItems = navItems.filter(item => !item.adminOnly || isAdmin());
