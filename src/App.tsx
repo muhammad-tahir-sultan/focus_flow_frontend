@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import Layout from './components/Layout';
 import AppLoadingSkeleton from './components/AppLoadingSkeleton';
+import PrivateRoute from './components/PrivateRoute';
 import './styles/modal.css';
 import './styles/components.css';
 import { lazy, Suspense } from 'react';
-import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 // Lazy load pages
@@ -36,18 +36,7 @@ const DatabasePerformanceBlog = lazy(() => import('./pages/DatabasePerformanceBl
 const GraphqlPerformanceBlog = lazy(() => import('./pages/GraphqlPerformanceBlog'));
 const ScalabilityStressTestBlog = lazy(() => import('./pages/ScalabilityStressTestBlog'));
 
-const PrivateRoute = ({ children, adminOnly = false }: { children: ReactNode, adminOnly?: boolean }) => {
-    const { user, loading, isAdmin } = useAuth();
-    if (loading) return <AppLoadingSkeleton />;
 
-    if (!user) return <Navigate to="/login" />;
-
-    if (adminOnly && !isAdmin()) {
-        return <Navigate to="/" />; // Or a generic Not Authorized page
-    }
-
-    return children;
-};
 
 function App() {
     return (
