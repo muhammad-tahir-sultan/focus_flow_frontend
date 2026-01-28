@@ -25,6 +25,7 @@ const NextPath = lazy(() => import('./pages/NextPath'));
 const CleanCodeGuide = lazy(() => import('./pages/CleanCodeGuide'));
 const SkillsManager = lazy(() => import('./pages/SkillsManager'));
 const Finance = lazy(() => import('./pages/Finance'));
+const CalorieTracker = lazy(() => import('./pages/CalorieTracker'));
 const FocusFlowPage = lazy(() => import('./pages/FocusFlowPage'));
 const IdentityPage = lazy(() => import('./pages/IdentityPage'));
 const PracticeProjects = lazy(() => import('./pages/PracticeProjects'));
@@ -165,6 +166,14 @@ function App() {
                                 element={
                                     <PrivateRoute>
                                         <Finance />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/calories"
+                                element={
+                                    <PrivateRoute>
+                                        <CalorieTracker />
                                     </PrivateRoute>
                                 }
                             />

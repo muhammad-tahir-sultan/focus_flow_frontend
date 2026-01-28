@@ -32,7 +32,7 @@ export const useSkills = () => {
     const fetchSkills = useCallback(async () => {
         setLoading(true);
         try {
-            let params: any = {};
+            const params: any = {};
             if (dateFilter === 'custom' && customStartDate && customEndDate) {
                 params.startDate = customStartDate;
                 params.endDate = customEndDate;
