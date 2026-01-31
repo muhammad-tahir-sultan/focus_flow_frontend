@@ -119,10 +119,10 @@ export const useDashboard = () => {
             let dominantMood = 'N/A';
             let maxCount = 0;
             const moodIcons: Record<string, string> = {
-                high: '🔥 High',
-                good: '✨ Good',
-                neutral: '😐 Neutral',
-                low: '📉 Low'
+                high: 'High',
+                good: 'Good',
+                neutral: 'Neutral',
+                low: 'Low'
             };
 
             Object.entries(moodCounts).forEach(([mood, count]) => {

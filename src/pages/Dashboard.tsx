@@ -5,7 +5,6 @@ import DashboardStatsGrid from '../components/features/dashboard/DashboardStatsG
 import CustomRangeModal from '../components/features/dashboard/CustomRangeModal';
 import QuickActions from '../components/features/dashboard/QuickActions';
 import RoadmapLinks from '../components/features/dashboard/RoadmapLinks';
-import NonNegotiablesCard from '../components/features/dashboard/NonNegotiablesCard';
 import GoalsCard from '../components/features/dashboard/GoalsCard';
 import ExecutionTruth from '../components/features/dashboard/ExecutionTruth';
 import '../styles/dashboard.css';
@@ -69,7 +68,6 @@ const Dashboard = () => {
 
                 {isAdmin() && (
                     <>
-                        <NonNegotiablesCard />
                         <GoalsCard />
                     </>
                 )}

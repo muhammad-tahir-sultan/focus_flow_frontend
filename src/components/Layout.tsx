@@ -19,16 +19,16 @@ const Layout = ({ children }: { children: ReactNode }) => {
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     const navItems = [
-        { label: 'Dashboard', path: '/', icon: <IconHome className="nav-svg-icon" /> },
-        { label: 'New Concept', path: '/skills', icon: <IconBrain className="nav-svg-icon" /> },
-        { label: 'Attract', path: '/attract_not_chase', icon: <IconMagnet className="nav-svg-icon" />, adminOnly: true },
-        { label: 'Get Clients', path: '/get-clients', icon: <IconLightning className="nav-svg-icon" />, adminOnly: true },
-        { label: 'Identity', path: '/identity', icon: <IconIdentity className="nav-svg-icon" />, adminOnly: true },
-        { label: 'Log Today', path: '/log', icon: <IconPen className="nav-svg-icon" /> },
-        { label: 'History', path: '/history', icon: <IconHistory className="nav-svg-icon" /> },
-        { label: 'Goals', path: '/goals', icon: <IconTrophy className="nav-svg-icon" /> },
-        { label: 'Elite Projects', path: '/practice-projects', icon: <IconFire className="nav-svg-icon" />, adminOnly: true },
-        { label: 'Nutrition', path: '/calories', icon: <IconNutrition className="nav-svg-icon" /> },
+        { label: 'Dashboard', path: '/', icon: <IconHome className="nav-svg-icon" style={{ color: '#60a5fa' }} /> },
+        { label: 'New Concept', path: '/skills', icon: <IconBrain className="nav-svg-icon" style={{ color: '#d946ef' }} /> },
+        { label: 'Attract', path: '/attract_not_chase', icon: <IconMagnet className="nav-svg-icon" style={{ color: '#f43f5e' }} />, adminOnly: true },
+        { label: 'Get Clients', path: '/get-clients', icon: <IconLightning className="nav-svg-icon" style={{ color: '#f59e0b' }} />, adminOnly: true },
+        { label: 'Identity', path: '/identity', icon: <IconIdentity className="nav-svg-icon" style={{ color: '#22d3ee' }} />, adminOnly: true },
+        { label: 'Log Today', path: '/log', icon: <IconPen className="nav-svg-icon" style={{ color: '#4ade80' }} /> },
+        { label: 'History', path: '/history', icon: <IconHistory className="nav-svg-icon" style={{ color: '#fb923c' }} /> },
+        { label: 'Goals', path: '/goals', icon: <IconTrophy className="nav-svg-icon" style={{ color: '#facc15' }} /> },
+        { label: 'Elite Projects', path: '/practice-projects', icon: <IconFire className="nav-svg-icon" style={{ color: '#a78bfa' }} />, adminOnly: true },
+        { label: 'Nutrition', path: '/calories', icon: <IconNutrition className="nav-svg-icon" style={{ color: '#34d399' }} /> },
     ];
 
     const filteredNavItems = navItems.filter(item => !item.adminOnly || isAdmin());
