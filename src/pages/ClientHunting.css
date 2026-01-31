@@ -1,0 +1,334 @@
+/* src/pages/ClientHunting.css */
+.client-hunting-page {
+    padding-bottom: 4rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.ch-hero {
+    text-align: center;
+    padding: 4rem 1rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ch-hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+}
+
+.ch-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.ch-section {
+    margin-bottom: 4rem;
+}
+
+.ch-section-header {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ch-step-number {
+    background: var(--accent-color);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.ch-section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Feature Cards for Step 1 */
+.ch-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.ch-card {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.ch-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.ch-card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.ch-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.ch-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Offer Box */
+.ch-offer-box {
+    background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(0, 0, 0, 0));
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.ch-offer-text {
+    font-size: 1.2rem;
+    color: #86efac;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.ch-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.ch-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.ch-badge.bad {
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.ch-badge.good {
+    background: rgba(34, 197, 94, 0.1);
+    color: #86efac;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* Client Sources Grid */
+.ch-sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.ch-source-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.ch-source-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.ch-source-list {
+    list-style: none;
+}
+
+.ch-source-list li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.ch-source-list li::before {
+    content: '→';
+    color: var(--accent-color);
+}
+
+/* DM Template */
+.ch-message-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: monospace;
+    position: relative;
+}
+
+.ch-message-card::before {
+    content: 'DM Template';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--bg-color);
+    padding: 0 10px;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.ch-variable {
+    color: #fbbf24;
+}
+
+.ch-rules-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.ch-rule-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Stats Counter */
+.ch-stats-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+
+.ch-stat-item {
+    text-align: center;
+}
+
+.ch-stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    display: block;
+}
+
+.ch-stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Timeline */
+.ch-timeline {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
+
+.ch-timeline-day {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 120px;
+    position: relative;
+}
+
+.ch-day-label {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.ch-day-content {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Footer Quote */
+.ch-footer {
+    text-align: center;
+    margin-top: 6rem;
+    padding: 3rem;
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+    border-top: 1px solid var(--border-color);
+}
+
+.ch-quote {
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.ch-quote-author {
+    color: var(--accent-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+    .ch-hero h1 {
+        font-size: 2rem;
+    }
+
+    .ch-timeline {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ch-stats-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}

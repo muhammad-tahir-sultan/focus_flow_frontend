@@ -64,6 +64,15 @@
 
 .nav-icon {
     font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-svg-icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2px;
 }
 
 .nav-link:hover {

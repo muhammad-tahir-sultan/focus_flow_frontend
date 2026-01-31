@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import type { ReactNode } from 'react';
+import {
+    IconHome, IconBrain, IconMagnet, IconLightning, IconIdentity,
+    IconPen, IconHistory, IconTrophy, IconFire, IconNutrition, IconLogout
+} from './layout/NavbarIcons';
 
 const Layout = ({ children }: { children: ReactNode }) => {
     const { user, logout, isAdmin } = useAuth();
@@ -15,15 +19,16 @@ const Layout = ({ children }: { children: ReactNode }) => {
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     const navItems = [
-        { label: 'Dashboard', path: '/', icon: '🏠' },
-        { label: 'New Concept', path: '/skills', icon: '🧠' },
-        { label: 'Attract', path: '/attract_not_chase', icon: '🧲', adminOnly: true },
-        { label: 'Identity', path: '/identity', icon: '🧱', adminOnly: true },
-        { label: 'Log Today', path: '/log', icon: '✍️' },
-        { label: 'History', path: '/history', icon: '📜' },
-        { label: 'Goals', path: '/goals', icon: '🏆' },
-        { label: 'Elite Projects', path: '/practice-projects', icon: '🔥', adminOnly: true },
-        { label: 'Nutrition', path: '/calories', icon: '🥗' },
+        { label: 'Dashboard', path: '/', icon: <IconHome className="nav-svg-icon" /> },
+        { label: 'New Concept', path: '/skills', icon: <IconBrain className="nav-svg-icon" /> },
+        { label: 'Attract', path: '/attract_not_chase', icon: <IconMagnet className="nav-svg-icon" />, adminOnly: true },
+        { label: 'Get Clients', path: '/get-clients', icon: <IconLightning className="nav-svg-icon" />, adminOnly: true },
+        { label: 'Identity', path: '/identity', icon: <IconIdentity className="nav-svg-icon" />, adminOnly: true },
+        { label: 'Log Today', path: '/log', icon: <IconPen className="nav-svg-icon" /> },
+        { label: 'History', path: '/history', icon: <IconHistory className="nav-svg-icon" /> },
+        { label: 'Goals', path: '/goals', icon: <IconTrophy className="nav-svg-icon" /> },
+        { label: 'Elite Projects', path: '/practice-projects', icon: <IconFire className="nav-svg-icon" />, adminOnly: true },
+        { label: 'Nutrition', path: '/calories', icon: <IconNutrition className="nav-svg-icon" /> },
     ];
 
     const filteredNavItems = navItems.filter(item => !item.adminOnly || isAdmin());
@@ -56,7 +61,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                             </Link>
                         ))}
                         <button onClick={() => { logout(); setIsMenuOpen(false); }} className="logout-btn">
-                            <span className="nav-icon">🚪</span>
+                            <span className="nav-icon"><IconLogout className="nav-svg-icon" /></span>
                             <span className="nav-label">Logout</span>
                         </button>
                     </nav>
