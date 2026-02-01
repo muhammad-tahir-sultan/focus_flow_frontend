@@ -1,4 +1,4 @@
-import { ChartDataPoint, PieDataPoint, FitnessStats } from '../types/fitness.types';
+import type { ChartDataPoint, PieDataPoint, FitnessStats } from '../types/fitness.types';
 
 export const prepareChartData = (stats: FitnessStats | null): ChartDataPoint[] => {
     if (!stats?.logs) return [];

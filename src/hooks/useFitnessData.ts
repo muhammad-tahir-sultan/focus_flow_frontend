@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { getTodayFitnessLog, logFitnessDaily, getFitnessStats, FitnessLog } from '../api/fitness';
-import { DailyChecklist, FitnessStats } from '../types/fitness.types';
+import { getTodayFitnessLog, logFitnessDaily, getFitnessStats } from '../api/fitness';
+import type { FitnessLog } from '../api/fitness';
+import type { DailyChecklist, FitnessStats } from '../types/fitness.types';
 import { getTodayDate } from '../utils/fitnessUtils';
 
 export const useFitnessData = () => {
