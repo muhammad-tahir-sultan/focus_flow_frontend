@@ -36,7 +36,9 @@ const ProductionDebuggingBlog = lazy(() => import('./pages/ProductionDebuggingBl
 const DatabasePerformanceBlog = lazy(() => import('./pages/DatabasePerformanceBlog'));
 const GraphqlPerformanceBlog = lazy(() => import('./pages/GraphqlPerformanceBlog'));
 const ScalabilityStressTestBlog = lazy(() => import('./pages/ScalabilityStressTestBlog'));
+
 const ClientHunting = lazy(() => import('./pages/ClientHunting'));
+const FitnessPlan = lazy(() => import('./pages/FitnessPlan'));
 
 
 
@@ -258,11 +260,20 @@ function App() {
                                     </PrivateRoute>
                                 }
                             />
+
                             <Route
                                 path="/get-clients"
                                 element={
                                     <PrivateRoute adminOnly={true}>
                                         <ClientHunting />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/fitness"
+                                element={
+                                    <PrivateRoute>
+                                        <FitnessPlan />
                                     </PrivateRoute>
                                 }
                             />
