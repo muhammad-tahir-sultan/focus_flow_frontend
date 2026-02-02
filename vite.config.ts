@@ -28,6 +28,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('recharts')) return 'recharts';
+            if (id.includes('react-router')) return 'react-router';
             if (id.includes('react')) return 'react-vendor';
             if (id.includes('axios')) return 'axios';
             return 'vendor';

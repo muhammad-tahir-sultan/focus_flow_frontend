@@ -6,6 +6,14 @@ interface NonNegotiablesChartProps {
 }
 
 const NonNegotiablesChart = ({ completedCount, totalCount }: NonNegotiablesChartProps) => {
+    if (totalCount === 0) {
+        return (
+            <div className="chart-container chart-container-pie flex items-center justify-center" style={{ minHeight: '300px' }}>
+                <p className="text-secondary">No non-negotiables data available yet</p>
+            </div>
+        );
+    }
+
     const missedCount = totalCount - completedCount;
 
     const data = [
