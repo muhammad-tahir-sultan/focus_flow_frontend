@@ -5,6 +5,14 @@ interface ConsistencyChartProps {
 }
 
 const ConsistencyChart = ({ data }: ConsistencyChartProps) => {
+    if (!data || data.length === 0) {
+        return (
+            <div className="chart-container flex items-center justify-center" style={{ minHeight: '300px' }}>
+                <p className="text-secondary">No consistency data available yet</p>
+            </div>
+        );
+    }
+
     return (
         <div className="chart-container">
             <ResponsiveContainer>
