@@ -4,29 +4,92 @@ export default function WeeklyRoutineCard() {
         return day >= 1 && day <= 5;
     };
 
+    const weekdayTasks = [
+        "Join 3-5 new FB Groups (Germany)",
+        "Direct Outreach (10-15 people)",
+        "Reply to comments on old posts"
+    ];
+
+    const weekendTasks = [
+        "Deep Partner Interviews/Calls",
+        "Find better groups/communities",
+        "Refine outreach script"
+    ];
+
     return (
-        <div className="card-premium">
-            <h2 className="heading-lg gradient-text">Simple Weekly Routine</h2>
-            <div className="badge badge-filled" style={{ marginBottom: '1.5rem' }}>
-                {isWeekday() ? 'Weekday Mode' : 'Weekend Mode'}
+        <div className="card-premium" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div className="flex-between">
+                <div>
+                    <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Weekly Routine</h2>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '0.4rem' }}>Optimized for outreach volume</p>
+                </div>
+                <div className={`badge ${isWeekday() ? 'badge-filled' : 'badge-outline'}`} style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '99px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    background: isWeekday() ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
+                    border: '1px solid var(--accent-color)',
+                    color: 'var(--accent-color)'
+                }}>
+                    {isWeekday() ? '⚡ WEEKDAY MODE' : '🌙 WEEKEND MODE'}
+                </div>
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-                <h3 className="heading-md" style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Weekdays (60–90m)</h3>
-                <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.5rem' }}>
-                    <li className="non-negotiable-item"><span className="bullet">⬜</span> Join 3-5 new FB Groups (Germany)</li>
-                    <li className="non-negotiable-item"><span className="bullet">⬜</span> Direct Outreach (10-15 people)</li>
-                    <li className="non-negotiable-item"><span className="bullet">⬜</span> Reply to comments on old posts</li>
-                </ul>
-            </div>
+            <div style={{ display: 'grid', gap: '2rem' }}>
+                <section>
+                    <h3 className="text-xs font-bold" style={{ color: 'var(--text-secondary)', letterSpacing: '0.1em', marginBottom: '1.25rem', textTransform: 'uppercase' }}>
+                        Weekdays (60–90m)
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {weekdayTasks.map((task, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                <div style={{
+                                    width: '24px',
+                                    height: '24px',
+                                    borderRadius: '6px',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0,
+                                    marginTop: '2px'
+                                }}>
+                                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--accent-color)' }}></div>
+                                </div>
+                                <span style={{ fontSize: '1rem', color: 'var(--text-primary)', lineHeight: '1.5' }}>{task}</span>
+                            </div>
+                        ))}
+                    </div>
+                </section>
 
-            <div>
-                <h3 className="heading-md" style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Weekends (3–5h)</h3>
-                <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.5rem' }}>
-                    <li className="non-negotiable-item"><span className="bullet">⬜</span> Deep Partner Interviews/Calls</li>
-                    <li className="non-negotiable-item"><span className="bullet">⬜</span> Find better groups/communities</li>
-                    <li className="non-negotiable-item"><span className="bullet">⬜</span> Refine outreach script</li>
-                </ul>
+                <section style={{ paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <h3 className="text-xs font-bold" style={{ color: 'var(--text-secondary)', letterSpacing: '0.1em', marginBottom: '1.25rem', textTransform: 'uppercase' }}>
+                        Weekends (3–5h)
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {weekendTasks.map((task, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                <div style={{
+                                    width: '24px',
+                                    height: '24px',
+                                    borderRadius: '6px',
+                                    background: 'rgba(252, 211, 77, 0.1)',
+                                    border: '1px solid rgba(252, 211, 77, 0.2)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0,
+                                    marginTop: '2px'
+                                }}>
+                                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#FCD34D' }}></div>
+                                </div>
+                                <span style={{ fontSize: '1rem', color: 'var(--text-primary)', lineHeight: '1.5' }}>{task}</span>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             </div>
         </div>
     );

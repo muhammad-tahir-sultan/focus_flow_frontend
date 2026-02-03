@@ -34,44 +34,90 @@ export default function EbayBusiness() {
     };
 
     return (
-        <div className="container" style={{ paddingBottom: '3rem' }}>
+        <div className="container" style={{ paddingBottom: '5rem', maxWidth: '1400px' }}>
             {/* Hero Section */}
-            <div className="master-roadmap-hero" style={{ padding: '3rem 2rem', marginBottom: '2rem' }}>
+            <div className="master-roadmap-hero" style={{ padding: '4rem 3rem', marginBottom: '3.5rem' }}>
                 <div className="hero-content">
-                    <div className="hero-badge">Phase 2: Parallel Start</div>
-                    <h1 className="hero-title gradient-text">eBay Business</h1>
-                    <p className="hero-subtitle">
-                        Find Germany-based partners (students/expats) for % profit share. Scale via daily FB outreach.
+                    <div className="hero-badge" style={{ background: 'rgba(252, 211, 77, 0.15)', color: '#FCD34D', border: '1px solid rgba(252, 211, 77, 0.3)' }}>
+                        Phase 2: Partner Scouting
+                    </div>
+                    <h1 className="hero-title gradient-text" style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}>eBay Business</h1>
+                    <p className="hero-subtitle" style={{ maxWidth: '700px', fontSize: '1.2rem', opacity: 0.9 }}>
+                        Building a high-output reselling network. Find Germany-based partners, lock in the profit share, and scale.
                     </p>
                 </div>
-                <div className="hero-glow"></div>
+                <div className="hero-glow" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(252, 211, 77, 0.15), transparent 70%)' }}></div>
             </div>
 
             {/* Main Layout Grid */}
-            <div className="grid-responsive-2" style={{ alignItems: 'start', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)' }}>
-                {/* Left Column: Input & Outreach */}
-                <div style={{ display: 'grid', gap: '1.5rem' }}>
-                    <EbayTaskLogForm onSubmit={handleLogSubmit} isSubmitting={isSubmitting} />
-                    <OutreachTemplates />
+            <div className="grid-responsive-2" style={{ alignItems: 'start', gap: '3rem', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)' }}>
+                {/* Left Column: Operations & Outreach */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                    <div style={{ animation: 'slideUp 0.5s ease-out' }}>
+                        <EbayTaskLogForm onSubmit={handleLogSubmit} isSubmitting={isSubmitting} />
+                    </div>
+                    <div style={{ animation: 'slideUp 0.6s ease-out' }}>
+                        <OutreachTemplates />
+                    </div>
                 </div>
 
-                {/* Right Column: Stats & System */}
-                <div style={{ display: 'grid', gap: '1.5rem' }}>
-                    <EbayStatsCard stats={stats} />
-                    <WeeklyRoutineCard />
+                {/* Right Column: Analytics & Strategy */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                    <div style={{ animation: 'slideUp 0.7s ease-out' }}>
+                        <EbayStatsCard stats={stats} />
+                    </div>
 
-                    <div className="card-premium">
-                        <h2 className="heading-lg gradient-text">Core Focus Areas</h2>
-                        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>Rotate these daily</p>
-                        <ul className="non-negotiables-list">
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> FB Groups Search (Post/Respond)</li>
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Outreach to Pakistanis/Indians in DE</li>
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Interview & Filter Candidates</li>
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Explain % Profit Model</li>
-                        </ul>
+                    <div style={{ animation: 'slideUp 0.8s ease-out' }}>
+                        <WeeklyRoutineCard />
+                    </div>
+
+                    <div className="card-premium" style={{
+                        padding: '2.5rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1.5rem',
+                        animation: 'slideUp 0.9s ease-out'
+                    }}>
+                        <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Core Strategy</h2>
+                        <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '-1rem' }}>Non-negotiable focus areas</p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.5rem' }}>
+                            {[
+                                { text: 'FB Groups Search (Post/Respond)', color: '#60a5fa' },
+                                { text: 'Outreach to Pakistanis/Indians in DE', color: '#c084fc' },
+                                { text: 'Interview & Filter Candidates', color: '#fbbf24' },
+                                { text: 'Explain % Profit Model', color: '#4ade80' }
+                            ].map((item, i) => (
+                                <div key={i} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '1rem',
+                                    padding: '1.25rem',
+                                    background: 'rgba(255,255,255,0.03)',
+                                    borderRadius: '12px',
+                                    border: '1px solid rgba(255,255,255,0.05)',
+                                    transition: 'all 0.3s ease',
+                                }} className="hover-scale">
+                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: item.color, boxShadow: `0 0 10px ${item.color}` }}></div>
+                                    <span style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{item.text}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <style>{`
+                @keyframes slideUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .hover-scale:hover {
+                    transform: translateX(8px);
+                    background: rgba(255,255,255,0.06);
+                    border-color: rgba(255,255,255,0.1);
+                }
+            `}</style>
         </div>
     );
 }
