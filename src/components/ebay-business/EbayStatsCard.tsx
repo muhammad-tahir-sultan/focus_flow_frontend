@@ -6,10 +6,10 @@ interface Props {
 
 export default function EbayStatsCard({ stats }: Props) {
     return (
-        <div className="card-premium" style={{ padding: '2.5rem' }}>
+        <div className="card-premium ebay-card-premium">
             <h2 className="heading-lg gradient-text" style={{ marginBottom: '2rem', marginTop: 0 }}>Business Analytics</h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div className="stats-grid">
                 <div style={{
                     padding: '1.5rem',
                     background: 'rgba(59, 130, 246, 0.05)',
@@ -21,7 +21,7 @@ export default function EbayStatsCard({ stats }: Props) {
                 }}>
                     <p className="text-xs font-bold" style={{ color: 'var(--accent-color)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>Total Persistence</p>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-                        <span style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>{stats?.logsCount || 0}</span>
+                        <span style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 800, color: 'var(--text-primary)' }}>{stats?.logsCount || 0}</span>
                         <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Days</span>
                     </div>
                 </div>
@@ -37,7 +37,7 @@ export default function EbayStatsCard({ stats }: Props) {
                 }}>
                     <p className="text-xs font-bold" style={{ color: '#ec4899', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>Hours Invested</p>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-                        <span style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                        <span style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 800, color: 'var(--text-primary)' }}>
                             {Math.round((stats?.totalTime || 0) / 60)}
                         </span>
                         <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Hrs</span>

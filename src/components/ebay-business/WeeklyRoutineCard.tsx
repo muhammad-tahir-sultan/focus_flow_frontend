@@ -17,8 +17,8 @@ export default function WeeklyRoutineCard() {
     ];
 
     return (
-        <div className="card-premium" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <div className="flex-between">
+        <div className="card-premium ebay-card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div className="flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                     <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Weekly Routine</h2>
                     <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '0.4rem' }}>Optimized for outreach volume</p>

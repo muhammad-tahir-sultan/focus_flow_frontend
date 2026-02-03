@@ -45,17 +45,17 @@ export default function OutreachTemplates() {
     const activeTemplate = TEMPLATES.find(t => t.id === activeTab);
 
     return (
-        <div className="card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', padding: '2.5rem' }}>
+        <div className="card-premium ebay-card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             {/* Header with Tabs */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div className="flex-between" style={{ alignItems: 'flex-start' }}>
+                <div className="flex-between" style={{ alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
                         <h2 className="heading-lg gradient-text" style={{ margin: 0, fontSize: '1.75rem' }}>Outreach Scripts</h2>
                         <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>High-conversion templates for partner hunting</p>
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', padding: '0.4rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', gap: '0.4rem', width: 'fit-content', border: '1px solid var(--border-color)' }}>
+                <div className="outreach-tabs-container">
                     {TEMPLATES.map(t => (
                         <button
                             key={t.id}
@@ -72,7 +72,8 @@ export default function OutreachTemplates() {
                                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                 background: activeTab === t.id ? 'var(--accent-color)' : 'transparent',
                                 color: activeTab === t.id ? '#fff' : 'var(--text-secondary)',
-                                boxShadow: activeTab === t.id ? '0 4px 12px rgba(59, 130, 246, 0.3)' : 'none'
+                                boxShadow: activeTab === t.id ? '0 4px 12px rgba(59, 130, 246, 0.3)' : 'none',
+                                whiteSpace: 'nowrap'
                             }}
                         >
                             {t.target}
@@ -83,7 +84,7 @@ export default function OutreachTemplates() {
 
             {activeTemplate && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', animation: 'fadeIn 0.4s ease-out' }}>
-                    <div className="flex-between">
+                    <div className="flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
                         <h3 className="text-sm font-bold" style={{ color: 'var(--accent-color)', letterSpacing: '0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span style={{ width: '12px', height: '2px', background: 'currentColor', borderRadius: '1px' }}></span>
                             {activeTemplate.title}
@@ -111,7 +112,7 @@ export default function OutreachTemplates() {
                     <div
                         style={{
                             background: 'rgba(5, 5, 5, 0.4)',
-                            padding: '2rem',
+                            padding: 'clamp(1rem, 5vw, 2rem)',
                             borderRadius: '16px',
                             border: '1px solid rgba(255,255,255,0.08)',
                             fontSize: '1rem',
@@ -119,7 +120,8 @@ export default function OutreachTemplates() {
                             color: 'var(--text-primary)',
                             whiteSpace: 'pre-wrap',
                             boxShadow: 'inset 0 2px 40px rgba(0,0,0,0.2)',
-                            position: 'relative'
+                            position: 'relative',
+                            wordBreak: 'break-word'
                         }}
                     >
                         {activeTemplate.message}
@@ -134,7 +136,7 @@ export default function OutreachTemplates() {
                     </h4>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+                <div className="trust-pillars-grid">
                     <div className="card-premium" style={{
                         padding: '1.5rem',
                         background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.02) 100%)',

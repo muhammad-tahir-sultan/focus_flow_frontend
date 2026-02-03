@@ -5,6 +5,7 @@ import EbayTaskLogForm from '../components/ebay-business/EbayTaskLogForm';
 import WeeklyRoutineCard from '../components/ebay-business/WeeklyRoutineCard';
 import EbayStatsCard from '../components/ebay-business/EbayStatsCard';
 import OutreachTemplates from '../components/ebay-business/OutreachTemplates';
+import '../styles/ebay.css';
 
 export default function EbayBusiness() {
     const [stats, setStats] = useState<EbayStats | null>(null);
@@ -34,9 +35,9 @@ export default function EbayBusiness() {
     };
 
     return (
-        <div className="container" style={{ paddingBottom: '5rem', maxWidth: '1400px' }}>
+        <div className="container ebay-container">
             {/* Hero Section */}
-            <div className="master-roadmap-hero" style={{ padding: '4rem 3rem', marginBottom: '3.5rem' }}>
+            <div className="master-roadmap-hero ebay-hero" style={{ marginBottom: '3.5rem' }}>
                 <div className="hero-content">
                     <div className="hero-badge" style={{ background: 'rgba(252, 211, 77, 0.15)', color: '#FCD34D', border: '1px solid rgba(252, 211, 77, 0.3)' }}>
                         Phase 2: Partner Scouting
@@ -50,9 +51,9 @@ export default function EbayBusiness() {
             </div>
 
             {/* Main Layout Grid */}
-            <div className="grid-responsive-2" style={{ alignItems: 'start', gap: '3rem', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)' }}>
+            <div className="ebay-grid">
                 {/* Left Column: Operations & Outreach */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                <div className="ebay-column">
                     <div style={{ animation: 'slideUp 0.5s ease-out' }}>
                         <EbayTaskLogForm onSubmit={handleLogSubmit} isSubmitting={isSubmitting} />
                     </div>
@@ -62,7 +63,7 @@ export default function EbayBusiness() {
                 </div>
 
                 {/* Right Column: Analytics & Strategy */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                <div className="ebay-column">
                     <div style={{ animation: 'slideUp 0.7s ease-out' }}>
                         <EbayStatsCard stats={stats} />
                     </div>
@@ -71,8 +72,7 @@ export default function EbayBusiness() {
                         <WeeklyRoutineCard />
                     </div>
 
-                    <div className="card-premium" style={{
-                        padding: '2.5rem',
+                    <div className="card-premium ebay-card-premium" style={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1.5rem',

@@ -1,0 +1,146 @@
+/* eBay Business Module Styles */
+
+.ebay-container {
+    padding-bottom: 5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.ebay-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.ebay-column {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+/* Responsive Grid */
+@media (max-width: 1100px) {
+    .ebay-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .ebay-column {
+        gap: 2rem;
+    }
+}
+
+/* Hero Adjustments */
+@media (max-width: 768px) {
+    .ebay-container {
+        padding: 0 1rem 3rem 1rem;
+    }
+
+    .ebay-grid {
+        gap: 1.5rem;
+    }
+
+    .ebay-column {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ebay-container {
+        padding: 0 0.75rem 2rem 0.75rem;
+    }
+
+    .ebay-hero {
+        padding: 2.5rem 1.5rem !important;
+    }
+
+    .ebay-hero .hero-title {
+        font-size: 2rem !important;
+    }
+
+    .ebay-hero .hero-subtitle {
+        font-size: 1rem !important;
+        line-height: 1.4;
+    }
+}
+
+/* Component Level Responsiveness */
+
+/* Outreach Templates */
+.outreach-tabs-container {
+    display: flex;
+    padding: 0.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    gap: 0.4rem;
+    width: fit-content;
+    border: 1px solid var(--border-color);
+    overflow-x: auto;
+    max-width: 100%;
+    scrollbar-width: none;
+}
+
+.outreach-tabs-container::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .outreach-tabs-container {
+        width: 100%;
+        padding: 0.3rem;
+    }
+
+    .mobile-stack {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1.25rem;
+    }
+
+    .mobile-hide {
+        display: none;
+    }
+}
+
+/* Stats Card Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Trust Pillars Grid */
+.trust-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    .trust-pillars-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* General Card Padding Responsiveness */
+.ebay-card-premium {
+    padding: 2.5rem;
+}
+
+@media (max-width: 768px) {
+    .ebay-card-premium {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ebay-card-premium {
+        padding: 1.25rem;
+    }
+}

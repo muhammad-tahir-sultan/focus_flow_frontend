@@ -30,7 +30,7 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
         setFormData(prev => {
             const exists = prev.focusAreas.includes(area);
             if (exists) return { ...prev, focusAreas: prev.focusAreas.filter(a => a !== area) };
-            if (prev.focusAreas.length >= 2) return prev; // Limit to 2 as per user request
+            if (prev.focusAreas.length >= 2) return prev;
             return { ...prev, focusAreas: [...prev.focusAreas, area] };
         });
     };
@@ -54,8 +54,6 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (formData.focusAreas.length === 0 && !window.confirm("No focus area selected. Continue?")) return;
-
         try {
             await onSubmit(formData);
             toast.success('Log saved successfully!');
@@ -75,17 +73,32 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <form onSubmit={handleSubmit} className="card-premium ebay-card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Daily Task Log</h2>
 
-            <div className="form-group">
-                <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Date</label>
-                <input
-                    type="date"
-                    value={formData.date}
-                    onChange={e => setFormData({ ...formData, date: e.target.value })}
-                    required
-                />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                <div className="form-group">
+                    <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Date</label>
+                    <input
+                        type="date"
+                        value={formData.date}
+                        onChange={e => setFormData({ ...formData, date: e.target.value })}
+                        required
+                        className="w-full"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Outreach Count</label>
+                    <input
+                        type="number"
+                        value={formData.outreachCount}
+                        onChange={e => setFormData({ ...formData, outreachCount: Number(e.target.value) })}
+                        min="0"
+                        placeholder="0"
+                        className="w-full"
+                    />
+                </div>
             </div>
 
             <div className="form-group">
@@ -97,7 +110,7 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                             type="button"
                             onClick={() => handleFocusToggle(option)}
                             className={`badge ${formData.focusAreas.includes(option) ? 'badge-filled' : 'badge-outline'}`}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: 'pointer', fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}
                         >
                             {formData.focusAreas.includes(option) ? '✓ ' : '+ '}{option}
                         </button>
@@ -106,19 +119,8 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
             </div>
 
             <div className="form-group">
-                <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>People Contacted (Outreach)</label>
-                <input
-                    type="number"
-                    value={formData.outreachCount}
-                    onChange={e => setFormData({ ...formData, outreachCount: Number(e.target.value) })}
-                    min="0"
-                    placeholder="0"
-                />
-            </div>
-
-            <div className="form-group">
                 <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Tasks Completed</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     {formData.tasksCompleted.map((task, index) => (
                         <div key={index} style={{ display: 'flex', gap: '0.5rem' }}>
                             <input
@@ -126,15 +128,16 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                                 value={task}
                                 onChange={e => handleTaskChange(index, e.target.value)}
                                 placeholder={`Task ${index + 1}`}
+                                className="w-full"
                             />
                             {formData.tasksCompleted.length > 1 && (
-                                <button type="button" onClick={() => removeTask(index)} className="btn-icon" style={{ color: 'var(--error-color)' }}>
+                                <button type="button" onClick={() => removeTask(index)} className="btn-icon" style={{ color: 'var(--error-color)', padding: '0 0.5rem' }}>
                                     ×
                                 </button>
                             )}
                         </div>
                     ))}
-                    <button type="button" onClick={addTask} className="text-sm" style={{ alignSelf: 'flex-start', color: 'var(--accent-color)', background: 'none', border: 'none', padding: 0, marginTop: '0.5rem' }}>
+                    <button type="button" onClick={addTask} className="text-sm" style={{ alignSelf: 'flex-start', color: 'var(--accent-color)', background: 'none', border: 'none', padding: 0, marginTop: '0.25rem', cursor: 'pointer', fontWeight: 600 }}>
                         + Add another task
                     </button>
                 </div>
@@ -147,31 +150,36 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                     value={formData.timeSpentMinutes}
                     onChange={e => setFormData({ ...formData, timeSpentMinutes: Number(e.target.value) })}
                     min="0"
+                    className="w-full"
                 />
             </div>
 
-            <div className="form-group">
-                <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Win of the Day</label>
-                <textarea
-                    value={formData.winOfTheDay}
-                    onChange={e => setFormData({ ...formData, winOfTheDay: e.target.value })}
-                    rows={2}
-                    placeholder="Even small wins count!"
-                />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                <div className="form-group">
+                    <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Win of the Day</label>
+                    <textarea
+                        value={formData.winOfTheDay}
+                        onChange={e => setFormData({ ...formData, winOfTheDay: e.target.value })}
+                        rows={2}
+                        placeholder="Even small wins count!"
+                        className="w-full"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Blocker / Lesson</label>
+                    <textarea
+                        value={formData.blockerOrLesson}
+                        onChange={e => setFormData({ ...formData, blockerOrLesson: e.target.value })}
+                        rows={2}
+                        placeholder="What got in your way?"
+                        className="w-full"
+                    />
+                </div>
             </div>
 
-            <div className="form-group">
-                <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Blocker / Lesson</label>
-                <textarea
-                    value={formData.blockerOrLesson}
-                    onChange={e => setFormData({ ...formData, blockerOrLesson: e.target.value })}
-                    rows={2}
-                    placeholder="What got in your way?"
-                />
-            </div>
-
-            <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full" style={{ marginTop: '1rem' }}>
-                {isSubmitting ? 'Saving...' : 'Save Log'}
+            <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full" style={{ marginTop: '1rem', padding: '1rem', fontWeight: 700, letterSpacing: '0.05em' }}>
+                {isSubmitting ? 'Saving...' : 'SAVE DAILY LOG'}
             </button>
         </form>
     );
