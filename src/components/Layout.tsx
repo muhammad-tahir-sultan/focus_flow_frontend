@@ -1,23 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import type { ReactNode } from 'react';
 import {
     IconHome, IconBrain, IconMagnet, IconLightning, IconIdentity,
-
     IconPen, IconHistory, IconTrophy, IconFire, IconNutrition, IconLogout, IconDumbbell
 } from './layout/NavbarIcons';
 
 const Layout = ({ children }: { children: ReactNode }) => {
     const { user, logout, isAdmin } = useAuth();
     const location = useLocation();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
     if (!user) {
         return <>{children}</>;
     }
 
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+    const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+
+    // Keyboard shortcut: Ctrl+B or Cmd+B to toggle sidebar
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Check for Ctrl+B (Windows/Linux) or Cmd+B (Mac)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                e.preventDefault(); // Prevent browser's default bookmark action
+                toggleCollapse();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isCollapsed]); // Re-create listener when isCollapsed changes
 
     const navItems = [
         { label: 'Dashboard', path: '/', icon: <IconHome className="nav-svg-icon" style={{ color: '#60a5fa' }} /> },
@@ -36,42 +55,80 @@ const Layout = ({ children }: { children: ReactNode }) => {
     const filteredNavItems = navItems.filter(item => !item.adminOnly || isAdmin());
 
     return (
-        <div>
-            <header className="app-header">
-                <div className="container header-inner">
-                    <Link to="/" className="header-logo" onClick={() => setIsMenuOpen(false)}>
-                        <img src="/focus_flow_favicon.png" alt="FocusFlow Logo" className="logo-img" />
-                        <h1 className="logo-text">FocusFlow</h1>
+        <div className="app-layout">
+            {/* Sidebar */}
+            <aside className={`sidebar ${isSidebarOpen ? 'sidebar-open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
+                <div className="sidebar-header">
+                    <Link to="/" className="sidebar-logo" onClick={() => setIsSidebarOpen(false)}>
+                        <img src="/focus_flow_favicon.png" alt="FocusFlow Logo" className="sidebar-logo-img" />
+                        {!isCollapsed && <h1 className="sidebar-logo-text">FocusFlow</h1>}
                     </Link>
 
-                    <button className={`hamburger ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu} aria-label="Toggle Menu">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    {/* Desktop Collapse Toggle */}
+                    <button
+                        className="sidebar-collapse-btn"
+                        onClick={toggleCollapse}
+                        aria-label={isCollapsed ? "Expand Sidebar (Ctrl+B)" : "Collapse Sidebar (Ctrl+B)"}
+                        title={isCollapsed ? "Expand Sidebar (Ctrl+B)" : "Collapse Sidebar (Ctrl+B)"}
+                    >
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className={`collapse-icon ${isCollapsed ? 'rotated' : ''}`}
+                        >
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
                     </button>
-
-                    <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
-                        {filteredNavItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
-                                onClick={() => setIsMenuOpen(false)}
-                            >
-                                <span className="nav-icon">{item.icon}</span>
-                                <span className="nav-label">{item.label}</span>
-                            </Link>
-                        ))}
-                        <button onClick={() => { logout(); setIsMenuOpen(false); }} className="logout-btn">
-                            <span className="nav-icon"><IconLogout className="nav-svg-icon" /></span>
-                            <span className="nav-label">Logout</span>
-                        </button>
-                    </nav>
                 </div>
 
-                {isMenuOpen && <div className="menu-overlay" onClick={toggleMenu}></div>}
-            </header>
-            <main className="container">{children}</main>
+                <nav className="sidebar-nav">
+                    {filteredNavItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
+                            onClick={() => setIsSidebarOpen(false)}
+                            title={isCollapsed ? item.label : ''}
+                        >
+                            <span className="sidebar-icon">{item.icon}</span>
+                            {!isCollapsed && <span className="sidebar-label">{item.label}</span>}
+                            {!isCollapsed && location.pathname === item.path && <div className="sidebar-active-indicator" />}
+                        </Link>
+                    ))}
+                </nav>
+
+                <div className="sidebar-footer">
+                    <button
+                        onClick={() => { logout(); setIsSidebarOpen(false); }}
+                        className="sidebar-logout"
+                        title={isCollapsed ? "Logout" : ''}
+                    >
+                        <span className="sidebar-icon"><IconLogout className="nav-svg-icon" /></span>
+                        {!isCollapsed && <span className="sidebar-label">Logout</span>}
+                    </button>
+                </div>
+            </aside>
+
+            {/* Mobile Toggle Button */}
+            <button className={`sidebar-toggle ${isSidebarOpen ? 'open' : ''}`} onClick={toggleSidebar} aria-label="Toggle Sidebar">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            {/* Overlay for mobile */}
+            {isSidebarOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
+
+            {/* Main Content */}
+            <main className={`main-content ${isCollapsed ? 'expanded' : ''}`}>
+                <div className="container">{children}</div>
+            </main>
         </div>
     );
 };

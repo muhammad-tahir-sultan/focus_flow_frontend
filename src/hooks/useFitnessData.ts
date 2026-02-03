@@ -25,10 +25,14 @@ export const useFitnessData = () => {
 
     const fetchData = async () => {
         try {
+            console.log('[Fitness] Fetching data for date:', todayDate);
             const [todayLog, statsData] = await Promise.all([
                 getTodayFitnessLog(todayDate),
                 getFitnessStats()
             ]);
+
+            console.log('[Fitness] Today log:', todayLog);
+            console.log('[Fitness] Stats data:', statsData);
 
             if (todayLog) {
                 setDailyChecklist({
@@ -40,8 +44,9 @@ export const useFitnessData = () => {
                 });
             }
             setStats(statsData);
+            console.log('[Fitness] Stats set successfully. Total logs:', statsData?.totalLogs, 'Logs array length:', statsData?.logs?.length);
         } catch (error) {
-            console.error(error);
+            console.error('[Fitness] Error fetching data:', error);
             toast.error("Failed to load fitness data");
         } finally {
             setLoading(false);

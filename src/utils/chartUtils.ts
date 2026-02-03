@@ -1,16 +1,23 @@
 import type { ChartDataPoint, PieDataPoint, FitnessStats } from '../types/fitness.types';
 
 export const prepareChartData = (stats: FitnessStats | null): ChartDataPoint[] => {
-    if (!stats?.logs) return [];
+    console.log('[ChartUtils] prepareChartData called with stats:', stats);
+    if (!stats?.logs) {
+        console.log('[ChartUtils] No stats or logs found, returning empty array');
+        return [];
+    }
 
     const last30Logs = stats.logs.slice(-30);
-    return last30Logs.map((log) => ({
+    console.log('[ChartUtils] Processing', last30Logs.length, 'logs for chart');
+    const chartData = last30Logs.map((log) => ({
         date: log.date.substring(5), // MM-DD
         Workout: log.workoutCompleted ? 1 : 0,
         Run: log.runCompleted ? 1 : 0,
         Water: log.waterIntake ? 1 : 0,
         Sleep: log.sleepQuality ? 1 : 0,
     }));
+    console.log('[ChartUtils] Chart data prepared:', chartData);
+    return chartData;
 };
 
 export const preparePieData = (stats: FitnessStats | null): PieDataPoint[] => {
