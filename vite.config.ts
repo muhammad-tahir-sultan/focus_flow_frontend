@@ -27,10 +27,25 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            // Recharts first (before react check)
             if (id.includes('recharts')) return 'recharts';
+
+            // React Router (before react check)
             if (id.includes('react-router')) return 'react-router';
-            if (id.includes('react')) return 'react-vendor';
+
+            // Core React packages - must stay together
+            // Use path separators to be more specific
+            if (id.includes('/react/') || id.includes('\\react\\') ||
+              id.includes('/react-dom/') || id.includes('\\react-dom\\') ||
+              id.includes('/scheduler/') || id.includes('\\scheduler\\') ||
+              id.includes('react/jsx-runtime') || id.includes('react\\jsx-runtime')) {
+              return 'react-vendor';
+            }
+
+            // Axios
             if (id.includes('axios')) return 'axios';
+
+            // Everything else
             return 'vendor';
           }
         },
