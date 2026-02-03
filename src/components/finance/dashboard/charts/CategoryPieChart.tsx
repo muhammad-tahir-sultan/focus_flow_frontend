@@ -10,8 +10,6 @@ interface CategoryPieChartProps {
 }
 
 const CategoryPieChart: React.FC<CategoryPieChartProps> = ({ data, title, iconColor }) => {
-    if (data.length === 0) return null;
-
     return (
         <div className="chart-card">
             <h3>
@@ -21,28 +19,39 @@ const CategoryPieChart: React.FC<CategoryPieChartProps> = ({ data, title, iconCo
                 </svg>
                 {title}
             </h3>
-            <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                    <Pie
-                        data={data}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
-                        paddingAngle={5}
-                        dataKey="value"
-                    >
-                        {data.map((_entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                    </Pie>
-                    <Tooltip
-                        contentStyle={{ background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                        formatter={(value: any) => `₹${Number(value || 0).toLocaleString()}`}
-                    />
-                    <Legend />
-                </PieChart>
-            </ResponsiveContainer>
+            {data.length === 0 ? (
+                <div style={{ height: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px', opacity: 0.5 }}>
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <p>No category data.</p>
+                </div>
+            ) : (
+                <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                        <Pie
+                            data={data}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={80}
+                            paddingAngle={5}
+                            dataKey="value"
+                        >
+                            {data.map((_entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip
+                            contentStyle={{ background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                            formatter={(value: any) => `₹${Number(value || 0).toLocaleString()}`}
+                        />
+                        <Legend />
+                    </PieChart>
+                </ResponsiveContainer>
+            )}
         </div>
     );
 };

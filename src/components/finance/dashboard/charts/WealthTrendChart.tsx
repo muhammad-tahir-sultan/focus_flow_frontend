@@ -6,8 +6,6 @@ interface WealthTrendChartProps {
 }
 
 const WealthTrendChart: React.FC<WealthTrendChartProps> = ({ data }) => {
-    if (data.length <= 1) return null;
-
     return (
         <div className="chart-card chart-card-wide" style={{ marginBottom: '24px' }}>
             <h3>
@@ -17,24 +15,33 @@ const WealthTrendChart: React.FC<WealthTrendChartProps> = ({ data }) => {
                 </svg>
                 Wealth Growth (Period Trend)
             </h3>
-            <ResponsiveContainer width="100%" height={350}>
-                <AreaChart data={data}>
-                    <defs>
-                        <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
-                        </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 12 }} minTickGap={30} />
-                    <YAxis stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 12 }} />
-                    <Tooltip
-                        contentStyle={{ background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                        formatter={(value: any) => [`₹${Number(value).toLocaleString()}`, 'Balance']}
-                    />
-                    <Area type="monotone" dataKey="balance" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorBalance)" />
-                </AreaChart>
-            </ResponsiveContainer>
+            {data.length <= 1 ? (
+                <div style={{ height: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px', opacity: 0.5 }}>
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    <p>Not enough data to map wealth trend.</p>
+                </div>
+            ) : (
+                <ResponsiveContainer width="100%" height={350}>
+                    <AreaChart data={data}>
+                        <defs>
+                            <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                        <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 12 }} minTickGap={30} />
+                        <YAxis stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 12 }} />
+                        <Tooltip
+                            contentStyle={{ background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                            formatter={(value: any) => [`₹${Number(value).toLocaleString()}`, 'Balance']}
+                        />
+                        <Area type="monotone" dataKey="balance" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorBalance)" />
+                    </AreaChart>
+                </ResponsiveContainer>
+            )}
         </div>
     );
 };
