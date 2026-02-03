@@ -1,0 +1,430 @@
+/* ===================================
+   PREMIUM LOANS TAB STYLES
+   =================================== */
+
+/* Loan Stats Container */
+.loan-stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Loan Stat Cards */
+.loan-stat-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.loan-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    opacity: 0.5;
+}
+
+.loan-stat-card.took {
+    color: #ef4444;
+}
+
+.loan-stat-card.took::before {
+    background: linear-gradient(90deg, transparent, #ef4444, transparent);
+}
+
+.loan-stat-card.gave {
+    color: #10b981;
+}
+
+.loan-stat-card.gave::before {
+    background: linear-gradient(90deg, transparent, #10b981, transparent);
+}
+
+.loan-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.loan-stat-card .icon {
+    font-size: 3.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 12px currentColor);
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.loan-stat-card .content {
+    flex: 1;
+}
+
+.loan-stat-card .content h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.loan-stat-card .content p {
+    font-size: 2rem;
+    font-weight: 800;
+    color: currentColor;
+    margin: 0;
+    font-family: 'Inter', monospace;
+    letter-spacing: -0.02em;
+}
+
+/* Type Toggle Buttons */
+.type-toggles {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.type-btn {
+    flex: 1;
+    padding: 0.85rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.type-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.type-btn.active {
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.type-btn.active.took {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-color: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.type-btn.active.gave {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+/* Submit Button Variants */
+.btn-submit.btn-took {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-color: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+}
+
+.btn-submit.btn-took:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+}
+
+.btn-submit.btn-gave {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+}
+
+.btn-submit.btn-gave:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+}
+
+/* Loan Cards */
+.loan-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.loan-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: currentColor;
+}
+
+.loan-card.took {
+    border-left-color: #ef4444;
+}
+
+.loan-card.took::after {
+    background: linear-gradient(180deg, #ef4444, #dc2626);
+}
+
+.loan-card.gave {
+    border-left-color: #10b981;
+}
+
+.loan-card.gave::after {
+    background: linear-gradient(180deg, #10b981, #059669);
+}
+
+/* Badge Styles */
+.badge-took {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.badge-gave {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid;
+}
+
+.status-badge.active {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+}
+
+.status-badge.partially-paid {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: #fbbf24;
+}
+
+.status-badge.fully-paid {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+.status-badge.overdue {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    animation: pulseBadge 2s ease-in-out infinite;
+}
+
+@keyframes pulseBadge {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+    }
+}
+
+/* Party Name */
+.party-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0.5rem 0 1rem;
+    font-weight: 500;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Card Actions */
+.card-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.btn-contribute {
+    flex: 1;
+    padding: 0.75rem 1.25rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.btn-contribute:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.btn-delete-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-delete-icon:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Savings Amounts */
+.savings-amounts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0 0.5rem;
+}
+
+.amount-current,
+.amount-target {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.amount-current {
+    color: var(--text-secondary);
+}
+
+.amount-target {
+    color: var(--text-primary);
+}
+
+/* Modal Submit Button */
+.btn-submit-modal {
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.btn-submit-modal:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .loan-stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .loan-stat-card {
+        padding: 1.5rem;
+    }
+
+    .loan-stat-card .icon {
+        font-size: 2.5rem;
+    }
+
+    .loan-stat-card .content p {
+        font-size: 1.5rem;
+    }
+
+    .type-toggles {
+        flex-direction: column;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+
+    .btn-delete-icon {
+        width: 100%;
+    }
+}

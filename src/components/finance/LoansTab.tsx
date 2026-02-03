@@ -143,14 +143,14 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
                                     className={`type-btn ${formData.type === 'Took' ? 'active took' : ''}`}
                                     onClick={() => setFormData({ ...formData, type: 'Took' })}
                                 >
-                                    Login (Took)
+                                    📉 Borrow (Took)
                                 </button>
                                 <button
                                     type="button"
                                     className={`type-btn ${formData.type === 'Gave' ? 'active gave' : ''}`}
                                     onClick={() => setFormData({ ...formData, type: 'Gave' })}
                                 >
-                                    Lend (Gave)
+                                    📈 Lend (Gave)
                                 </button>
                             </div>
                         </div>
