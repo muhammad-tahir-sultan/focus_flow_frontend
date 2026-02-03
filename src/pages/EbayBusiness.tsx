@@ -40,7 +40,7 @@ export default function EbayBusiness() {
                     <div className="hero-badge">Phase 2: Parallel Start</div>
                     <h1 className="hero-title gradient-text">eBay Business</h1>
                     <p className="hero-subtitle">
-                        Job ke saath-saath business build karna — clean, legal, long‑term.
+                        Find Germany-based partners (students/expats) for % profit share. Scale via daily FB outreach.
                     </p>
                 </div>
                 <div className="hero-glow"></div>
@@ -59,10 +59,10 @@ export default function EbayBusiness() {
                         <h2 className="heading-lg gradient-text">Core Focus Areas</h2>
                         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>Rotate these daily</p>
                         <ul className="non-negotiables-list">
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Germany‑based partners find karna</li>
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Listings & product research</li>
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> SOPs aur systems banana</li>
-                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Monthly profit consistency</li>
+                            <li className="non-negotiable-item"><span className="bullet">⬜</span> FB Groups Search (Post/Respond)</li>
+                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Outreach to Pakistanis/Indians in DE</li>
+                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Interview & Filter Candidates</li>
+                            <li className="non-negotiable-item"><span className="bullet">⬜</span> Explain % Profit Model</li>
                         </ul>
                     </div>
                 </div>

@@ -8,11 +8,11 @@ interface Props {
 }
 
 const FOCUS_OPTIONS = [
-    'Partner outreach',
-    'Product research',
-    'Listing optimization',
-    'SOP / system building',
-    'Review & analytics'
+    'FB Group Hunting (Germany)',
+    'Direct Messaging (DM)',
+    'Explaining Business Model',
+    'Partner Interviews',
+    'Listing Research'
 ];
 
 export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
@@ -22,7 +22,8 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
         tasksCompleted: [''],
         timeSpentMinutes: 0,
         winOfTheDay: '',
-        blockerOrLesson: ''
+        blockerOrLesson: '',
+        outreachCount: 0
     });
 
     const handleFocusToggle = (area: string) => {
@@ -64,7 +65,8 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                 tasksCompleted: [''],
                 timeSpentMinutes: 0,
                 winOfTheDay: '',
-                blockerOrLesson: ''
+                blockerOrLesson: '',
+                outreachCount: 0
             }));
         } catch (error) {
             console.error(error);
@@ -101,6 +103,17 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                         </button>
                     ))}
                 </div>
+            </div>
+
+            <div className="form-group">
+                <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>People Contacted (Outreach)</label>
+                <input
+                    type="number"
+                    value={formData.outreachCount}
+                    onChange={e => setFormData({ ...formData, outreachCount: Number(e.target.value) })}
+                    min="0"
+                    placeholder="0"
+                />
             </div>
 
             <div className="form-group">

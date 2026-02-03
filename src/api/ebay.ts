@@ -8,6 +8,7 @@ export interface EbayTaskLog {
     timeSpentMinutes: number;
     winOfTheDay: string;
     blockerOrLesson: string;
+    outreachCount?: number;
     createdAt: string;
 }
 
@@ -18,6 +19,7 @@ export interface CreateEbayLogDto {
     timeSpentMinutes: number;
     winOfTheDay: string;
     blockerOrLesson: string;
+    outreachCount?: number;
 }
 
 export interface EbayStats {
