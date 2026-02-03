@@ -666,7 +666,7 @@
 /* 4-column grid for stats */
 .stats-dashboard {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}/* Charts Section CSS - Append to expenses.css */
+}
 
 .charts-section {
     margin-bottom: 3rem;
@@ -789,8 +789,41 @@
 
 
 @keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
+/* Premium Icon Glows - Global Upgrade */
+.category-icon svg {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+}
+
+.recurring-badge svg {
+    filter: drop-shadow(0 0 4px currentColor);
+}
+
+.btn-submit svg,
+.btn-delete svg,
+.btn-clear-filter svg,
+.btn-contribute svg {
+    filter: drop-shadow(0 0 3px currentColor);
+}
+
+/* Enhancing existing SVG within headers if not already styled inline */
+h1 svg,
+h2 svg,
+h3 svg {
+    filter: drop-shadow(0 0 5px currentColor);
+}

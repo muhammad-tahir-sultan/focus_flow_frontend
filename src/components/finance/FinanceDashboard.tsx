@@ -82,7 +82,12 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
             {/* Overall Stats */}
             <div className="stats-dashboard">
                 <div className="stat-card total-card">
-                    <div className="stat-icon">💵</div>
+                    <div className="stat-icon" style={{ color: '#10b981', filter: 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.4))' }}>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </div>
                     <div className="stat-content">
                         <h3>Total Income</h3>
                         <p className="stat-value">₹{totalIncome.toLocaleString()}</p>
@@ -92,8 +97,23 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
                     className={`stat-card count-card ${isExpenseCritical ? 'critical-alert' : isExpenseWarning ? 'warning-alert' : ''}`}
                     style={isExpenseCritical ? { border: '1px solid #ef4444', boxShadow: '0 0 20px rgba(239, 68, 68, 0.4)', background: 'linear-gradient(145deg, rgba(239, 68, 68, 0.1), rgba(0, 0, 0, 0.6))' } : {}}
                 >
-                    <div className="stat-icon" style={isExpenseCritical ? { animation: 'pulse 1s infinite' } : {}}>
-                        {isExpenseCritical ? '🚨' : '💸'}
+                    <div className="stat-icon" style={{
+                        color: '#ef4444',
+                        filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.4))',
+                        ...(isExpenseCritical ? { animation: 'pulse 1s infinite' } : {})
+                    }}>
+                        {isExpenseCritical ? (
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        ) : (
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        )}
                     </div>
                     <div className="stat-content">
                         <h3>Total Expenses</h3>
@@ -102,25 +122,45 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
                         </p>
                         {isExpenseCritical && (
                             <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                ⚠️ Limit Exceeded (₹{MAX_MONTHLY_EXPENSE / 1000}k)
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                Limit Exceeded (₹{MAX_MONTHLY_EXPENSE / 1000}k)
                             </div>
                         )}
                         {!isExpenseCritical && isExpenseWarning && (
                             <div style={{ color: '#f59e0b', fontSize: '0.75rem', marginTop: '0.25rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                ⚠️ Nearing Limit (₹{MAX_MONTHLY_EXPENSE / 1000}k)
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                Nearing Limit (₹{MAX_MONTHLY_EXPENSE / 1000}k)
                             </div>
                         )}
                     </div>
                 </div>
                 <div className="stat-card avg-card">
-                    <div className="stat-icon">💰</div>
+                    <div className="stat-icon" style={{ color: '#06b6d4', filter: 'drop-shadow(0 0 8px rgba(6, 182, 212, 0.4))' }}>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
                     <div className="stat-content">
                         <h3>Total Savings</h3>
                         <p className="stat-value">₹{totalSaved.toLocaleString()}</p>
                     </div>
                 </div>
                 <div className="stat-card net-card">
-                    <div className="stat-icon">📊</div>
+                    <div className="stat-icon" style={{ color: '#8b5cf6', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.4))' }}>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="12" y1="20" x2="12" y2="10"></line>
+                            <line x1="18" y1="20" x2="18" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                        </svg>
+                    </div>
                     <div className="stat-content">
                         <h3>Net Worth</h3>
                         <p className="stat-value" style={{ color: netWorth >= 0 ? '#10b981' : '#ef4444' }}>
@@ -132,12 +172,25 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
 
             {/* Charts Section */}
             <div className="charts-section">
-                <h2 className="charts-heading">📊 Financial Analytics</h2>
+                <h2 className="charts-heading">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '10px', color: '#8b5cf6' }}>
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Financial Analytics
+                </h2>
                 <div className="charts-grid">
                     {/* Expense Category Breakdown */}
                     {expenseCategoryData.length > 0 && (
                         <div className="chart-card">
-                            <h3>💸 Expenses by Category</h3>
+                            <h3>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px', color: '#ef4444' }}>
+                                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                                    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                                </svg>
+                                Expenses by Category
+                            </h3>
                             <ResponsiveContainer width="100%" height={300}>
                                 <PieChart>
                                     <Pie
@@ -163,7 +216,13 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
                     {/* Income Category Breakdown */}
                     {incomeCategoryData.length > 0 && (
                         <div className="chart-card">
-                            <h3>💵 Income by Category</h3>
+                            <h3>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px', color: '#10b981' }}>
+                                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                                    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                                </svg>
+                                Income by Category
+                            </h3>
                             <ResponsiveContainer width="100%" height={300}>
                                 <PieChart>
                                     <Pie
@@ -189,7 +248,13 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
                     {/* Monthly Income vs Expenses */}
                     {monthlyComparisonData.length > 0 && (
                         <div className="chart-card chart-card-wide">
-                            <h3>📈 Income vs Expenses (Last 6 Months)</h3>
+                            <h3>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px', color: '#3b82f6' }}>
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    <polyline points="17 6 23 6 23 12"></polyline>
+                                </svg>
+                                Income vs Expenses (Last 6 Months)
+                            </h3>
                             <ResponsiveContainer width="100%" height={300}>
                                 <BarChart data={monthlyComparisonData}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />

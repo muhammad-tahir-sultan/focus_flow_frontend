@@ -91,14 +91,24 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
             {/* Loan Stats */}
             <div className="loan-stats-container">
                 <div className="loan-stat-card took">
-                    <div className="icon">📉</div>
+                    <div className="icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                    </div>
                     <div className="content">
                         <h3>You Borrowed (Took)</h3>
                         <p>₹{totalTook.toLocaleString()}</p>
                     </div>
                 </div>
                 <div className="loan-stat-card gave">
-                    <div className="icon">📈</div>
+                    <div className="icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                            <polyline points="17 18 23 18 23 12"></polyline>
+                        </svg>
+                    </div>
                     <div className="content">
                         <h3>You Lent (Gave)</h3>
                         <p>₹{totalGave.toLocaleString()}</p>
@@ -143,14 +153,22 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
                                     className={`type-btn ${formData.type === 'Took' ? 'active took' : ''}`}
                                     onClick={() => setFormData({ ...formData, type: 'Took' })}
                                 >
-                                    📉 Borrow (Took)
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                    </svg>
+                                    Borrow (Took)
                                 </button>
                                 <button
                                     type="button"
                                     className={`type-btn ${formData.type === 'Gave' ? 'active gave' : ''}`}
                                     onClick={() => setFormData({ ...formData, type: 'Gave' })}
                                 >
-                                    📈 Lend (Gave)
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                        <polyline points="17 18 23 18 23 12"></polyline>
+                                    </svg>
+                                    Lend (Gave)
                                 </button>
                             </div>
                         </div>
@@ -198,7 +216,23 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
                         </div>
                     </div>
                     <button type="submit" className={`btn-submit ${formData.type === 'Took' ? 'btn-took' : 'btn-gave'}`}>
-                        {formData.type === 'Took' ? '📉 RECORD DEBT' : '📈 RECORD ASSET'}
+                        {formData.type === 'Took' ? (
+                            <>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    <polyline points="17 6 23 6 23 12"></polyline>
+                                </svg>
+                                RECORD DEBT
+                            </>
+                        ) : (
+                            <>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                    <polyline points="17 18 23 18 23 12"></polyline>
+                                </svg>
+                                RECORD ASSET
+                            </>
+                        )}
                     </button>
                 </form>
             </div>
@@ -219,7 +253,19 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
                                 <div key={loan._id} className={`expense-card loan-card ${loan.type.toLowerCase()}`}>
                                     <div className="expense-header">
                                         <div className={`expense-category-badge ${loan.type === 'Took' ? 'badge-took' : 'badge-gave'}`}>
-                                            <span className="category-icon">{loan.type === 'Took' ? '📉' : '📈'}</span>
+                                            <span className="category-icon">
+                                                {loan.type === 'Took' ? (
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                                                ) : (
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                                        <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                                                )}
+                                            </span>
                                             <span>{loan.type}</span>
                                         </div>
                                         <div className={`status-badge ${loan.status.toLowerCase().replace('_', '-')}`}>
@@ -258,7 +304,11 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
                                                     setShowPaymentModal(true);
                                                 }}
                                             >
-                                                💳 Add Payment
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                                </svg>
+                                                Add Payment
                                             </button>
                                         )}
                                         <button
@@ -269,7 +319,12 @@ const LoansTab: React.FC<LoansTabProps> = ({ loans, totalTook, totalGave, onRefr
                                             }}
                                             title="Delete Loan"
                                         >
-                                            🗑️
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            </svg>
                                         </button>
                                     </div>
                                 </div>
