@@ -76,7 +76,7 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
         <form onSubmit={handleSubmit} className="card-premium ebay-card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Daily Task Log</h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1.5rem' }}>
                 <div className="form-group">
                     <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Date</label>
                     <input
@@ -154,7 +154,7 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                 />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
                 <div className="form-group">
                     <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Win of the Day</label>
                     <textarea

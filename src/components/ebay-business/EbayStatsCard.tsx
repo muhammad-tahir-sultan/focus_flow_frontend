@@ -9,34 +9,34 @@ export default function EbayStatsCard({ stats }: Props) {
         <div className="card-premium ebay-card-premium">
             <h2 className="heading-lg gradient-text" style={{ marginBottom: '2rem', marginTop: 0 }}>Business Analytics</h2>
 
-            <div className="stats-grid">
+            <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))' }}>
                 <div style={{
-                    padding: '1.5rem',
+                    padding: '1.25rem',
                     background: 'rgba(59, 130, 246, 0.05)',
                     borderRadius: '20px',
                     border: '1px solid rgba(59, 130, 246, 0.15)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '0.5rem'
+                    gap: '0.4rem'
                 }}>
-                    <p className="text-xs font-bold" style={{ color: 'var(--accent-color)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>Total Persistence</p>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                    <p className="text-xs font-bold" style={{ color: 'var(--accent-color)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>Persistence</p>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
                         <span style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 800, color: 'var(--text-primary)' }}>{stats?.logsCount || 0}</span>
                         <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Days</span>
                     </div>
                 </div>
 
                 <div style={{
-                    padding: '1.5rem',
+                    padding: '1.25rem',
                     background: 'rgba(236, 72, 153, 0.05)',
                     borderRadius: '20px',
                     border: '1px solid rgba(236, 72, 153, 0.15)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '0.5rem'
+                    gap: '0.4rem'
                 }}>
-                    <p className="text-xs font-bold" style={{ color: '#ec4899', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>Hours Invested</p>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                    <p className="text-xs font-bold" style={{ color: '#ec4899', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>Invested</p>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
                         <span style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 800, color: 'var(--text-primary)' }}>
                             {Math.round((stats?.totalTime || 0) / 60)}
                         </span>

@@ -18,19 +18,20 @@ export default function WeeklyRoutineCard() {
 
     return (
         <div className="card-premium ebay-card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <div className="flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
+            <div className="flex-between mobile-stack">
                 <div>
                     <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Weekly Routine</h2>
-                    <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '0.4rem' }}>Optimized for outreach volume</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '0.4rem' }}>Outreach Volume</p>
                 </div>
                 <div className={`badge ${isWeekday() ? 'badge-filled' : 'badge-outline'}`} style={{
                     padding: '0.5rem 1rem',
                     borderRadius: '99px',
-                    fontSize: '0.75rem',
+                    fontSize: '0.65rem',
                     fontWeight: 700,
                     background: isWeekday() ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
                     border: '1px solid var(--accent-color)',
-                    color: 'var(--accent-color)'
+                    color: 'var(--accent-color)',
+                    width: 'fit-content'
                 }}>
                     {isWeekday() ? '⚡ WEEKDAY MODE' : '🌙 WEEKEND MODE'}
                 </div>

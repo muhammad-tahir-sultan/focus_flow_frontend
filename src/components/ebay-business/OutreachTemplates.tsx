@@ -48,10 +48,10 @@ export default function OutreachTemplates() {
         <div className="card-premium ebay-card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             {/* Header with Tabs */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div className="flex-between" style={{ alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div className="flex-between mobile-stack">
                     <div>
-                        <h2 className="heading-lg gradient-text" style={{ margin: 0, fontSize: '1.75rem' }}>Outreach Scripts</h2>
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>High-conversion templates for partner hunting</p>
+                        <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Outreach Scripts</h2>
+                        <p className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: '0.4rem' }}>High-conversion templates</p>
                     </div>
                 </div>
 
@@ -84,9 +84,9 @@ export default function OutreachTemplates() {
 
             {activeTemplate && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', animation: 'fadeIn 0.4s ease-out' }}>
-                    <div className="flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
+                    <div className="flex-between mobile-stack">
                         <h3 className="text-sm font-bold" style={{ color: 'var(--accent-color)', letterSpacing: '0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ width: '12px', height: '2px', background: 'currentColor', borderRadius: '1px' }}></span>
+                            <span className="mobile-hide" style={{ width: '12px', height: '2px', background: 'currentColor', borderRadius: '1px' }}></span>
                             {activeTemplate.title}
                         </h3>
                         <button
@@ -101,7 +101,8 @@ export default function OutreachTemplates() {
                                 gap: '0.4rem',
                                 color: 'var(--text-primary)',
                                 background: 'rgba(255,255,255,0.05)',
-                                fontWeight: 600
+                                fontWeight: 600,
+                                width: 'fit-content'
                             }}
                         >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
