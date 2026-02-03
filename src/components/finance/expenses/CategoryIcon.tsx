@@ -1,4 +1,3 @@
-import React from 'react';
 
 const CategoryIcon = ({ category }: { category: string }) => {
     switch (category) {
