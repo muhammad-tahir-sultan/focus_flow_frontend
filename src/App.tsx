@@ -41,6 +41,7 @@ const ScalabilityStressTestBlog = lazyWithRetry(() => import('./pages/Scalabilit
 
 const ClientHunting = lazyWithRetry(() => import('./pages/ClientHunting'));
 const FitnessPlan = lazyWithRetry(() => import('./pages/FitnessPlan'));
+const EbayBusiness = lazyWithRetry(() => import('./pages/EbayBusiness'));
 
 
 
@@ -277,6 +278,14 @@ function App() {
                                     element={
                                         <PrivateRoute>
                                             <FitnessPlan />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/ebay"
+                                    element={
+                                        <PrivateRoute adminOnly={true}>
+                                            <EbayBusiness />
                                         </PrivateRoute>
                                     }
                                 />
