@@ -4,6 +4,7 @@ import type { CreateEbayLogDto, EbayStats } from '../api/ebay';
 import EbayTaskLogForm from '../components/ebay-business/EbayTaskLogForm';
 import WeeklyRoutineCard from '../components/ebay-business/WeeklyRoutineCard';
 import EbayStatsCard from '../components/ebay-business/EbayStatsCard';
+import OutreachTemplates from '../components/ebay-business/OutreachTemplates';
 
 export default function EbayBusiness() {
     const [stats, setStats] = useState<EbayStats | null>(null);
@@ -15,7 +16,6 @@ export default function EbayBusiness() {
             setStats(data);
         } catch (error) {
             console.error(error);
-            // toast.error('Failed to load stats'); // Suppress onload error for smoother UX if empty
         }
     };
 
@@ -27,7 +27,7 @@ export default function EbayBusiness() {
         setIsSubmitting(true);
         try {
             await ebayApi.create(data);
-            await loadStats(); // Refresh stats
+            await loadStats();
         } finally {
             setIsSubmitting(false);
         }
@@ -35,6 +35,7 @@ export default function EbayBusiness() {
 
     return (
         <div className="container" style={{ paddingBottom: '3rem' }}>
+            {/* Hero Section */}
             <div className="master-roadmap-hero" style={{ padding: '3rem 2rem', marginBottom: '2rem' }}>
                 <div className="hero-content">
                     <div className="hero-badge">Phase 2: Parallel Start</div>
@@ -46,11 +47,15 @@ export default function EbayBusiness() {
                 <div className="hero-glow"></div>
             </div>
 
-            <div className="grid-responsive-2" style={{ alignItems: 'start' }}>
+            {/* Main Layout Grid */}
+            <div className="grid-responsive-2" style={{ alignItems: 'start', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)' }}>
+                {/* Left Column: Input & Outreach */}
                 <div style={{ display: 'grid', gap: '1.5rem' }}>
                     <EbayTaskLogForm onSubmit={handleLogSubmit} isSubmitting={isSubmitting} />
+                    <OutreachTemplates />
                 </div>
 
+                {/* Right Column: Stats & System */}
                 <div style={{ display: 'grid', gap: '1.5rem' }}>
                     <EbayStatsCard stats={stats} />
                     <WeeklyRoutineCard />
