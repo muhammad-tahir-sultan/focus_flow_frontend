@@ -137,7 +137,7 @@ export default function OutreachTemplates() {
                     </h4>
                 </div>
 
-                <div className="trust-pillars-grid">
+                <div className="trust-pillars-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
                     <div className="card-premium" style={{
                         padding: '1.5rem',
                         background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.02) 100%)',

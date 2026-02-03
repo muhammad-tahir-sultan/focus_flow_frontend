@@ -76,7 +76,7 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
         <form onSubmit={handleSubmit} className="card-premium ebay-card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <h2 className="heading-lg gradient-text" style={{ margin: 0 }}>Daily Task Log</h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1.5rem' }}>
+            <div className="ebay-form-row">
                 <div className="form-group">
                     <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Date</label>
                     <input
@@ -89,7 +89,7 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                 </div>
 
                 <div className="form-group">
-                    <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Outreach Count</label>
+                    <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Outreach Count</label>
                     <input
                         type="number"
                         value={formData.outreachCount}
@@ -120,24 +120,25 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
 
             <div className="form-group">
                 <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Tasks Completed</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                     {formData.tasksCompleted.map((task, index) => (
-                        <div key={index} style={{ display: 'flex', gap: '0.5rem' }}>
+                        <div key={index} style={{ display: 'flex', gap: '0.4rem' }}>
                             <input
                                 type="text"
                                 value={task}
                                 onChange={e => handleTaskChange(index, e.target.value)}
                                 placeholder={`Task ${index + 1}`}
                                 className="w-full"
+                                style={{ padding: '0.6rem 0.8rem', fontSize: '0.9rem' }}
                             />
                             {formData.tasksCompleted.length > 1 && (
-                                <button type="button" onClick={() => removeTask(index)} className="btn-icon" style={{ color: 'var(--error-color)', padding: '0 0.5rem' }}>
+                                <button type="button" onClick={() => removeTask(index)} className="btn-icon" style={{ color: 'var(--error-color)', padding: '0 0.4rem', fontSize: '1.2rem' }}>
                                     ×
                                 </button>
                             )}
                         </div>
                     ))}
-                    <button type="button" onClick={addTask} className="text-sm" style={{ alignSelf: 'flex-start', color: 'var(--accent-color)', background: 'none', border: 'none', padding: 0, marginTop: '0.25rem', cursor: 'pointer', fontWeight: 600 }}>
+                    <button type="button" onClick={addTask} className="text-sm" style={{ alignSelf: 'flex-start', color: 'var(--accent-color)', background: 'none', border: 'none', padding: '0.2rem 0', marginTop: '0.1rem', cursor: 'pointer', fontWeight: 600 }}>
                         + Add another task
                     </button>
                 </div>
@@ -154,7 +155,7 @@ export default function EbayTaskLogForm({ onSubmit, isSubmitting }: Props) {
                 />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+            <div className="ebay-form-row">
                 <div className="form-group">
                     <label className="text-sm d-block mb-2" style={{ color: 'var(--text-secondary)' }}>Win of the Day</label>
                     <textarea
