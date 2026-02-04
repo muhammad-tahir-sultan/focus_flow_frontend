@@ -54,7 +54,7 @@ const FocusFlowPage = () => {
                 </div>
             </div>
 
-            <div className="grid-responsive-2 mt-8">
+            <div className="grid-responsive-2" style={{ marginTop: '3rem' }}>
                 {/* Daily Mindset Rules */}
                 <div className="card-premium" style={{ gridRow: 'span 2' }}>
                     <h2 className="heading-lg mb-6">🔑 Daily Mindset Rules</h2>

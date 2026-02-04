@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import '../styles/focusFlow.css';
+import '../styles/identity.css';
 import { useIdentity } from '../hooks/useIdentity';
 import IdentityHero from '../components/identity/IdentityHero';
 import IdentityTabs from '../components/identity/IdentityTabs';
@@ -28,7 +29,7 @@ const IdentityPage = () => {
     } = useIdentity();
 
     return (
-        <div className="container" style={{ paddingBottom: '4rem' }}>
+        <div className="identity-page-wrapper" style={{ paddingBottom: '4rem' }}>
             <IdentityHero />
 
             <IdentityTabs activeTab={activeTab} setActiveTab={setActiveTab} />
