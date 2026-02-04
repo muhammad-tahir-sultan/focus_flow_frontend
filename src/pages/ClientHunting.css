@@ -1,35 +1,67 @@
 /* src/pages/ClientHunting.css */
 /* Ensure all elements fit within their parents */
-.client-hunting-page * {
-    box-sizing: border-box;
-}
-
 .client-hunting-page {
     padding-bottom: 4rem;
     max-width: 1000px;
     margin: 0 auto;
     width: 100%;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+    box-sizing: border-box;
+}
+
+.client-hunting-page *,
+.client-hunting-page *::before,
+.client-hunting-page *::after {
+    box-sizing: border-box !important;
+    max-width: 90vw !important;
 }
 
 /* Override global container padding for this page */
 .client-hunting-page .container {
-    padding: 0 3rem;
-    max-width: 100%;
-    width: 100%;
+    padding: 0 2rem;
+    max-width: 100% !important;
+    width: 100% !important;
     box-sizing: border-box;
 }
 
 .ch-hero {
     text-align: center;
-    padding: 4rem 2rem;
+    padding: 4rem 1rem;
     margin-bottom: 2rem;
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    max-width: 90%;
+    max-width: 100% !important;
     overflow: hidden;
-    width: 90%;
+    width: 100% !important;
+}
+
+/* Force all grids to respect width */
+.client-hunting-page .ch-cards-grid,
+.client-hunting-page .ch-sources-grid,
+.client-hunting-page .ch-dual-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Force all cards to respect width */
+.client-hunting-page .ch-card,
+.client-hunting-page .ch-source-card,
+.client-hunting-page .ch-offer-box,
+.client-hunting-page .ch-message-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden;
+}
+
+/* Force all text to wrap */
+.client-hunting-page h1,
+.client-hunting-page h2,
+.client-hunting-page h3,
+.client-hunting-page p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .ch-hero h1 {
