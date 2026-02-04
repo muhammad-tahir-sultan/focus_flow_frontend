@@ -1,17 +1,35 @@
 /* src/pages/ClientHunting.css */
+/* Ensure all elements fit within their parents */
+.client-hunting-page * {
+    box-sizing: border-box;
+}
+
 .client-hunting-page {
     padding-bottom: 4rem;
     max-width: 1000px;
     margin: 0 auto;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Override global container padding for this page */
+.client-hunting-page .container {
+    padding: 0 3rem;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .ch-hero {
     text-align: center;
-    padding: 4rem 1rem;
+    padding: 4rem 2rem;
     margin-bottom: 2rem;
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    max-width: 90%;
+    overflow: hidden;
+    width: 90%;
 }
 
 .ch-hero h1 {
@@ -22,17 +40,21 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+    max-width: 100%;
 }
 
 .ch-subtitle {
     font-size: 1.25rem;
     color: var(--text-secondary);
     font-weight: 500;
+    max-width: 100%;
 }
 
 .ch-section {
     margin-bottom: 4rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .ch-section-header {
@@ -40,6 +62,8 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
+    max-width: 100%;
 }
 
 .ch-step-number {
@@ -53,19 +77,25 @@
     justify-content: center;
     font-weight: bold;
     font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
-.ch-section-title {
+.ch-section-header-title {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-primary);
+    margin: 0;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 /* Feature Cards for Step 1 */
 .ch-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
 }
 
 .ch-card {
@@ -77,6 +107,10 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    max-width: 100%;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .ch-card:hover {
@@ -95,11 +129,17 @@
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: var(--text-primary);
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
 .ch-card p {
     color: var(--text-secondary);
     font-size: 0.9rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
 /* Offer Box */
@@ -110,26 +150,30 @@
     border-radius: 16px;
     margin-top: 2rem;
     text-align: center;
+    max-width: 100%;
+    width: 100%;
 }
 
 .ch-offer-text {
     font-size: 1.2rem;
     color: #86efac;
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 .ch-badges {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
 }
 
 .ch-badge {
     padding: 0.5rem 1rem;
     border-radius: 99px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
 }
 
@@ -150,6 +194,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
 }
 
 .ch-source-card {
@@ -157,6 +203,8 @@
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     border-radius: 12px;
+    max-width: 100%;
+    width: 100%;
 }
 
 .ch-source-header {
@@ -166,10 +214,12 @@
     margin-bottom: 1rem;
     font-weight: 700;
     font-size: 1.1rem;
+    max-width: 100%;
 }
 
 .ch-source-list {
     list-style: none;
+    padding: 0;
 }
 
 .ch-source-list li {
@@ -179,11 +229,14 @@
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 .ch-source-list li::before {
     content: '→';
     color: var(--accent-color);
+    flex-shrink: 0;
 }
 
 /* DM Template */
@@ -194,8 +247,11 @@
     padding: 2rem;
     max-width: 600px;
     margin: 0 auto;
-    font-family: monospace;
+    font-family: inherit;
     position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
+    width: 100%;
 }
 
 .ch-message-card::before {
@@ -203,16 +259,18 @@
     position: absolute;
     top: -10px;
     left: 20px;
-    background: var(--bg-color);
+    background: #050505;
     padding: 0 10px;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: var(--accent-color);
     text-transform: uppercase;
     font-weight: bold;
+    letter-spacing: 0.05em;
 }
 
 .ch-variable {
     color: #fbbf24;
+    font-weight: 700;
 }
 
 .ch-rules-row {
@@ -220,14 +278,16 @@
     justify-content: center;
     gap: 2rem;
     margin-top: 1.5rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-secondary);
+    flex-wrap: wrap;
 }
 
 .ch-rule-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
 }
 
 /* Stats Counter */
@@ -240,10 +300,14 @@
     padding: 2rem;
     border-radius: 16px;
     border: 1px solid var(--border-color);
+    max-width: 100%;
+    width: 100%;
 }
 
 .ch-stat-item {
     text-align: center;
+    flex: 1;
+    min-width: 120px;
 }
 
 .ch-stat-value {
@@ -254,10 +318,19 @@
 }
 
 .ch-stat-label {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+/* Dual Grid for Step 5 & 6 */
+.ch-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 100%;
+    width: 100%;
 }
 
 /* Timeline */
@@ -267,21 +340,37 @@
     gap: 1rem;
     margin-top: 2rem;
     overflow-x: auto;
-    padding-bottom: 1rem;
+    padding: 0.5rem 0.25rem 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+    max-width: 100%;
+}
+
+.ch-timeline::-webkit-scrollbar {
+    display: block;
+    height: 4px;
+}
+
+.ch-timeline::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
 }
 
 .ch-timeline-day {
     background: var(--surface-color);
     border: 1px solid var(--border-color);
-    padding: 1.5rem 1rem;
+    padding: 1.25rem 0.75rem;
     border-radius: 12px;
     text-align: center;
-    min-width: 120px;
+    min-width: 110px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .ch-day-label {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: var(--accent-color);
     text-transform: uppercase;
     font-weight: 700;
@@ -290,17 +379,21 @@
 }
 
 .ch-day-content {
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-primary);
+    line-height: 1.3;
 }
 
 /* Footer Quote */
 .ch-footer {
     text-align: center;
     margin-top: 6rem;
-    padding: 3rem;
+    padding: 4rem 2rem;
     background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
     border-top: 1px solid var(--border-color);
+    max-width: 100%;
+    width: 100%;
 }
 
 .ch-quote {
@@ -309,6 +402,9 @@
     font-style: italic;
     color: var(--text-primary);
     margin-bottom: 1rem;
+    line-height: 1.6;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 .ch-quote-author {
@@ -316,19 +412,201 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    font-size: 0.8rem;
 }
 
+/* ===== RESPONSIVE BREAKPOINTS (Following eBay Pattern) ===== */
+
 @media (max-width: 768px) {
-    .ch-hero h1 {
-        font-size: 2rem;
+    .client-hunting-page .container {
+        padding: 0 1.5rem;
     }
 
-    .ch-timeline {
-        grid-template-columns: repeat(2, 1fr);
+    .ch-hero {
+        padding: 2rem 1rem;
+        width: 70%;
+    }
+
+    .ch-hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .ch-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .ch-section {
+        margin-bottom: 3rem;
+    }
+
+    .ch-section-header-title {
+        font-size: 1.5rem;
+    }
+
+    .ch-card {
+        padding: 1.5rem;
     }
 
     .ch-stats-container {
-        flex-direction: column;
+        padding: 1.5rem;
         gap: 1.5rem;
+    }
+
+    .ch-stat-item {
+        min-width: 40%;
+    }
+
+    .ch-dual-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .ch-footer {
+        margin-top: 4rem;
+        padding: 3rem 1.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .ch-cards-grid,
+    .ch-sources-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .client-hunting-page .container {
+        padding: 0 0.75rem;
+    }
+
+    .ch-hero {
+        padding: 2rem 1rem;
+        border-radius: 16px;
+        width: 50%;
+    }
+
+    .ch-hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .ch-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .ch-section-header-title {
+        font-size: 1.25rem;
+    }
+
+    .ch-card {
+        padding: 1.25rem;
+        width: 50%;
+    }
+
+    .ch-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .ch-card p {
+        font-size: 0.85rem;
+    }
+
+    .ch-offer-box {
+        padding: 1.5rem;
+        width: 50%;
+    }
+
+    .ch-offer-text {
+        font-size: 1.05rem;
+    }
+
+    .ch-source-card {
+        padding: 1.25rem;
+
+    }
+
+    .ch-message-card {
+        padding: 1.5rem;
+    }
+
+    .ch-stats-container {
+        padding: 1.25rem;
+        gap: 1.25rem;
+    }
+
+    .ch-stat-item {
+        min-width: 100%;
+    }
+
+    .ch-stat-value {
+        font-size: 2rem;
+    }
+
+    .ch-rules-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .ch-cards-grid,
+    .ch-sources-grid {
+        gap: 1rem;
+    }
+
+    .ch-footer {
+        margin-top: 3rem;
+        padding: 2rem 1rem;
+    }
+
+    .ch-quote {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .client-hunting-page .container {
+        padding: 0 0.5rem;
+    }
+
+    .ch-hero {
+        padding: 1.75rem 0.75rem;
+    }
+
+    .ch-hero h1 {
+        font-size: 1.6rem;
+    }
+
+    .ch-card {
+        padding: 1rem;
+    }
+
+    .ch-card h3 {
+        font-size: 1.05rem;
+    }
+
+    .ch-card p {
+        font-size: 0.8rem;
+    }
+
+    .ch-source-card {
+        padding: 1rem;
+    }
+
+    .ch-message-card {
+        padding: 1.25rem;
+    }
+
+    .ch-offer-box {
+        padding: 1.25rem;
+    }
+
+    .ch-cards-grid,
+    .ch-sources-grid {
+        gap: 0.75rem;
+    }
+
+    .ch-timeline-day {
+        min-width: 100px;
+        padding: 1rem 0.5rem;
     }
 }

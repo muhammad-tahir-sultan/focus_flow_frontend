@@ -18,7 +18,7 @@ const ClientHunting: React.FC = () => {
                     <div className="ch-step-number">1</div>
                     <h2 className="ch-section-header-title">Pick ONE Problem (Day 1)</h2>
                 </div>
-                
+
                 <div className="ch-cards-grid">
                     <div className="ch-card">
                         <span className="ch-card-icon">🐢</span>
@@ -152,7 +152,7 @@ const ClientHunting: React.FC = () => {
 
             {/* Step 5 & 6 */}
             <section className="ch-section container">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <div className="ch-dual-grid">
                     <div>
                         <div className="ch-section-header">
                             <div className="ch-step-number">5</div>
@@ -167,7 +167,7 @@ const ClientHunting: React.FC = () => {
                             </ul>
                         </div>
                     </div>
-                    
+
                     <div>
                         <div className="ch-section-header">
                             <div className="ch-step-number">6</div>
