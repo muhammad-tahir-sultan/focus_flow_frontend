@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import toast from 'react-hot-toast';
 import { IconSparkles, IconPen, IconHistory, IconBriefcase } from '../components/layout/NavbarIcons';
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
 import { PremiumInvoice, PremiumProposal } from '../components/PremiumTemplates';
 import './BusinessAutomation.css';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const BusinessAutomation: React.FC = () => {
     const [requirement, setRequirement] = useState('');
@@ -25,11 +23,7 @@ const BusinessAutomation: React.FC = () => {
 
         setLoading(true);
         try {
-            const token = localStorage.getItem('accessToken');
-            const response = await axios.post(`${API_URL}/ai-tool/process-requirement`,
-                { requirement },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            const response = await api.post('/ai-tool/process-requirement', { requirement });
             setProcessedData(response.data);
             setStep(2);
             toast.success('Strategy & Invoice generated!');
