@@ -1,0 +1,242 @@
+/* Premium Templates CSS */
+.premium-invoice,
+.premium-proposal {
+    background: white;
+    color: #1e293b;
+    padding: 60px;
+    border-radius: 4px;
+    font-family: 'Inter', system-ui, sans-serif;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* Invoice Header */
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+}
+
+.brand-side {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand-logo {
+    width: 48px;
+    height: 48px;
+    background: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.brand-info h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+}
+
+.brand-info p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.bill-info h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #0f172a;
+}
+
+.bill-info p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* Client Section */
+.client-section {
+    margin-bottom: 40px;
+}
+
+.billed-to h4 {
+    margin: 0 0 8px 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+}
+
+.billed-to h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.5rem;
+    color: #1e293b;
+}
+
+.billed-to p {
+    margin: 0;
+    color: #64748b;
+}
+
+/* Table */
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+.invoice-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.invoice-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #1e293b;
+    font-size: 0.95rem;
+}
+
+/* Footer Section */
+.invoice-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.notes-section {
+    flex: 1;
+}
+
+.notes-section h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 8px;
+}
+
+.notes-section p {
+    color: #64748b;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.total-section {
+    width: 250px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    color: #64748b;
+}
+
+.grand-total {
+    border-top: 2px solid #f1f5f9;
+    margin-top: 8px;
+    padding-top: 16px;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: #2563eb;
+}
+
+/* Proposal Styles */
+.proposal-hero {
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+}
+
+.hero-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.proposal-hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0 0 20px 0;
+    color: #0f172a;
+}
+
+.summary-text {
+    font-size: 1.25rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.proposal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.proposal-section {
+    margin-bottom: 0;
+}
+
+.proposal-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.proposal-section ul {
+    padding-left: 20px;
+    color: #64748b;
+}
+
+.proposal-section li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.deliverable-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.del-item {
+    padding: 6px 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.pdf-export-mode {
+    box-shadow: none !important;
+    padding: 40px !important;
+}

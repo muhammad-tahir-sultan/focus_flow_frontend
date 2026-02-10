@@ -209,10 +209,25 @@
     margin-bottom: 2rem;
     max-height: 500px;
     overflow-y: auto;
+    position: relative;
 }
 
-.ba-markdown-preview h1, 
-.ba-markdown-preview h2, 
+.ba-edit-textarea {
+    width: 100%;
+    min-height: 400px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    padding: 0;
+}
+
+.ba-markdown-preview h1,
+.ba-markdown-preview h2,
 .ba-markdown-preview h3 {
     color: #60a5fa;
     margin-top: 2rem;
@@ -223,7 +238,7 @@
     margin-bottom: 1rem;
 }
 
-.ba-markdown-preview ul, 
+.ba-markdown-preview ul,
 .ba-markdown-preview ol {
     margin-bottom: 1.5rem;
     padding-left: 1.5rem;
@@ -239,7 +254,7 @@
     margin: 2rem 0;
 }
 
-.ba-markdown-preview th, 
+.ba-markdown-preview th,
 .ba-markdown-preview td {
     border: 1px solid var(--border-color);
     padding: 0.75rem 1rem;
@@ -292,7 +307,9 @@
 }
 
 @keyframes ba-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .animate-fade-in {
@@ -300,24 +317,119 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Responsive */
+/* PDF Export Styling */
+.ba-markdown-preview.pdf-export-mode {
+    background: white !important;
+    color: #1a1a1a !important;
+    padding: 40px !important;
+    max-height: none !important;
+    overflow: visible !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
+    border: none !important;
+}
+
+.pdf-export-mode h1,
+.pdf-export-mode h2,
+.pdf-export-mode h3 {
+    color: #2563eb !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    padding-bottom: 8px !important;
+}
+
+.pdf-export-mode th {
+    background: #f8fafc !important;
+    color: #1e293b !important;
+}
+
+.pdf-export-mode td,
+.pdf-export-mode th {
+    border-color: #e2e8f0 !important;
+}
+
+.ba-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.ba-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ba-form-group label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.ba-form-group input,
+.ba-form-group textarea {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.ba-form-group input:focus,
+.ba-form-group textarea:focus {
+    border-color: #60a5fa;
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+}
+
+.ba-form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.ba-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
 @media (max-width: 768px) {
+    .ba-form-grid {
+        grid-template-columns: 1fr;
+    }
+
     .ba-hero h1 {
         font-size: 2rem;
     }
-    
+
     .ba-stepper {
         gap: 0.5rem;
     }
-    
+
     .ba-step-line {
         width: 30px;
     }
-    
+
     .ba-card {
         padding: 1.5rem;
     }

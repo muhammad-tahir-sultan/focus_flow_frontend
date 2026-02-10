@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
 import toast from 'react-hot-toast';
 import { IconSparkles, IconPen, IconHistory, IconBriefcase } from '../components/layout/NavbarIcons';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
+import { PremiumInvoice, PremiumProposal } from '../components/PremiumTemplates';
 import './BusinessAutomation.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -12,8 +14,8 @@ const BusinessAutomation: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1); // 1: Input, 2: Proposal, 3: Invoice
     const [processedData, setProcessedData] = useState<any>(null);
-    const [proposal, setProposal] = useState('');
-    const [invoice, setInvoice] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const previewRef = React.useRef<HTMLDivElement>(null);
 
     const handleProcessRequirement = async () => {
         if (!requirement.trim()) {
@@ -23,17 +25,14 @@ const BusinessAutomation: React.FC = () => {
 
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('accessToken');
             const response = await axios.post(`${API_URL}/ai-tool/process-requirement`,
                 { requirement },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setProcessedData(response.data);
             setStep(2);
-            toast.success('Requirements analyzed!');
-
-            // Automatically generate proposal
-            generateProposal(response.data);
+            toast.success('Strategy & Invoice generated!');
         } catch (error) {
             console.error(error);
             toast.error('Failed to process requirements');
@@ -42,43 +41,29 @@ const BusinessAutomation: React.FC = () => {
         }
     };
 
-    const generateProposal = async (data: any) => {
-        setLoading(true);
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post(`${API_URL}/ai-tool/generate-proposal`,
-                data,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setProposal(response.data.proposal);
-        } catch (error) {
-            toast.error('Failed to generate proposal');
-        } finally {
-            setLoading(false);
-        }
+    const handleGenerateInvoice = () => {
+        setStep(3);
     };
 
-    const handleGenerateInvoice = async () => {
-        setLoading(true);
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post(`${API_URL}/ai-tool/generate-invoice`,
-                processedData,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setInvoice(response.data.invoice);
-            setStep(3);
-            toast.success('Invoice generated!');
-        } catch (error) {
-            toast.error('Failed to generate invoice');
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
-        toast.success('Copied to clipboard!');
+    const exportToPdf = (title: string) => {
+        if (!previewRef.current) return;
+
+        const opt = {
+            margin: 0.5,
+            filename: `${title.toLowerCase().replace(/\s+/g, '_')}.pdf`,
+            image: { type: 'jpeg' as const, quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' as const }
+        };
+
+        const element = previewRef.current;
+        element.classList.add('pdf-export-mode');
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            element.classList.remove('pdf-export-mode');
+            toast.success('PDF exported successfully!');
+        });
     };
 
     return (
@@ -86,14 +71,14 @@ const BusinessAutomation: React.FC = () => {
             <header className="ba-hero">
                 <div className="container">
                     <h1><IconSparkles className="ba-hero-icon" /> AI Business Automation</h1>
-                    <p className="ba-subtitle">From Requirement to Invoice in seconds.</p>
+                    <p className="ba-subtitle">Professional templates generated instantly.</p>
                 </div>
             </header>
 
             <div className="ba-stepper">
                 <div className={`ba-step ${step >= 1 ? 'active' : ''}`} onClick={() => setStep(1)}>
                     <span className="ba-step-num">1</span>
-                    <span className="ba-step-label">Requirement</span>
+                    <span className="ba-step-label">Analysis</span>
                 </div>
                 <div className="ba-step-line"></div>
                 <div className={`ba-step ${step >= 2 ? 'active' : ''}`} onClick={() => processedData && setStep(2)}>
@@ -101,7 +86,7 @@ const BusinessAutomation: React.FC = () => {
                     <span className="ba-step-label">Proposal</span>
                 </div>
                 <div className="ba-step-line"></div>
-                <div className={`ba-step ${step >= 3 ? 'active' : ''}`} onClick={() => invoice && setStep(3)}>
+                <div className={`ba-step ${step >= 3 ? 'active' : ''}`} onClick={() => processedData && setStep(3)}>
                     <span className="ba-step-num">3</span>
                     <span className="ba-step-label">Invoice</span>
                 </div>
@@ -113,11 +98,11 @@ const BusinessAutomation: React.FC = () => {
                         <div className="ba-card">
                             <div className="ba-card-header">
                                 <IconPen style={{ color: '#60a5fa' }} />
-                                <h2>Paste Client Requirements</h2>
+                                <h2>Define Project Scope</h2>
                             </div>
                             <textarea
                                 className="ba-textarea"
-                                placeholder="Example: Need a full-stack developer to build a SaaS for tracking fitness goals. Must include auth, dashboard, and Stripe integration..."
+                                placeholder="Describe the client requirement in detail..."
                                 value={requirement}
                                 onChange={(e) => setRequirement(e.target.value)}
                             />
@@ -126,45 +111,207 @@ const BusinessAutomation: React.FC = () => {
                                 onClick={handleProcessRequirement}
                                 disabled={loading}
                             >
-                                {loading ? 'Analyzing...' : 'Process Requirement'}
+                                {loading ? 'Thinking...' : 'Generate Premium Assets'}
                             </button>
                         </div>
                     </div>
                 )}
 
-                {step === 2 && proposal && (
+                {step === 2 && processedData && (
                     <div className="ba-section animate-fade-in">
                         <div className="ba-card">
                             <div className="ba-card-header">
                                 <IconHistory style={{ color: '#a78bfa' }} />
-                                <h2>Generated Proposal</h2>
-                                <button className="ba-copy-btn" onClick={() => copyToClipboard(proposal)}>Copy</button>
+                                <h2>Executive Proposal</h2>
+                                <button className="ba-copy-btn" onClick={() => setIsEditing(!isEditing)}>
+                                    {isEditing ? 'Save Changes' : 'Edit Proposal'}
+                                </button>
+                                <button className="ba-copy-btn" onClick={() => exportToPdf('Proposal')}>Export PDF</button>
                             </div>
-                            <div className="ba-markdown-preview">
-                                <ReactMarkdown>{proposal}</ReactMarkdown>
-                            </div>
-                            <div className="ba-actions">
+
+                            {isEditing ? (
+                                <div className="ba-edit-form">
+                                    <div className="ba-form-grid">
+                                        <div className="ba-form-group">
+                                            <label>Company Name</label>
+                                            <input
+                                                type="text"
+                                                value={processedData.companyName || 'FocusFlow AI'}
+                                                onChange={(e) => setProcessedData({ ...processedData, companyName: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="ba-form-group">
+                                            <label>Company Tagline / Role</label>
+                                            <input
+                                                type="text"
+                                                value={processedData.companyRole || 'Automation Excellence'}
+                                                onChange={(e) => setProcessedData({ ...processedData, companyRole: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Project Name</label>
+                                        <input
+                                            type="text"
+                                            value={processedData.projectName}
+                                            onChange={(e) => setProcessedData({ ...processedData, projectName: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Client Name</label>
+                                        <input
+                                            type="text"
+                                            value={processedData.clientName}
+                                            onChange={(e) => setProcessedData({ ...processedData, clientName: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Executive Summary</label>
+                                        <textarea
+                                            value={processedData.summary}
+                                            onChange={(e) => setProcessedData({ ...processedData, summary: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="ba-form-grid">
+                                        <div className="ba-form-group">
+                                            <label>Timeline</label>
+                                            <input
+                                                type="text"
+                                                value={processedData.proposal.timeline}
+                                                onChange={(e) => setProcessedData({
+                                                    ...processedData,
+                                                    proposal: { ...processedData.proposal, timeline: e.target.value }
+                                                })}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Objectives (one per line)</label>
+                                        <textarea
+                                            value={processedData.proposal.objectives.join('\n')}
+                                            onChange={(e) => setProcessedData({
+                                                ...processedData,
+                                                proposal: { ...processedData.proposal, objectives: e.target.value.split('\n') }
+                                            })}
+                                        />
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Scope (one per line)</label>
+                                        <textarea
+                                            value={processedData.proposal.scope.join('\n')}
+                                            onChange={(e) => setProcessedData({
+                                                ...processedData,
+                                                proposal: { ...processedData.proposal, scope: e.target.value.split('\n') }
+                                            })}
+                                        />
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Deliverables (one per line)</label>
+                                        <textarea
+                                            value={processedData.proposal.deliverables.join('\n')}
+                                            onChange={(e) => setProcessedData({
+                                                ...processedData,
+                                                proposal: { ...processedData.proposal, deliverables: e.target.value.split('\n') }
+                                            })}
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="premium-container" ref={previewRef} style={{ background: '#f8fafc', padding: '20px', borderRadius: '12px' }}>
+                                    <PremiumProposal data={processedData} />
+                                </div>
+                            )}
+
+                            <div className="ba-actions" style={{ marginTop: '2rem' }}>
                                 <button className="ba-secondary-btn" onClick={() => setStep(1)}>Back</button>
-                                <button className="ba-primary-btn" onClick={handleGenerateInvoice}>Next: Generate Invoice</button>
+                                {!isEditing && <button className="ba-primary-btn" onClick={handleGenerateInvoice}>Next: Review Invoice</button>}
                             </div>
                         </div>
                     </div>
                 )}
 
-                {step === 3 && invoice && (
+                {step === 3 && processedData && (
                     <div className="ba-section animate-fade-in">
                         <div className="ba-card">
                             <div className="ba-card-header">
                                 <IconBriefcase style={{ color: '#FCD34D' }} />
-                                <h2>Generated Invoice</h2>
-                                <button className="ba-copy-btn" onClick={() => copyToClipboard(invoice)}>Copy</button>
+                                <h2>Professional Invoice</h2>
+                                <button className="ba-copy-btn" onClick={() => setIsEditing(!isEditing)}>
+                                    {isEditing ? 'Save Changes' : 'Edit Invoice'}
+                                </button>
+                                <button className="ba-copy-btn" onClick={() => exportToPdf('Invoice')}>Export PDF</button>
                             </div>
-                            <div className="ba-markdown-preview">
-                                <ReactMarkdown>{invoice}</ReactMarkdown>
-                            </div>
-                            <div className="ba-actions">
+
+                            {isEditing ? (
+                                <div className="ba-edit-form">
+                                    <div className="ba-form-grid">
+                                        <div className="ba-form-group">
+                                            <label>Company Name</label>
+                                            <input
+                                                type="text"
+                                                value={processedData.companyName || 'FocusFlow AI'}
+                                                onChange={(e) => setProcessedData({ ...processedData, companyName: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="ba-form-group">
+                                            <label>Company Tagline / Role</label>
+                                            <input
+                                                type="text"
+                                                value={processedData.companyRole || 'Automation Excellence'}
+                                                onChange={(e) => setProcessedData({ ...processedData, companyRole: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="ba-form-grid">
+                                        <div className="ba-form-group">
+                                            <label>Invoice Number</label>
+                                            <input
+                                                type="text"
+                                                value={processedData.invoice.invoiceNumber}
+                                                onChange={(e) => setProcessedData({
+                                                    ...processedData,
+                                                    invoice: { ...processedData.invoice, invoiceNumber: e.target.value }
+                                                })}
+                                            />
+                                        </div>
+                                        <div className="ba-form-group">
+                                            <label>Invoice Date</label>
+                                            <input
+                                                type="text"
+                                                value={processedData.invoice.date}
+                                                onChange={(e) => setProcessedData({
+                                                    ...processedData,
+                                                    invoice: { ...processedData.invoice, date: e.target.value }
+                                                })}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Client Name (Billed To)</label>
+                                        <input
+                                            type="text"
+                                            value={processedData.clientName}
+                                            onChange={(e) => setProcessedData({ ...processedData, clientName: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="ba-form-group">
+                                        <label>Notes</label>
+                                        <textarea
+                                            value={processedData.notes}
+                                            onChange={(e) => setProcessedData({ ...processedData, notes: e.target.value })}
+                                        />
+                                    </div>
+                                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Line items editing coming soon. Total is automatically calculated in the premium view.</p>
+                                </div>
+                            ) : (
+                                <div className="premium-container" ref={previewRef} style={{ background: '#f8fafc', padding: '20px', borderRadius: '12px' }}>
+                                    <PremiumInvoice data={processedData} />
+                                </div>
+                            )}
+
+                            <div className="ba-actions" style={{ marginTop: '2rem' }}>
                                 <button className="ba-secondary-btn" onClick={() => setStep(2)}>Back</button>
-                                <button className="ba-primary-btn" onClick={() => toast.success('Logic for exporting PDF coming soon!')}>Export as PDF</button>
+                                {!isEditing && <button className="ba-primary-btn" onClick={() => exportToPdf('Invoice')}>Download Final PDF</button>}
                             </div>
                         </div>
                     </div>
@@ -174,7 +321,7 @@ const BusinessAutomation: React.FC = () => {
             {loading && (
                 <div className="ba-loading-overlay">
                     <div className="ba-spinner"></div>
-                    <p>AI is thinking...</p>
+                    <p>Building your premium strategy...</p>
                 </div>
             )}
         </div>
