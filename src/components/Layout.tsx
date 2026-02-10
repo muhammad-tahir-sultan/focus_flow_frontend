@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import type { ReactNode } from 'react';
 import {
     IconHome, IconBrain, IconMagnet, IconLightning, IconIdentity,
-    IconPen, IconHistory, IconTrophy, IconFire, IconNutrition, IconLogout, IconDumbbell, IconBriefcase
+    IconPen, IconHistory, IconTrophy, IconFire, IconNutrition, IconLogout, IconDumbbell, IconBriefcase, IconSparkles
 } from './layout/NavbarIcons';
 
 const Layout = ({ children }: { children: ReactNode }) => {
@@ -44,7 +44,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
         { label: 'Attract', path: '/attract_not_chase', icon: <IconMagnet className="nav-svg-icon" style={{ color: '#f43f5e' }} />, adminOnly: true },
         { label: 'Get Clients', path: '/get-clients', icon: <IconLightning className="nav-svg-icon" style={{ color: '#f59e0b' }} />, adminOnly: true },
         { label: 'Identity', path: '/identity', icon: <IconIdentity className="nav-svg-icon" style={{ color: '#22d3ee' }} />, adminOnly: true },
-        { label: 'eBay Business', path: '/ebay', icon: <IconBriefcase className="nav-svg-icon" style={{ color: '#FCD34D' }} />, adminOnly: true },
+        { label: 'AI Business', path: '/ai-business', icon: <IconSparkles className="nav-svg-icon" style={{ color: '#FCD34D' }} />, adminOnly: true },
+        { label: 'eBay Business', path: '/ebay', icon: <IconBriefcase className="nav-svg-icon" style={{ color: '#94a3b8' }} />, adminOnly: true },
         { label: 'Fitness', path: '/fitness', icon: <IconDumbbell className="nav-svg-icon" style={{ color: '#ec4899' }} /> },
         { label: 'Log Today', path: '/log', icon: <IconPen className="nav-svg-icon" style={{ color: '#4ade80' }} /> },
         { label: 'History', path: '/history', icon: <IconHistory className="nav-svg-icon" style={{ color: '#fb923c' }} /> },

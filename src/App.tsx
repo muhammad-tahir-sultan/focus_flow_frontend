@@ -42,6 +42,7 @@ const ScalabilityStressTestBlog = lazyWithRetry(() => import('./pages/Scalabilit
 const ClientHunting = lazyWithRetry(() => import('./pages/ClientHunting'));
 const FitnessPlan = lazyWithRetry(() => import('./pages/FitnessPlan'));
 const EbayBusiness = lazyWithRetry(() => import('./pages/EbayBusiness'));
+const BusinessAutomation = lazyWithRetry(() => import('./pages/BusinessAutomation'));
 
 
 
@@ -286,6 +287,14 @@ function App() {
                                     element={
                                         <PrivateRoute adminOnly={true}>
                                             <EbayBusiness />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/ai-business"
+                                    element={
+                                        <PrivateRoute adminOnly={true}>
+                                            <BusinessAutomation />
                                         </PrivateRoute>
                                     }
                                 />
