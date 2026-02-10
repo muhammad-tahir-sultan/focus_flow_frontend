@@ -13,10 +13,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
 
-    if (!user) {
-        return <>{children}</>;
-    }
-
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
     const toggleCollapse = () => setIsCollapsed(!isCollapsed);
 
@@ -37,6 +33,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [isCollapsed]); // Re-create listener when isCollapsed changes
+
+    if (!user) {
+        return <>{children}</>;
+    }
 
     const navItems = [
         { label: 'Dashboard', path: '/', icon: <IconHome className="nav-svg-icon" style={{ color: '#60a5fa' }} /> },
