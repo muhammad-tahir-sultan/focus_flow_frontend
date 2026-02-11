@@ -7,6 +7,7 @@ import QuickActions from '../components/features/dashboard/QuickActions';
 import RoadmapLinks from '../components/features/dashboard/RoadmapLinks';
 import GoalsCard from '../components/features/dashboard/GoalsCard';
 import ExecutionTruth from '../components/features/dashboard/ExecutionTruth';
+import TwoMonthChallenge from '../components/features/dashboard/TwoMonthChallenge';
 import '../styles/dashboard.css';
 
 const Dashboard = () => {
@@ -50,6 +51,12 @@ const Dashboard = () => {
                     stats={stats}
                     timeline={timeline}
                 />
+
+                {isAdmin() && (
+                    <>
+                        <TwoMonthChallenge />
+                    </>
+                )}
 
                 <CustomRangeModal
                     show={showCustomPicker}
