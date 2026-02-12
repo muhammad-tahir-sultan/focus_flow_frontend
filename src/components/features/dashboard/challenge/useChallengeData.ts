@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { challengeApi } from '../../../../api/challenge';
 import toast from 'react-hot-toast';
 import type { ChallengeData, TaskLog } from './types';
@@ -7,6 +7,9 @@ export const useChallengeData = () => {
     const [data, setData] = useState<ChallengeData | null>(null);
     const [loading, setLoading] = useState(true);
     const [editMode, setEditMode] = useState<{ [key: string]: { value: string, note: string } }>({});
+
+    // Track inflight requests for each task to "drop" them if a new one starts
+    const abortControllers = useRef<{ [key: string]: AbortController }>({});
 
     const fetchData = useCallback(async () => {
         try {
@@ -29,33 +32,60 @@ export const useChallengeData = () => {
     const handleToggle = useCallback(async (taskCode: string) => {
         if (!data || !data.today) return;
 
+        // Cancel previous request for this specific task if it's still running
+        if (abortControllers.current[taskCode]) {
+            abortControllers.current[taskCode].abort();
+        }
+
+        const controller = new AbortController();
+        abortControllers.current[taskCode] = controller;
+
         const currentLog = data.today.taskLogs.find(l => l.taskCode === taskCode);
         const newCompleted = !currentLog?.completed;
         const currentEdit = editMode[taskCode] || { value: '', note: '' };
 
+        // 1. Update LOCAL state immediately (non-optimistic, the base state)
+        setData(prev => {
+            if (!prev || !prev.today) return prev;
+            const updatedToday = {
+                ...prev.today,
+                taskLogs: prev.today.taskLogs.map(l =>
+                    l.taskCode === taskCode ? { ...l, completed: newCompleted } : l
+                )
+            };
+            const newHistory = prev.progress?.history.map(h =>
+                new Date(h.date).toDateString() === new Date(updatedToday.date).toDateString() ? updatedToday : h
+            ) || [];
+
+            return { ...prev, today: updatedToday, progress: prev.progress ? { ...prev.progress, history: newHistory } : null };
+        });
+
         try {
-            const result = await challengeApi.toggleTask(taskCode, newCompleted, currentEdit.value, currentEdit.note);
+            // 2. Perform API call with cancellation support
+            const result = await challengeApi.toggleTask(
+                taskCode,
+                newCompleted,
+                currentEdit.value,
+                currentEdit.note,
+                controller.signal
+            );
+
+            // 3. Final sync with server result
             setData(prev => {
                 if (!prev) return null;
-                // Update history as well so stats update in real-time
                 const newHistory = prev.progress?.history.map(h =>
                     new Date(h.date).toDateString() === new Date(result.date).toDateString() ? result : h
                 ) || [];
-
-                // If today isn't in history yet (first task of the day), add it
-                const todayExists = newHistory.some(h => new Date(h.date).toDateString() === new Date(result.date).toDateString());
-                if (!todayExists) newHistory.push(result);
-
-                return {
-                    ...prev,
-                    today: result,
-                    progress: prev.progress ? { ...prev.progress, history: newHistory } : null
-                };
+                return { ...prev, today: result, progress: prev.progress ? { ...prev.progress, history: newHistory } : null };
             });
-            toast.success(newCompleted ? "Task marked complete!" : "Task reset.");
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === 'CanceledError' || error.name === 'AbortError') {
+                // Request was cancelled by a newer click, ignore
+                return;
+            }
             console.error(error);
             toast.error("Failed to update task");
+            // Revert on error? For now, just log.
         }
     }, [data, editMode]);
 
@@ -72,12 +102,7 @@ export const useChallengeData = () => {
                 const newHistory = prev.progress?.history.map(h =>
                     new Date(h.date).toDateString() === new Date(result.date).toDateString() ? result : h
                 ) || [];
-
-                return {
-                    ...prev,
-                    today: result,
-                    progress: prev.progress ? { ...prev.progress, history: newHistory } : null
-                };
+                return { ...prev, today: result, progress: prev.progress ? { ...prev.progress, history: newHistory } : null };
             });
             toast.success("Progress saved!");
             if (onComplete) onComplete();
@@ -96,6 +121,10 @@ export const useChallengeData = () => {
 
     useEffect(() => {
         fetchData();
+        return () => {
+            // Cleanup: abort all on unmount
+            Object.values(abortControllers.current).forEach(c => c.abort());
+        };
     }, [fetchData]);
 
     return {

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useOptimistic, useTransition } from 'react';
+import { useState, useMemo, useCallback, useOptimistic, useTransition, useEffect } from 'react';
 import '../../../../styles/TwoMonthChallenge.css';
 import { useChallengeData } from './useChallengeData';
 import { useChallengeNotifications } from './useChallengeNotifications';
@@ -20,36 +20,59 @@ const TwoMonthChallenge = () => {
         updateEditMode
     } = useChallengeData();
 
-    // Optimistic state for the entire challenge data to ensure stats update too
+    // The user's current toggled state for today (local-only, for instant UI)
+    const [localTodayLogs, setLocalTodayLogs] = useState<{ [taskCode: string]: boolean }>({});
+
+    // Synchronize localTodayLogs with incoming data (when DB reflects changes)
+    useEffect(() => {
+        if (data?.today?.taskLogs) {
+            const newLogs: { [taskCode: string]: boolean } = {};
+            data.today.taskLogs.forEach(log => {
+                newLogs[log.taskCode] = log.completed;
+            });
+            setLocalTodayLogs(newLogs);
+        }
+    }, [data]);
+
+    // 2. Optimistic state using React 19 hook
     const [optimisticData, addOptimisticToggle] = useOptimistic(
         data,
         (state: ChallengeData | null, { taskCode, completed }: { taskCode: string, completed: boolean }) => {
             if (!state || !state.today) return state;
-
-            // Update today's logs
             const updatedToday = {
                 ...state.today,
                 taskLogs: state.today.taskLogs.map(log =>
                     log.taskCode === taskCode ? { ...log, completed } : log
                 )
             };
-
-            // Update history to keep stats in sync optimistically
             const updatedHistory = state.progress?.history.map(h =>
-                new Date(h.date).toDateString() === new Date(state.today!.date).toDateString()
-                    ? updatedToday
-                    : h
+                new Date(h.date).toDateString() === new Date(state.today!.date).toDateString() ? updatedToday : h
             ) || [];
-
-            return {
-                ...state,
-                today: updatedToday,
-                progress: state.progress ? { ...state.progress, history: updatedHistory } : null
-            };
+            return { ...state, today: updatedToday, progress: state.progress ? { ...state.progress, history: updatedHistory } : null };
         }
     );
 
     const [isPending, startTransition] = useTransition();
+
+    // 3. Effect to sync with DB when deferredLogs settle
+    // This effectively "drops" intermediate states if the user clicks 10 times quickly
+    const syncWithDB = useCallback(async (taskCode: string) => {
+        await handleToggle(taskCode);
+    }, [handleToggle]);
+
+    const handleCheckToggle = useCallback((taskCode: string) => {
+        const currentComplete = localTodayLogs[taskCode] || false;
+        const newComplete = !currentComplete;
+
+        // Instant UI Update
+        setLocalTodayLogs(prev => ({ ...prev, [taskCode]: newComplete }));
+
+        startTransition(() => {
+            addOptimisticToggle({ taskCode, completed: newComplete });
+            // The actual API call is now handled by AbortController in useChallengeData
+            syncWithDB(taskCode);
+        });
+    }, [localTodayLogs, addOptimisticToggle, syncWithDB]);
 
     const {
         notificationsEnabled,
@@ -61,16 +84,6 @@ const TwoMonthChallenge = () => {
     const handleExpandToggle = useCallback((taskCode: string) => {
         setExpandedTask(prev => prev === taskCode ? null : taskCode);
     }, []);
-
-    const handleOptimisticToggle = useCallback((taskCode: string) => {
-        const currentLog = optimisticData?.today?.taskLogs.find(l => l.taskCode === taskCode);
-        const newCompleted = !currentLog?.completed;
-
-        startTransition(async () => {
-            addOptimisticToggle({ taskCode, completed: newCompleted });
-            await handleToggle(taskCode);
-        });
-    }, [optimisticData, addOptimisticToggle, handleToggle]);
 
     const stats = useMemo(() => {
         const completedCount = optimisticData?.today?.taskLogs?.filter(l => l.completed).length || 0;
@@ -133,7 +146,7 @@ const TwoMonthChallenge = () => {
                         log={optimisticData?.today?.taskLogs.find(l => l.taskCode === task.code)}
                         isExpanded={expandedTask === task.code}
                         onExpand={() => handleExpandToggle(task.code)}
-                        onToggle={() => handleOptimisticToggle(task.code)}
+                        onToggle={() => handleCheckToggle(task.code)}
                         onSaveDetails={() => handleSaveDetails(task.code, () => setExpandedTask(null))}
                         currentEdit={editMode[task.code] || { value: '', note: '' }}
                         onUpdateEdit={(field, val) => updateEditMode(task.code, field, val)}
