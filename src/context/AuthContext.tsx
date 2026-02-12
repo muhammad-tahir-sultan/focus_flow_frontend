@@ -50,7 +50,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(false);
         };
 
+        const handleTokenRefresh = (event: Event) => {
+            const customEvent = event as CustomEvent;
+            const { accessToken } = customEvent.detail;
+            const decoded = jwtDecode<User>(accessToken);
+            setUser(decoded);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        };
+
         initializeAuth();
+        window.addEventListener('tokenRefreshed', handleTokenRefresh);
+        return () => window.removeEventListener('tokenRefreshed', handleTokenRefresh);
     }, []);
 
     const isTokenExpired = (token: string): boolean => {
