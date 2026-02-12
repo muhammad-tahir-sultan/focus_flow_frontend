@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import '../../../../styles/TwoMonthChallenge.css';
 import { useChallengeData } from './useChallengeData';
 import { useChallengeNotifications } from './useChallengeNotifications';
@@ -27,43 +27,52 @@ const TwoMonthChallenge = () => {
 
     const [expandedTask, setExpandedTask] = useState<string | null>(null);
 
+    const handleExpandToggle = useCallback((taskCode: string) => {
+        setExpandedTask(prev => prev === taskCode ? null : taskCode);
+    }, []);
+
+    const stats = useMemo(() => {
+        const completedCount = data?.today?.taskLogs?.filter(l => l.completed).length || 0;
+        const progressPercent = data?.progress?.consistencyPercentage || 0;
+        const perfectPercent = data?.progress?.completionPercentage || 0;
+        const activeDays = data?.progress?.activeDays || 0;
+        return { completedCount, progressPercent, perfectPercent, activeDays };
+    }, [data]);
+
+    const forecast = useMemo(() => {
+        const SESSIONS_IN_CHALLENGE = 17;
+        return {
+            pushups: 100 * SESSIONS_IN_CHALLENGE,
+            pullups: 10 * SESSIONS_IN_CHALLENGE,
+            situps: 100 * SESSIONS_IN_CHALLENGE,
+            squats: 150 * SESSIONS_IN_CHALLENGE
+        };
+    }, []);
+
+    const totals = useMemo(() => {
+        return (data?.progress?.history || []).reduce((acc, entry) => {
+            entry.taskLogs.forEach((log: TaskLog) => {
+                if (log.completed) {
+                    if (log.taskCode === "pushups") acc.pushups += 100;
+                    if (log.taskCode === "pullups") acc.pullups += 10;
+                    if (log.taskCode === "situps") acc.situps += 100;
+                    if (log.taskCode === "squats") acc.squats += 150;
+                }
+            });
+            return acc;
+        }, { pushups: 0, pullups: 0, situps: 0, squats: 0 });
+    }, [data?.progress?.history]);
+
     if (loading) return <ChallengeSkeleton />;
-
-    const completedCount = data?.today?.taskLogs?.filter(l => l.completed).length || 0;
-    const progressPercent = data?.progress?.consistencyPercentage || 0;
-    const perfectPercent = data?.progress?.completionPercentage || 0;
-    const activeDays = data?.progress?.activeDays || 0;
-
-    // Forecast calculation for 2 months (approx 8.5 weeks)
-    // Formula: 2 sessions/week * 8.5 weeks = ~17 sessions total
-    const SESSIONS_IN_CHALLENGE = 17;
-    const forecast = {
-        pushups: 100 * SESSIONS_IN_CHALLENGE,
-        pullups: 10 * SESSIONS_IN_CHALLENGE,
-        situps: 100 * SESSIONS_IN_CHALLENGE, // Assuming core with push or legs
-        squats: 150 * SESSIONS_IN_CHALLENGE
-    };
-
-    const totals = (data?.progress?.history || []).reduce((acc, entry) => {
-        entry.taskLogs.forEach((log: TaskLog) => {
-            if (log.completed) {
-                if (log.taskCode === "pushups") acc.pushups += 100;
-                if (log.taskCode === "pullups") acc.pullups += 10;
-                if (log.taskCode === "situps") acc.situps += 100;
-                if (log.taskCode === "squats") acc.squats += 150;
-            }
-        });
-        return acc;
-    }, { pushups: 0, pullups: 0, situps: 0, squats: 0 });
 
     return (
         <div className="challenge-card">
             <ChallengeHeader
-                activeDays={activeDays}
-                completedCount={completedCount}
+                activeDays={stats.activeDays}
+                completedCount={stats.completedCount}
                 totalTasks={TASKS.length}
-                progressPercent={progressPercent}
-                perfectPercent={perfectPercent}
+                progressPercent={stats.progressPercent}
+                perfectPercent={stats.perfectPercent}
                 notificationsEnabled={notificationsEnabled}
                 onToggleNotifications={requestNotificationPermission}
             />
@@ -71,7 +80,7 @@ const TwoMonthChallenge = () => {
             <div className="progress-container">
                 <div
                     className="progress-bar"
-                    style={{ width: `${(activeDays / 60) * 100}%` }}
+                    style={{ width: `${(stats.activeDays / 60) * 100}%` }}
                 ></div>
             </div>
 
@@ -82,7 +91,7 @@ const TwoMonthChallenge = () => {
                         task={task}
                         log={data?.today?.taskLogs.find(l => l.taskCode === task.code)}
                         isExpanded={expandedTask === task.code}
-                        onExpand={() => setExpandedTask(expandedTask === task.code ? null : task.code)}
+                        onExpand={() => handleExpandToggle(task.code)}
                         onToggle={() => handleToggle(task.code)}
                         onSaveDetails={() => handleSaveDetails(task.code, () => setExpandedTask(null))}
                         currentEdit={editMode[task.code] || { value: '', note: '' }}

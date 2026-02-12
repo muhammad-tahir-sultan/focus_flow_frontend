@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface ChallengeForecastProps {
     totals: {
@@ -15,7 +15,7 @@ interface ChallengeForecastProps {
     };
 }
 
-const ChallengeForecast: React.FC<ChallengeForecastProps> = ({ totals, forecast }) => {
+const ChallengeForecast: React.FC<ChallengeForecastProps> = memo(({ totals, forecast }) => {
     return (
         <div className="forecast-section">
             <h3 className="forecast-title">60-Day Transformation Forecast</h3>
@@ -39,6 +39,6 @@ const ChallengeForecast: React.FC<ChallengeForecastProps> = ({ totals, forecast 
             </div>
         </div>
     );
-};
+});
 
 export default ChallengeForecast;

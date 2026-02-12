@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface ChallengeHeaderProps {
     activeDays: number;
@@ -10,7 +10,7 @@ interface ChallengeHeaderProps {
     onToggleNotifications: () => void;
 }
 
-const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({
+const ChallengeHeader: React.FC<ChallengeHeaderProps> = memo(({
     activeDays,
     completedCount,
     totalTasks,
@@ -57,6 +57,6 @@ const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({
             </div>
         </div>
     );
-};
+});
 
 export default ChallengeHeader;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import type { ChallengeData } from './types';
 import { TASKS } from './types';
@@ -7,7 +7,7 @@ export const useChallengeNotifications = (data: ChallengeData | null) => {
     const [notificationsEnabled, setNotificationsEnabled] = useState(Notification.permission === 'granted');
     const [lastNotified, setLastNotified] = useState<string | null>(null);
 
-    const requestNotificationPermission = async () => {
+    const requestNotificationPermission = useCallback(async () => {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
             setNotificationsEnabled(true);
@@ -20,9 +20,9 @@ export const useChallengeNotifications = (data: ChallengeData | null) => {
             setNotificationsEnabled(false);
             toast.error("Notification permission denied.");
         }
-    };
+    }, []);
 
-    const checkAndNotify = () => {
+    const checkAndNotify = useCallback(() => {
         if (Notification.permission !== 'granted' || !data || data.today?.isFullyCompleted) return;
 
         const now = new Date();
@@ -40,12 +40,12 @@ export const useChallengeNotifications = (data: ChallengeData | null) => {
             });
             setLastNotified(combinedKey);
         }
-    };
+    }, [data, lastNotified]);
 
     useEffect(() => {
         const interval = setInterval(checkAndNotify, 60000);
         return () => clearInterval(interval);
-    }, [data, lastNotified]);
+    }, [checkAndNotify]);
 
     return {
         notificationsEnabled,

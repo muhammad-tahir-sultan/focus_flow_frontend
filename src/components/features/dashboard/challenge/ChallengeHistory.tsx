@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { TASKS } from './types';
 import type { TaskLog } from './types';
 
@@ -6,7 +6,7 @@ interface ChallengeHistoryProps {
     history: any[];
 }
 
-const ChallengeHistory: React.FC<ChallengeHistoryProps> = ({ history }) => {
+const ChallengeHistory: React.FC<ChallengeHistoryProps> = memo(({ history }) => {
     return (
         <div className="history-section">
             <h3 className="forecast-title">Recent Movement</h3>
@@ -33,6 +33,6 @@ const ChallengeHistory: React.FC<ChallengeHistoryProps> = ({ history }) => {
             </div>
         </div>
     );
-};
+});
 
 export default ChallengeHistory;

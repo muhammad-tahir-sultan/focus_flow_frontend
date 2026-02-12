@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import type { TaskLog, TaskDefinition } from './types';
 
 interface ChallengeTaskItemProps {
@@ -12,7 +12,7 @@ interface ChallengeTaskItemProps {
     onUpdateEdit: (field: 'value' | 'note', val: string) => void;
 }
 
-const ChallengeTaskItem: React.FC<ChallengeTaskItemProps> = ({
+const ChallengeTaskItem: React.FC<ChallengeTaskItemProps> = memo(({
     task,
     log,
     isExpanded,
@@ -77,6 +77,6 @@ const ChallengeTaskItem: React.FC<ChallengeTaskItemProps> = ({
             )}
         </div>
     );
-};
+});
 
 export default ChallengeTaskItem;
