@@ -1,8 +1,8 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useOptimistic, useTransition } from 'react';
 import '../../../../styles/TwoMonthChallenge.css';
 import { useChallengeData } from './useChallengeData';
 import { useChallengeNotifications } from './useChallengeNotifications';
-import type { TaskLog } from './types';
+import type { TaskLog, ChallengeData } from './types';
 import { TASKS } from './types';
 import ChallengeHeader from './ChallengeHeader';
 import ChallengeTaskItem from './ChallengeTaskItem';
@@ -20,10 +20,41 @@ const TwoMonthChallenge = () => {
         updateEditMode
     } = useChallengeData();
 
+    // Optimistic state for the entire challenge data to ensure stats update too
+    const [optimisticData, addOptimisticToggle] = useOptimistic(
+        data,
+        (state: ChallengeData | null, { taskCode, completed }: { taskCode: string, completed: boolean }) => {
+            if (!state || !state.today) return state;
+
+            // Update today's logs
+            const updatedToday = {
+                ...state.today,
+                taskLogs: state.today.taskLogs.map(log =>
+                    log.taskCode === taskCode ? { ...log, completed } : log
+                )
+            };
+
+            // Update history to keep stats in sync optimistically
+            const updatedHistory = state.progress?.history.map(h =>
+                new Date(h.date).toDateString() === new Date(state.today!.date).toDateString()
+                    ? updatedToday
+                    : h
+            ) || [];
+
+            return {
+                ...state,
+                today: updatedToday,
+                progress: state.progress ? { ...state.progress, history: updatedHistory } : null
+            };
+        }
+    );
+
+    const [isPending, startTransition] = useTransition();
+
     const {
         notificationsEnabled,
         requestNotificationPermission
-    } = useChallengeNotifications(data);
+    } = useChallengeNotifications(optimisticData);
 
     const [expandedTask, setExpandedTask] = useState<string | null>(null);
 
@@ -31,13 +62,23 @@ const TwoMonthChallenge = () => {
         setExpandedTask(prev => prev === taskCode ? null : taskCode);
     }, []);
 
+    const handleOptimisticToggle = useCallback((taskCode: string) => {
+        const currentLog = optimisticData?.today?.taskLogs.find(l => l.taskCode === taskCode);
+        const newCompleted = !currentLog?.completed;
+
+        startTransition(async () => {
+            addOptimisticToggle({ taskCode, completed: newCompleted });
+            await handleToggle(taskCode);
+        });
+    }, [optimisticData, addOptimisticToggle, handleToggle]);
+
     const stats = useMemo(() => {
-        const completedCount = data?.today?.taskLogs?.filter(l => l.completed).length || 0;
-        const progressPercent = data?.progress?.consistencyPercentage || 0;
-        const perfectPercent = data?.progress?.completionPercentage || 0;
-        const activeDays = data?.progress?.activeDays || 0;
+        const completedCount = optimisticData?.today?.taskLogs?.filter(l => l.completed).length || 0;
+        const progressPercent = optimisticData?.progress?.consistencyPercentage || 0;
+        const perfectPercent = optimisticData?.progress?.completionPercentage || 0;
+        const activeDays = optimisticData?.progress?.activeDays || 0;
         return { completedCount, progressPercent, perfectPercent, activeDays };
-    }, [data]);
+    }, [optimisticData]);
 
     const forecast = useMemo(() => {
         const SESSIONS_IN_CHALLENGE = 17;
@@ -50,7 +91,7 @@ const TwoMonthChallenge = () => {
     }, []);
 
     const totals = useMemo(() => {
-        return (data?.progress?.history || []).reduce((acc, entry) => {
+        return (optimisticData?.progress?.history || []).reduce((acc, entry) => {
             entry.taskLogs.forEach((log: TaskLog) => {
                 if (log.completed) {
                     if (log.taskCode === "pushups") acc.pushups += 100;
@@ -61,12 +102,12 @@ const TwoMonthChallenge = () => {
             });
             return acc;
         }, { pushups: 0, pullups: 0, situps: 0, squats: 0 });
-    }, [data?.progress?.history]);
+    }, [optimisticData?.progress?.history]);
 
     if (loading) return <ChallengeSkeleton />;
 
     return (
-        <div className="challenge-card">
+        <div className={`challenge-card ${isPending ? 'opac-pending' : ''}`}>
             <ChallengeHeader
                 activeDays={stats.activeDays}
                 completedCount={stats.completedCount}
@@ -89,10 +130,10 @@ const TwoMonthChallenge = () => {
                     <ChallengeTaskItem
                         key={task.code}
                         task={task}
-                        log={data?.today?.taskLogs.find(l => l.taskCode === task.code)}
+                        log={optimisticData?.today?.taskLogs.find(l => l.taskCode === task.code)}
                         isExpanded={expandedTask === task.code}
                         onExpand={() => handleExpandToggle(task.code)}
-                        onToggle={() => handleToggle(task.code)}
+                        onToggle={() => handleOptimisticToggle(task.code)}
                         onSaveDetails={() => handleSaveDetails(task.code, () => setExpandedTask(null))}
                         currentEdit={editMode[task.code] || { value: '', note: '' }}
                         onUpdateEdit={(field, val) => updateEditMode(task.code, field, val)}
@@ -104,7 +145,7 @@ const TwoMonthChallenge = () => {
             <div className="outcome-message" style={{ margin: '0 2rem 2rem 2rem' }}>
                 Gradual Overload: Following a PPL routine (2x/week each). Moving from multiple sets to achieving target reps in a single set by Day 60. Sunday is a dedicated rest day.
             </div>
-            <ChallengeHistory history={data?.progress?.history || []} />
+            <ChallengeHistory history={optimisticData?.progress?.history || []} />
         </div>
     );
 };
