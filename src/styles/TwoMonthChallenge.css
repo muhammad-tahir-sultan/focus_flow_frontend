@@ -238,6 +238,7 @@
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    padding-top: 0.5rem;
 }
 
 .input-group input,

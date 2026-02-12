@@ -256,7 +256,12 @@ const TwoMonthChallenge = () => {
                                         <label>Progress (Reps/Sets/Metric)</label>
                                         <input
                                             type="text"
-                                            placeholder="e.g. 3 sets of 30, 10"
+                                            placeholder={
+                                                task.code === 'bike' ? "e.g. Saved 10k Rs." :
+                                                    task.code === 'income' ? "e.g. $50 earned, 2 outreach emails" :
+                                                        task.code === 'appointment' ? "e.g. 100% free day, no bookings" :
+                                                            "e.g. 3 sets of 30, 10"
+                                            }
                                             value={currentEdit.value}
                                             onChange={(e) => setEditMode({
                                                 ...editMode,
