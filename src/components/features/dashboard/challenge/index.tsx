@@ -8,6 +8,7 @@ import ChallengeHeader from './ChallengeHeader';
 import ChallengeTaskItem from './ChallengeTaskItem';
 import ChallengeForecast from './ChallengeForecast';
 import ChallengeHistory from './ChallengeHistory';
+import ChallengeSkeleton from './ChallengeSkeleton';
 
 const TwoMonthChallenge = () => {
     const {
@@ -26,7 +27,7 @@ const TwoMonthChallenge = () => {
 
     const [expandedTask, setExpandedTask] = useState<string | null>(null);
 
-    if (loading) return <div className="challenge-card animate-pulse">Loading Challenge...</div>;
+    if (loading) return <ChallengeSkeleton />;
 
     const completedCount = data?.today?.taskLogs?.filter(l => l.completed).length || 0;
     const progressPercent = data?.progress?.consistencyPercentage || 0;
