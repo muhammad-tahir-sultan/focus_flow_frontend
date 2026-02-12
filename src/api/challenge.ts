@@ -6,8 +6,8 @@ export const challengeApi = {
         return response.data;
     },
 
-    toggleTask: async (task: string, completed: boolean) => {
-        const response = await api.post('/challenge/task', { task, completed });
+    toggleTask: async (task: string, completed: boolean, value?: string, note?: string) => {
+        const response = await api.post('/challenge/task', { task, completed, value, note });
         return response.data;
     }
 };

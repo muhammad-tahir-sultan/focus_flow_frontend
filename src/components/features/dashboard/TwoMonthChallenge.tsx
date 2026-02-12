@@ -4,21 +4,28 @@ import { challengeApi } from '../../../api/challenge';
 import toast from 'react-hot-toast';
 
 const TASKS = [
-    "100 Push ups",
-    "10 Pull Ups",
-    "100 Sit Ups",
-    "150 Squats",
-    "1 Minute Plank Hold - 3x Set",
-    "Bike",
-    "Must Have Second Source of Income",
-    "No Appointment",
+    { code: "pushups", label: "100 Push ups" },
+    { code: "pullups", label: "10 Pull Ups" },
+    { code: "situps", label: "100 Sit Ups" },
+    { code: "squats", label: "150 Squats" },
+    { code: "plank", label: "1 Minute Plank Hold - 3x Set" },
+    { code: "bike", label: "Bike" },
+    { code: "income", label: "Second Source of Income" },
+    { code: "appointment", label: "No Appointment" },
 ];
+
+interface TaskLog {
+    taskCode: string;
+    value: string;
+    note: string;
+    completed: boolean;
+}
 
 interface ChallengeData {
     today: {
         userId: string;
         date: string;
-        completedTasks: string[];
+        taskLogs: TaskLog[];
         isFullyCompleted: boolean;
     } | null;
     progress: {
@@ -34,11 +41,20 @@ interface ChallengeData {
 const TwoMonthChallenge = () => {
     const [data, setData] = useState<ChallengeData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [expandedTask, setExpandedTask] = useState<string | null>(null);
+    const [editMode, setEditMode] = useState<{ [key: string]: { value: string, note: string } }>({});
 
     const fetchData = async () => {
         try {
             const result = await challengeApi.getProgress();
             setData(result);
+
+            // Initialize edit mode with current values
+            const initialEditMode: { [key: string]: { value: string, note: string } } = {};
+            result.today?.taskLogs.forEach((log: TaskLog) => {
+                initialEditMode[log.taskCode] = { value: log.value, note: log.note };
+            });
+            setEditMode(initialEditMode);
         } catch (error) {
             console.error(error);
             toast.error("Failed to load challenge data");
@@ -51,41 +67,43 @@ const TwoMonthChallenge = () => {
         fetchData();
     }, []);
 
-    const handleToggle = async (task: string) => {
+    const handleToggle = async (taskCode: string) => {
         if (!data || !data.today) return;
 
-        const isCompleted = data.today.completedTasks.includes(task);
-        const newCompleted = !isCompleted;
-
-        // Optimistic update
-        const updatedTasks = newCompleted
-            ? [...data.today.completedTasks, task]
-            : data.today.completedTasks.filter(t => t !== task);
-
-        const updatedToday = {
-            ...data.today,
-            completedTasks: updatedTasks,
-            isFullyCompleted: updatedTasks.length === TASKS.length
-        };
-
-        setData({
-            ...data,
-            today: updatedToday
-        });
+        const currentLog = data.today.taskLogs.find(l => l.taskCode === taskCode);
+        const newCompleted = !currentLog?.completed;
+        const currentEdit = editMode[taskCode] || { value: '', note: '' };
 
         try {
-            await challengeApi.toggleTask(task, newCompleted);
+            const result = await challengeApi.toggleTask(taskCode, newCompleted, currentEdit.value, currentEdit.note);
+            setData({ ...data, today: result });
+            toast.success(newCompleted ? "Task marked complete!" : "Task reset.");
         } catch (error) {
             console.error(error);
             toast.error("Failed to update task");
-            // Revert on error
-            fetchData();
+        }
+    };
+
+    const handleSaveDetails = async (taskCode: string) => {
+        if (!data || !data.today) return;
+
+        const currentLog = data.today.taskLogs.find(l => l.taskCode === taskCode);
+        const currentEdit = editMode[taskCode] || { value: '', note: '' };
+
+        try {
+            const result = await challengeApi.toggleTask(taskCode, currentLog?.completed || false, currentEdit.value, currentEdit.note);
+            setData({ ...data, today: result });
+            toast.success("Progress saved!");
+            setExpandedTask(null);
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to save progress");
         }
     };
 
     if (loading) return <div className="challenge-card animate-pulse">Loading Challenge...</div>;
 
-    const completedCount = data?.today?.completedTasks?.length || 0;
+    const completedCount = data?.today?.taskLogs?.filter(l => l.completed).length || 0;
     const progressPercent = data?.progress?.consistencyPercentage || 0;
     const perfectPercent = data?.progress?.completionPercentage || 0;
     const activeDays = data?.progress?.activeDays || 0;
@@ -100,10 +118,14 @@ const TwoMonthChallenge = () => {
 
     // Calculate current totals from history
     const totals = (data?.progress?.history || []).reduce((acc, entry) => {
-        if (entry.completedTasks.includes("100 Push ups")) acc.pushups += 100;
-        if (entry.completedTasks.includes("10 Pull Ups")) acc.pullups += 10;
-        if (entry.completedTasks.includes("100 Sit Ups")) acc.situps += 100;
-        if (entry.completedTasks.includes("150 Squats")) acc.squats += 150;
+        entry.taskLogs.forEach((log: TaskLog) => {
+            if (log.completed) {
+                if (log.taskCode === "pushups") acc.pushups += 100;
+                if (log.taskCode === "pullups") acc.pullups += 10;
+                if (log.taskCode === "situps") acc.situps += 100;
+                if (log.taskCode === "squats") acc.squats += 150;
+            }
+        });
         return acc;
     }, { pushups: 0, pullups: 0, situps: 0, squats: 0 });
 
@@ -111,9 +133,9 @@ const TwoMonthChallenge = () => {
         <div className="challenge-card">
             <div className="challenge-header">
                 <div>
-                    <h2 className="challenge-title">Last Wish Come Back (2 Months)</h2>
+                    <h2 className="challenge-title">The 2-Month Transformation</h2>
                     <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '0.5rem' }}>
-                        Transform yourself in 60 days. Day {activeDays} / 60
+                        Gradual Progress Tracker • Day {activeDays} / 60
                     </p>
                 </div>
 
@@ -124,9 +146,9 @@ const TwoMonthChallenge = () => {
                     </div>
                     <div className="stat-item">
                         <div className="stat-value">{Math.round(progressPercent)}%</div>
-                        <div className="stat-label">Consistency</div>
+                        <div className="stat-label">Streak</div>
                     </div>
-                    <div className="stat-item" title="Percent of days fully completed">
+                    <div className="stat-item">
                         <div className="stat-value">{Math.round(perfectPercent)}%</div>
                         <div className="stat-label">Perfect</div>
                     </div>
@@ -137,54 +159,127 @@ const TwoMonthChallenge = () => {
                 <div
                     className="progress-bar"
                     style={{ width: `${(activeDays / 60) * 100}%` }}
-                    title={`Progress: ${activeDays}/60 Days`}
                 ></div>
             </div>
 
             <div className="tasks-grid">
                 {TASKS.map((task) => {
-                    const isCompleted = data?.today?.completedTasks.includes(task);
+                    const log = data?.today?.taskLogs.find(l => l.taskCode === task.code);
+                    const isExpanded = expandedTask === task.code;
+                    const currentEdit = editMode[task.code] || { value: '', note: '' };
+
                     return (
                         <div
-                            key={task}
-                            className={`task-item ${isCompleted ? 'completed' : ''}`}
-                            onClick={() => handleToggle(task)}
+                            key={task.code}
+                            className={`task-wrapper ${isExpanded ? 'expanded' : ''}`}
                         >
-                            <div className="checkbox">
-                                {isCompleted && (
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                )}
+                            <div className={`task-item ${log?.completed ? 'completed' : ''}`}>
+                                <div className="task-main" onClick={() => handleToggle(task.code)}>
+                                    <div className="checkbox">
+                                        {log?.completed && (
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        )}
+                                    </div>
+                                    <div className="task-info">
+                                        <span className="task-text">{task.label}</span>
+                                        {log?.value && <span className="task-value-badge">{log.value}</span>}
+                                    </div>
+                                </div>
+                                <button
+                                    className="expand-btn"
+                                    onClick={() => setExpandedTask(isExpanded ? null : task.code)}
+                                >
+                                    {isExpanded ? 'Collapse' : 'Log Details'}
+                                </button>
                             </div>
-                            <span className="task-text">{task}</span>
+
+                            {isExpanded && (
+                                <div className="task-details-pane">
+                                    <div className="input-group">
+                                        <label>Progress (Reps/Sets/Metric)</label>
+                                        <input
+                                            type="text"
+                                            placeholder="e.g. 3 sets of 30, 10"
+                                            value={currentEdit.value}
+                                            onChange={(e) => setEditMode({
+                                                ...editMode,
+                                                [task.code]: { ...currentEdit, value: e.target.value }
+                                            })}
+                                        />
+                                    </div>
+                                    <div className="input-group">
+                                        <label>Quick Note</label>
+                                        <textarea
+                                            placeholder="How did it feel? What did you do?"
+                                            value={currentEdit.note}
+                                            onChange={(e) => setEditMode({
+                                                ...editMode,
+                                                [task.code]: { ...currentEdit, note: e.target.value }
+                                            })}
+                                        />
+                                    </div>
+                                    <button className="save-progress-btn" onClick={() => handleSaveDetails(task.code)}>
+                                        Save Daily Progress
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     );
                 })}
             </div>
 
             <div className="forecast-section">
-                <h3 className="forecast-title">60-Day Transformation Goal</h3>
+                <h3 className="forecast-title">60-Day Transformation Forecast</h3>
                 <div className="forecast-grid">
                     <div className="forecast-item">
                         <span className="forecast-val">{totals.pushups.toLocaleString()} / {forecast.pushups.toLocaleString()}</span>
-                        <span className="forecast-lab">Push Ups</span>
+                        <span className="forecast-lab">Push Ups Total</span>
                     </div>
                     <div className="forecast-item">
                         <span className="forecast-val">{totals.situps.toLocaleString()} / {forecast.situps.toLocaleString()}</span>
-                        <span className="forecast-lab">Sit Ups</span>
+                        <span className="forecast-lab">Sit Ups Total</span>
                     </div>
                     <div className="forecast-item">
                         <span className="forecast-val">{totals.squats.toLocaleString()} / {forecast.squats.toLocaleString()}</span>
-                        <span className="forecast-lab">Squats</span>
+                        <span className="forecast-lab">Squats Total</span>
                     </div>
                     <div className="forecast-item">
                         <span className="forecast-val">{totals.pullups.toLocaleString()} / {forecast.pullups.toLocaleString()}</span>
-                        <span className="forecast-lab">Pull Ups</span>
+                        <span className="forecast-lab">Pull Ups Total</span>
                     </div>
                 </div>
                 <div className="outcome-message">
-                    Objective: Build a resilient body, establish a 2nd income stream, and achieve complete lifestyle autonomy.
+                    Gradual overload: Moving from multiple sets to achieving target reps in a single set by Day 60.
+                </div>
+            </div>
+
+            <div className="history-section">
+                <h3 className="forecast-title">Recent Movement</h3>
+                <div className="history-timeline">
+                    {(data?.progress?.history || []).slice(-7).reverse().map((entry: any) => (
+                        <div key={entry.date} className="history-day">
+                            <span className="history-date">
+                                {new Date(entry.date).toLocaleDateString([], { weekday: 'short', day: 'numeric' })}
+                            </span>
+                            <div className="history-dots">
+                                {TASKS.map(task => {
+                                    const log = entry.taskLogs.find((l: any) => l.taskCode === task.code);
+                                    return (
+                                        <div
+                                            key={task.code}
+                                            className={`history-dot ${log?.completed ? 'active' : ''}`}
+                                            title={`${task.label}: ${log?.value || 'No details'}`}
+                                        ></div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+                    {(!data?.progress?.history || data.progress.history.length === 0) && (
+                        <p className="no-history">Consistency starts today. Log your first session!</p>
+                    )}
                 </div>
             </div>
         </div>
