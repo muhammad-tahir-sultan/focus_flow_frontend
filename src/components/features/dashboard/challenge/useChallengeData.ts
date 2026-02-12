@@ -35,7 +35,23 @@ export const useChallengeData = () => {
 
         try {
             const result = await challengeApi.toggleTask(taskCode, newCompleted, currentEdit.value, currentEdit.note);
-            setData(prev => prev ? ({ ...prev, today: result }) : null);
+            setData(prev => {
+                if (!prev) return null;
+                // Update history as well so stats update in real-time
+                const newHistory = prev.progress?.history.map(h =>
+                    new Date(h.date).toDateString() === new Date(result.date).toDateString() ? result : h
+                ) || [];
+
+                // If today isn't in history yet (first task of the day), add it
+                const todayExists = newHistory.some(h => new Date(h.date).toDateString() === new Date(result.date).toDateString());
+                if (!todayExists) newHistory.push(result);
+
+                return {
+                    ...prev,
+                    today: result,
+                    progress: prev.progress ? { ...prev.progress, history: newHistory } : null
+                };
+            });
             toast.success(newCompleted ? "Task marked complete!" : "Task reset.");
         } catch (error) {
             console.error(error);
@@ -51,7 +67,18 @@ export const useChallengeData = () => {
 
         try {
             const result = await challengeApi.toggleTask(taskCode, currentLog?.completed || false, currentEdit.value, currentEdit.note);
-            setData(prev => prev ? ({ ...prev, today: result }) : null);
+            setData(prev => {
+                if (!prev) return null;
+                const newHistory = prev.progress?.history.map(h =>
+                    new Date(h.date).toDateString() === new Date(result.date).toDateString() ? result : h
+                ) || [];
+
+                return {
+                    ...prev,
+                    today: result,
+                    progress: prev.progress ? { ...prev.progress, history: newHistory } : null
+                };
+            });
             toast.success("Progress saved!");
             if (onComplete) onComplete();
         } catch (error) {
