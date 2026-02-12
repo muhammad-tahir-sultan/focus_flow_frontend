@@ -37,9 +37,6 @@ const ChallengeForecast: React.FC<ChallengeForecastProps> = ({ totals, forecast 
                     <span className="forecast-lab">Pull Ups Total</span>
                 </div>
             </div>
-            <div className="outcome-message">
-                Gradual overload: Moving from multiple sets to achieving target reps in a single set by Day 60.
-            </div>
         </div>
     );
 };

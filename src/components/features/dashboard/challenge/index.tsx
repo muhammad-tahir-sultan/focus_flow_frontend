@@ -33,11 +33,14 @@ const TwoMonthChallenge = () => {
     const perfectPercent = data?.progress?.completionPercentage || 0;
     const activeDays = data?.progress?.activeDays || 0;
 
+    // Forecast calculation for 2 months (approx 8.5 weeks)
+    // Formula: 2 sessions/week * 8.5 weeks = ~17 sessions total
+    const SESSIONS_IN_CHALLENGE = 17;
     const forecast = {
-        pushups: 100 * 60,
-        pullups: 10 * 60,
-        situps: 100 * 60,
-        squats: 150 * 60
+        pushups: 100 * SESSIONS_IN_CHALLENGE,
+        pullups: 10 * SESSIONS_IN_CHALLENGE,
+        situps: 100 * SESSIONS_IN_CHALLENGE, // Assuming core with push or legs
+        squats: 150 * SESSIONS_IN_CHALLENGE
     };
 
     const totals = (data?.progress?.history || []).reduce((acc, entry) => {
@@ -88,6 +91,9 @@ const TwoMonthChallenge = () => {
             </div>
 
             <ChallengeForecast totals={totals} forecast={forecast} />
+            <div className="outcome-message" style={{ margin: '0 2rem 2rem 2rem' }}>
+                Gradual Overload: Following a PPL routine (2x/week each). Moving from multiple sets to achieving target reps in a single set by Day 60. Sunday is a dedicated rest day.
+            </div>
             <ChallengeHistory history={data?.progress?.history || []} />
         </div>
     );
