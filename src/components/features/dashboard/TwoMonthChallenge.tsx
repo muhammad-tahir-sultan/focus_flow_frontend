@@ -43,6 +43,7 @@ const TwoMonthChallenge = () => {
     const [loading, setLoading] = useState(true);
     const [expandedTask, setExpandedTask] = useState<string | null>(null);
     const [editMode, setEditMode] = useState<{ [key: string]: { value: string, note: string } }>({});
+    const [notificationsEnabled, setNotificationsEnabled] = useState(Notification.permission === 'granted');
 
     const fetchData = async () => {
         try {
@@ -63,8 +64,49 @@ const TwoMonthChallenge = () => {
         }
     };
 
+    const requestNotificationPermission = async () => {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            setNotificationsEnabled(true);
+            toast.success("Notifications enabled for daily reminders!");
+            // Send a welcome notification
+            new Notification("Transformation Tracker", {
+                body: "You'll receive daily reminders to complete your tasks!",
+                icon: "/favicon.ico"
+            });
+        } else {
+            setNotificationsEnabled(false);
+            toast.error("Notification permission denied.");
+        }
+    };
+
+    const [lastNotified, setLastNotified] = useState<string | null>(null);
+
+    const checkAndNotify = () => {
+        if (Notification.permission !== 'granted' || !data || data.today?.isFullyCompleted) return;
+
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const todayStr = now.toDateString();
+        const combinedKey = `${todayStr}-${hour}`;
+
+        // Notify at 10:00 AM, 2:00 PM (14), and 8:00 PM (20)
+        // Ensure we only notify once per scheduled hour
+        if ([10, 14, 20].includes(hour) && minute === 0 && lastNotified !== combinedKey) {
+            new Notification("Transformation Tracker", {
+                body: `You still have ${TASKS.length - (data.today?.taskLogs.filter(l => l.completed).length || 0)} tasks remaining today. Stay consistent!`,
+                icon: "/favicon.ico",
+                badge: "/favicon.ico"
+            });
+            setLastNotified(combinedKey);
+        }
+    };
+
     useEffect(() => {
         fetchData();
+        const interval = setInterval(checkAndNotify, 60000); // Check every minute
+        return () => clearInterval(interval);
     }, []);
 
     const handleToggle = async (taskCode: string) => {
@@ -132,11 +174,24 @@ const TwoMonthChallenge = () => {
     return (
         <div className="challenge-card">
             <div className="challenge-header">
-                <div>
-                    <h2 className="challenge-title">The 2-Month Transformation</h2>
-                    <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '0.5rem' }}>
-                        Gradual Progress Tracker • Day {activeDays} / 60
-                    </p>
+                <div className="challenge-title-row">
+                    <div>
+                        <h2 className="challenge-title">The 2-Month Transformation</h2>
+                        <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '0.5rem' }}>
+                            Gradual Progress Tracker • Day {activeDays} / 60
+                        </p>
+                    </div>
+                    <button
+                        className={`notification-toggle ${notificationsEnabled ? 'active' : ''}`}
+                        onClick={requestNotificationPermission}
+                        title={notificationsEnabled ? "Reminders active" : "Enable daily reminders"}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        {notificationsEnabled && <span className="notif-dot"></span>}
+                    </button>
                 </div>
 
                 <div className="challenge-stats">
