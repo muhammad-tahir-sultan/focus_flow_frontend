@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useOptimistic, useTransition, useEffect } from 'react';
+import { useState, useMemo, useCallback, useOptimistic, useTransition } from 'react';
 import '../../../../styles/TwoMonthChallenge.css';
 import { useChallengeData } from './useChallengeData';
 import { useChallengeNotifications } from './useChallengeNotifications';
@@ -20,76 +20,67 @@ const TwoMonthChallenge = () => {
         updateEditMode
     } = useChallengeData();
 
-    // The user's current toggled state for today (local-only, for instant UI)
-    const [localTodayLogs, setLocalTodayLogs] = useState<{ [taskCode: string]: boolean }>({});
-
-    // Synchronize localTodayLogs with incoming data (when DB reflects changes)
-    useEffect(() => {
-        if (data?.today?.taskLogs) {
-            const newLogs: { [taskCode: string]: boolean } = {};
-            data.today.taskLogs.forEach(log => {
-                newLogs[log.taskCode] = log.completed;
-            });
-            setLocalTodayLogs(newLogs);
-        }
-    }, [data]);
-
-    // 2. Optimistic state using React 19 hook
-    const [optimisticData, addOptimisticToggle] = useOptimistic(
+    // 1. Optimistic state using React 19 hook
+    // This is the source of truth for the UI
+    const [optimisticData, addOptimisticAction] = useOptimistic(
         data,
         (state: ChallengeData | null, { taskCode, completed }: { taskCode: string, completed: boolean }) => {
             if (!state || !state.today) return state;
+
             const updatedToday = {
                 ...state.today,
-                taskLogs: state.today.taskLogs.map(log =>
-                    log.taskCode === taskCode ? { ...log, completed } : log
-                )
+                taskLogs: state.today.taskLogs.some(l => l.taskCode === taskCode)
+                    ? state.today.taskLogs.map(log =>
+                        log.taskCode === taskCode ? { ...log, completed } : log
+                    )
+                    : [...state.today.taskLogs, { taskCode, completed, value: '', note: '' }]
             };
-            const updatedHistory = state.progress?.history.map(h =>
-                new Date(h.date).toDateString() === new Date(state.today!.date).toDateString() ? updatedToday : h
-            ) || [];
-            return { ...state, today: updatedToday, progress: state.progress ? { ...state.progress, history: updatedHistory } : null };
+
+            const updatedHistory = (state.progress?.history || []).map(h =>
+                new Date(h.date).toDateString() === new Date(state.today!.date).toDateString()
+                    ? updatedToday
+                    : h
+            );
+
+            // If today isn't in history yet, added it
+            const todayExists = (state.progress?.history || []).some(h =>
+                new Date(h.date).toDateString() === new Date(state.today!.date).toDateString()
+            );
+
+            if (!todayExists) {
+                updatedHistory.push(updatedToday);
+            }
+
+            return {
+                ...state,
+                today: updatedToday,
+                progress: state.progress ? { ...state.progress, history: updatedHistory } : null
+            };
         }
     );
 
     const [isPending, startTransition] = useTransition();
 
-    // 3. Effect to sync with DB when deferredLogs settle
-    // This effectively "drops" intermediate states if the user clicks 10 times quickly
-    const syncWithDB = useCallback(async (taskCode: string) => {
-        await handleToggle(taskCode);
-    }, [handleToggle]);
-
+    // 2. Handlers
     const handleCheckToggle = useCallback((taskCode: string) => {
-        const currentComplete = localTodayLogs[taskCode] || false;
-        const newComplete = !currentComplete;
+        // Find the current status in the optimistic state
+        const currentLog = optimisticData?.today?.taskLogs.find(l => l.taskCode === taskCode);
+        const newCompleted = !currentLog?.completed;
 
-        // Instant UI Update
-        setLocalTodayLogs(prev => ({ ...prev, [taskCode]: newComplete }));
-
-        startTransition(() => {
-            addOptimisticToggle({ taskCode, completed: newComplete });
-            // The actual API call is now handled by AbortController in useChallengeData
-            syncWithDB(taskCode);
+        startTransition(async () => {
+            // Update UI instantly
+            addOptimisticAction({ taskCode, completed: newCompleted });
+            // Send to DB
+            await handleToggle(taskCode);
         });
-    }, [localTodayLogs, addOptimisticToggle, syncWithDB]);
-
-    const {
-        notificationsEnabled,
-        requestNotificationPermission
-    } = useChallengeNotifications(optimisticData);
-
-    const [expandedTask, setExpandedTask] = useState<string | null>(null);
-
-    const handleExpandToggle = useCallback((taskCode: string) => {
-        setExpandedTask(prev => prev === taskCode ? null : taskCode);
-    }, []);
+    }, [optimisticData, addOptimisticAction, handleToggle]);
 
     const stats = useMemo(() => {
-        const completedCount = optimisticData?.today?.taskLogs?.filter(l => l.completed).length || 0;
-        const progressPercent = optimisticData?.progress?.consistencyPercentage || 0;
-        const perfectPercent = optimisticData?.progress?.completionPercentage || 0;
-        const activeDays = optimisticData?.progress?.activeDays || 0;
+        if (!optimisticData) return { completedCount: 0, progressPercent: 0, perfectPercent: 0, activeDays: 0 };
+        const completedCount = optimisticData.today?.taskLogs?.filter(l => l.completed).length || 0;
+        const progressPercent = optimisticData.progress?.consistencyPercentage || 0;
+        const perfectPercent = optimisticData.progress?.completionPercentage || 0;
+        const activeDays = optimisticData.progress?.activeDays || 0;
         return { completedCount, progressPercent, perfectPercent, activeDays };
     }, [optimisticData]);
 
@@ -116,6 +107,17 @@ const TwoMonthChallenge = () => {
             return acc;
         }, { pushups: 0, pullups: 0, situps: 0, squats: 0 });
     }, [optimisticData?.progress?.history]);
+
+    const {
+        notificationsEnabled,
+        requestNotificationPermission
+    } = useChallengeNotifications(optimisticData);
+
+    const [expandedTask, setExpandedTask] = useState<string | null>(null);
+
+    const handleExpandToggle = useCallback((taskCode: string) => {
+        setExpandedTask(prev => prev === taskCode ? null : taskCode);
+    }, []);
 
     if (loading) return <ChallengeSkeleton />;
 

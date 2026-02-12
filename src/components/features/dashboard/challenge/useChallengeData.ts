@@ -47,12 +47,17 @@ export const useChallengeData = () => {
         // 1. Update LOCAL state immediately (non-optimistic, the base state)
         setData(prev => {
             if (!prev || !prev.today) return prev;
+
+            const taskExists = prev.today.taskLogs.some(l => l.taskCode === taskCode);
+            const updatedTaskLogs = taskExists
+                ? prev.today.taskLogs.map(l => l.taskCode === taskCode ? { ...l, completed: newCompleted } : l)
+                : [...prev.today.taskLogs, { taskCode, completed: newCompleted, value: currentEdit.value, note: currentEdit.note }];
+
             const updatedToday = {
                 ...prev.today,
-                taskLogs: prev.today.taskLogs.map(l =>
-                    l.taskCode === taskCode ? { ...l, completed: newCompleted } : l
-                )
+                taskLogs: updatedTaskLogs
             };
+
             const newHistory = prev.progress?.history.map(h =>
                 new Date(h.date).toDateString() === new Date(updatedToday.date).toDateString() ? updatedToday : h
             ) || [];
